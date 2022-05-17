@@ -2343,7 +2343,10 @@ class ShopAction extends BaseAction
     public function change_status(){
         $now_store = $this->check_store(intval($_POST['id']));
         $store_status = $_POST['type'] == 'open' ? 1 : 0;
-        if(D('Merchant_store')->where(array('store_id'=>$now_store['store_id']))->save(array('status'=>$store_status))){
+        $data = array('status'=>$store_status);
+        if($now_store['have_shop'] == 0 && $now_store['is_pickup'] == 0) $data['have_shop'] = 1;
+
+        if(D('Merchant_store')->where(array('store_id'=>$now_store['store_id']))->save($data)){
             if($store_status == 0){
                 D('Cart')->where(array('sid'=>$now_store['store_id']))->delete();
             }

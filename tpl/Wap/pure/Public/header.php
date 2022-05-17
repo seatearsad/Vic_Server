@@ -712,12 +712,10 @@
                 if (cha_top > 0 && cha_top <= select_height && !select_hide) {
                     $('#tutti_header').css('margin-top', -(init_top+cha_top));
                     $('#search_label').css('margin-top', -(init_top+cha_top) + $('#tutti_header').height());
-                    console.log("select hide a");
                 }
                 if(cha_top >= select_height && !select_hide){
                     $('#tutti_header').css('margin-top', -(init_top+select_height));
                     select_hide = true;
-                    console.log("select hide b");
                 }
                 if(select_hide && cha_top == 0){
                     $('#tutti_header').css('margin-top', -(init_top+select_height));
@@ -727,12 +725,10 @@
                 if (cha_top < 0 && cha_top >= -select_height && select_hide) {
                     $('#tutti_header').css('margin-top', -(init_top+select_height+cha_top));
                     $('#search_label').css('margin-top', -(init_top+select_height+cha_top) + $('#tutti_header').height());
-                    console.log("select hide c");
                 }
                 if(cha_top <= -select_height && select_hide){
                     $('#tutti_header').css('margin-top', -init_top);
                     select_hide = false;
-                    console.log("select hide d");
                 }
 
                 if(!select_hide && cha_top == 0){

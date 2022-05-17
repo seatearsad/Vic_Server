@@ -340,7 +340,7 @@ class IndexAction extends BaseAction
 
         //获取系统消息 $from 0Wap 1iOS 2Android
 
-        $arr['system_message'] = D("System_message")->getSystemMessage($_POST['from'],$_POST['version'],$city_id,$lat,$long);
+        $arr['system_message'] = D("System_message")->getSystemMessage($_POST['from'],$_POST['version'],$city_id,$lat,$long,$selectType);
 
         $this->returnCode(0,'data',$arr);
     }
@@ -427,7 +427,8 @@ class IndexAction extends BaseAction
         $sid = $_POST['sid'];
         $lat = $_POST['lat'] ? $_POST['lat'] : 0;
         $lng = $_POST['lng'] ? $_POST['lng'] : 0;
-        $store = $this->loadModel()->get_store_by_id($sid,$lat,$lng);
+        $city_id = $_POST['city_id'] ? $_POST['city_id'] : 0;
+        $store = $this->loadModel()->get_store_by_id($sid,$lat,$lng,$city_id);
 
         $this->returnCode(0,'info',$store);
 

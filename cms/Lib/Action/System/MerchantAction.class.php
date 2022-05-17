@@ -426,8 +426,8 @@ class MerchantAction extends BaseAction{
 
 	public function store_edit(){
 		$database_merchant_store = D('Merchant_store');
-		$condition_merchant_store['store_id'] = intval($_GET['store_id']);
-		$store = $database_merchant_store->field(true)->where($condition_merchant_store)->find();
+		$condition_merchant_store['st.store_id'] = intval($_GET['store_id']);
+		$store = $database_merchant_store->field('st.*,sh.delivery_radius,sh.pickup_radius')->join('as st left join '.C('DB_PREFIX').'merchant_store_shop as sh on st.store_id=sh.store_id')->where($condition_merchant_store)->find();
 		if(empty($store)){
 			$this->frame_error_tips('数据库中没有查询到该店铺的信息！',5);
 		}
@@ -467,6 +467,7 @@ class MerchantAction extends BaseAction{
 
 			$database_merchant_store = D('Merchant_store');
 			if($database_merchant_store->data($_POST)->save()){
+			    D("Merchant_store_shop")->where(array('store_id'=>$_POST['store_id']))->save(array('delivery_radius'=>$_POST['delivery_radius'],'pickup_radius'=>$_POST['pickup_radius']));
 				$this->success('Success');
 			}else{
 				$this->error(L('J_MODIFICATION_FAILED2'));
@@ -1657,7 +1658,7 @@ class MerchantAction extends BaseAction{
         import('@.ORG.system_page');
         $count_store = D('Merchant_store')->join('as s left join '.C('DB_PREFIX').'merchant m ON m.mer_id = s.mer_id ')->where($where)->count();
         $p = new Page($count_store, 15);
-        $store_list = D('Merchant_store')->field('s.*,m.name as merchant_name')->join('as s left join '.C('DB_PREFIX').'merchant m ON m.mer_id = s.mer_id ')->where($where)->order('m.mer_id DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
+        $store_list = D('Merchant_store')->field('s.*,m.name as merchant_name,p.delivery_radius,p.pickup_radius')->join('as s left join '.C('DB_PREFIX').'merchant m ON m.mer_id = s.mer_id left join '.C('DB_PREFIX').'merchant_store_shop as p ON s.store_id=p.store_id')->where($where)->order('m.mer_id DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
         foreach ($store_list as &$store){
             $is_all_zero = true;
             for($i=1;$i<=21;++$i){

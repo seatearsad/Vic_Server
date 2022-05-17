@@ -322,7 +322,7 @@ line-height: .7rem;
         var link_url = "{pigcms{:U('Storestaff/shop_list')}";
         var sound_url = "{pigcms{$static_public}sound/soft-bells.mp3";
     </script>
-    <script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=2.5"></script>
+    <script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=2.1.0"></script>
 </body>
 <script type="text/javascript" src="{pigcms{$static_public}js/artdialog/jquery.artDialog.js"></script>
 <script type="text/javascript">

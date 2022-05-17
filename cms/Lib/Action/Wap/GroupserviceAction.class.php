@@ -477,7 +477,7 @@ class GroupserviceAction extends BaseAction{
 			}
             $new_group_list['has_more'] = $lists['total'] > $page*5 ? true : false;
 
-            $new_group_list['system_message'] = D("System_message")->getSystemMessage(0,0,$city_id,$lat,$long);
+            $new_group_list['system_message'] = D("System_message")->getSystemMessage(0,0,$city_id,$lat,$long,$selectType);
 
             if($selectType == 0)
             	$wap_index_top_adver = D('Adver')->get_adver_by_key('wap_index_top',5);

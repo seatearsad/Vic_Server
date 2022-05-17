@@ -67,6 +67,8 @@ return array(
     '_DELI_PRICE_'          =>  'Delivery Fee',
     '_DELI_TXT_'            =>  'Delivery',
     '_SELF_LIFT_'           =>  'Pickup',
+    '_DELI_RANGE_'          =>  'Delivery Range',
+    '_SELF_RANGE_'          =>  'Pickup Range',
     '_PACK_PRICE_'          =>  'Packing Fee',
     '_AT_REST_'             =>  'Closed',
     '_NO_BUSINESS_'         =>  'Closed',

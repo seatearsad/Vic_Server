@@ -680,6 +680,7 @@ class ShopAction extends BaseAction
         $pickup_settings = D('Config')->where(array('gid'=>52))->select();
         foreach ($pickup_settings as $v){
             if($v['name'] == "pickup_pay_time_tip") $pickup_pay_time_tip = $v['value'];
+            if($v['name'] == "pickup_complete_time_tip") $pickup_complete_time_tip = $v['value'];
         }
 
         $is_tip = 0;
@@ -687,6 +688,12 @@ class ShopAction extends BaseAction
         $pay_count = D('Shop_order')->where(array("paid"=>1,"status"=>0,"pay_time"=>array("lt",$checkTime),"order_type"=>1,"is_del"=>0))->count();
         if($pay_count > 0){
             $is_tip = 1;
+        }else{
+            $curr_time = time() - $pickup_complete_time_tip*60;
+            $complete_count = D('Shop_order')->join('as o left join '.C('DB_PREFIX').'shop_order_log as l on o.order_id=l.order_id')->where(array("o.paid"=>1,"o.status"=>1,"o.order_type"=>1,"o.is_del"=>0,"l.status"=>2,"l.dateline"=>array('lt',$curr_time)))->count();
+            if($complete_count > 0){
+                $is_tip = 1;
+            }
         }
         $this->assign("is_tip",$is_tip);
 

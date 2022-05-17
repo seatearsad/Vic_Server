@@ -194,7 +194,14 @@
                             <if condition="is_array($order_list)">
                                 <volist name="order_list" id="vo">
                                     <tr>
-                                        <td>{pigcms{$vo.order_id}</td>
+                                        <td>
+                                            {pigcms{$vo.order_id}
+                                            <if condition="$vo.order_type eq 0">
+                                                <img src="./tpl/Static/blue/images/new/car.png" width="20" />
+                                                <else />
+                                                <img src="./tpl/Static/blue/images/new/pickup_icon.png" width="20" />
+                                            </if>
+                                        </td>
                                         <td>{pigcms{$vo.store_name}</td>
                                         <td>{pigcms{$vo.store_phone}</td>
                                         <td>{pigcms{$vo.username}</td>
@@ -254,13 +261,25 @@
                                             {pigcms{$vo.reg_user_phone}
                                         </td>
                                         <td>
-                                            {pigcms{$vo.address}<if condition="$vo['address_detail'] neq ''">&nbsp;- {pigcms{$vo.address_detail}</if>
+                                            <if condition="$vo.order_type eq 0">
+                                                {pigcms{$vo.address}<if condition="$vo['address_detail'] neq ''">&nbsp;- {pigcms{$vo.address_detail}</if>
+                                                <else />
+                                                -
+                                            </if>
                                         </td>
                                         <td>
-                                            {pigcms{$vo.deliver_status_str}
+                                            <if condition="$vo.order_type eq 0">
+                                                {pigcms{$vo.deliver_status_str}
+                                                <else />
+                                                -
+                                            </if>
                                         </td>
                                         <td>
-                                            {pigcms{$vo.deliverinfo_forbk}
+                                            <if condition="$vo.order_type eq 0">
+                                                {pigcms{$vo.deliverinfo_forbk}
+                                                <else />
+                                                -
+                                            </if>
                                         </td>
                                         <!--                                        {pigcms{$vo.pay_status} -({pigcms{$vo.pay_type})--->
                                         <td><span style="color: green">{pigcms{$vo.pay_type_str}</span>

@@ -2651,7 +2651,9 @@ class StorestaffAction extends BaseAction
 
     public function manage_holiday(){
         $store = D('Merchant_store')->field(true)->where(array('store_id' => $this->store['store_id']))->find();
+
         $data['status'] = $store['status'] == 1 ? 0 : 1;
+        if($store['have_shop'] == 0 && $store['is_pickup'] == 0) $data['have_shop'] = 1;
         D('Merchant_store')->where(array('store_id' => $this->store['store_id']))->save($data);
 
         if($data['status'] == 0){

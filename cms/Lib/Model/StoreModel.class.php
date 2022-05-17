@@ -8,7 +8,7 @@
 
 class StoreModel extends Model
 {
-    public function get_store_by_id($store_id,$lat,$lng)
+    public function get_store_by_id($store_id,$lat=0,$lng=0,$city_id=0)
     {
         $where = array('store_id' => $store_id);
         $now_store = D('Merchant_store')->field(true)->where($where)->find();
@@ -360,7 +360,7 @@ class StoreModel extends Model
                     //$temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
                 }
 
-                $city_id = D('Store')->geocoderGoogle($lat,$lng);
+                $city_id = $city_id != 0 ? $city_id : D('Store')->geocoderGoogle($lat,$lng);
                 if($store['city_id'] != $city_id){
                     $store['is_delivery'] = "0";
                 }else {
@@ -1181,15 +1181,34 @@ class StoreModel extends Model
                 }
             }
 
-            if($now_time < $check_time){
-                if ($add_time == 0)
-                    $desc = replace_lang_str(L('V3_PREPARINGSUB1'),date("H:i", $check_time));
-                else {
-                    $desc = replace_lang_str(L('V3_PREPARINGSUB2_1'), $add_time);
-                    $desc .= replace_lang_str(L('V3_PREPARINGSUB2_2'), date("H:i", $check_time));
+            if ($order['order_type'] == 1){
+                $order['preparing_time'] = date("H:i",($order['last_time'] + $order['dining_time']*60));
+                if($order['order_status'] == 1){
+                    $preparing_time = time() - ($order['last_time'] + $order['dining_time']*60);
+                    if($preparing_time > 0) {
+                        $desc = "Your order should be ready but the merchant has not confirmed. Please contact the restaurant before picking up your order!";
+                    }else{
+                        if($add_time == 0)
+                            $desc = replace_lang_str(L('V3_PREPARINGSUB1'),$order['preparing_time']);
+                        else {
+                            $desc = replace_lang_str(L('V3_PREPARINGSUB2_1'), $add_time);
+                            $desc .= replace_lang_str(L('V3_PREPARINGSUB2_2'), $order['preparing_time']);
+                        }
+                    }
+                }else{
+                    $desc = replace_lang_str(L('V3_PREPARINGSUB1'),$order['preparing_time']);
                 }
             }else {
-                $desc = L('V3_PREPARINGSUB3');
+                if ($now_time < $check_time) {
+                    if ($add_time == 0)
+                        $desc = replace_lang_str(L('V3_PREPARINGSUB1'), date("H:i", $check_time));
+                    else {
+                        $desc = replace_lang_str(L('V3_PREPARINGSUB2_1'), $add_time);
+                        $desc .= replace_lang_str(L('V3_PREPARINGSUB2_2'), date("H:i", $check_time));
+                    }
+                } else {
+                    $desc = L('V3_PREPARINGSUB3');
+                }
             }
         }
 

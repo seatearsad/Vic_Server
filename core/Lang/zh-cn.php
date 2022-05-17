@@ -67,6 +67,8 @@ return array(
     '_DELI_PRICE_'          =>  '配送费',
     '_DELI_TXT_'            =>  '外卖',
     '_SELF_LIFT_'           =>  '自提',
+    '_DELI_RANGE_'          =>  '外卖范围',
+    '_SELF_RANGE_'          =>  '自提范围',
     '_PACK_PRICE_'          =>  '打包费',
     '_AT_REST_'             =>  '休息中',
     '_NO_BUSINESS_'         =>  '未营业',

@@ -4046,20 +4046,6 @@ class ShopAction extends BaseAction{
                         $order['statusDesc'] = L('V3_UNPAID_DESC');
                     else
                         $order['statusDesc'] = L('V3_UNPAID_PICKUP_DESC');
-                }elseif ($order['order_type'] == 1 && $order['statusLog'] == 2){
-                    $order['statusLogName'] = D('Store')->getOrderStatusLogName($n_status['status'],$order['order_type']);
-                    //order_prepared是否已经出餐
-                    $order['preparing_time'] = date("H:i",($order['last_time'] + $order['dining_time']*60));
-                    if($order['order_status'] == 1){
-                        $preparing_time = time() - ($order['last_time'] + $order['dining_time']*60);
-                        if($preparing_time > 0) {
-                            $order['statusDesc'] = "Your order should be ready but the merchant has not confirmed. Please contact the restaurant before picking up your order!";
-                        }else{
-                            $order['statusDesc'] = "Your order is expected to be ready by ".$order['preparing_time'];
-                        }
-                    }else{
-                        $order['statusDesc'] = "Your order is expected to be ready by ".$order['preparing_time'];
-                    }
                 }else{
                     $order['statusLogName'] = D('Store')->getOrderStatusLogName($n_status['status'],$order['order_type']);
                     $order['statusDesc'] = D('Store')->getOrderStatusDesc($n_status['status'],$order,0,$store['name'],$add_time,$store['store_id']);

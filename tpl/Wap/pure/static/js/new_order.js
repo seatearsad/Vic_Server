@@ -179,8 +179,13 @@ function getOrderDetail(order_id) {
                             $('#add_dining_time').hide();
                             $('.con_layer_confirm .confirm_txt').hide();
                             $('.con_layer_confirm .cha_time').hide();
-                            $('.confirm_btn').css({"background":"#294068","color":"white"});
-                            $('.confirm_btn').html("MARK AS DONE");
+                            if(this_order.order_type == 1) {
+                                $('.confirm_btn').css({"background": "#294068", "color": "white"});
+                                $('.confirm_btn').html("MARK AS DONE");
+                            }else{
+                                $('.confirm_btn').attr("style", "");
+                                $('.confirm_btn').html('<label id="item_all_con_num">'+this_order.num+'</label> Item(s) Confirmed');
+                            }
                         }
 
                         //$('#item_all_con_num').html(this_order.num);

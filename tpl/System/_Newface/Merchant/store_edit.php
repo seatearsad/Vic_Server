@@ -58,6 +58,7 @@
                                 <div class="col-sm-8">
                                     <span class="cb-enable"><label class="cb-enable <if condition="$store['is_pickup'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_ON_')}</span><input type="radio" name="is_pickup" value="1" <if condition="$store['is_pickup'] eq 1">checked="checked"</if> /></label></span>
                                     <span class="cb-disable"><label class="cb-disable <if condition="$store['is_pickup'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_OFF_')}</span><input type="radio" name="is_pickup" value="0" <if condition="$store['is_pickup'] eq 0">checked="checked"</if>/></label></span>
+                                    <input type="text" class="col-sm-4" name="pickup_radius" size="7" value="{pigcms{$store.pickup_radius}" validate="required:true,number:true,maxlength:7" style="margin-left: 10px;"/> km
                                 </div>
                             </div>
                             <div class="form-group  row">
@@ -65,6 +66,7 @@
                                 <div class="col-sm-8">
                                     <span class="cb-enable"><label class="cb-enable <if condition="$store['have_shop'] eq 1">selected</if>"><span>{pigcms{:L('_BACK_ON_')}</span><input type="radio" name="have_shop" value="1" <if condition="$store['have_shop'] eq 1">checked="checked"</if> /></label></span>
                                     <span class="cb-disable"><label class="cb-disable <if condition="$store['have_shop'] eq 0">selected</if>"><span>{pigcms{:L('_BACK_OFF_')}</span><input type="radio" name="have_shop" value="0" <if condition="$store['have_shop'] eq 0">checked="checked"</if>/></label></span>
+                                    <input type="text" class="col-sm-4" name="delivery_radius" size="7" value="{pigcms{$store.delivery_radius}" validate="required:true,number:true,maxlength:7" style="margin-left: 10px;"/> km
                                 </div>
                             </div>
                             <div class="form-group  row">
