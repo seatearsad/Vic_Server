@@ -3286,10 +3286,11 @@ class ShopAction extends BaseAction{
                     $user_long_lat['long'] = 0;
                 }
 
+                $user = D("User")->where(array('uid'=>$this->user_session['uid']))->find();
                 $order_data['is_pick_in_store'] = 2;//配送方式 0：平台配送，1：商家配送，2：自提，3:快递配送
                 $delivery_fee = $order_data['freight_charge'] = 0;//运费
-                $order_data['username'] = isset($this->user_session['nickname']) && $this->user_session['nickname'] ? $this->user_session['nickname'] : '';
-                $order_data['userphone'] = isset($this->user_session['phone']) && $this->user_session['phone'] ? $this->user_session['phone'] : '';
+                $order_data['username'] = $user['nickname'];//isset($this->user_session['nickname']) && $this->user_session['nickname'] ? $this->user_session['nickname'] : '';
+                $order_data['userphone'] = $user['phone'];//isset($this->user_session['phone']) && $this->user_session['phone'] ? $this->user_session['phone'] : '';
                 $order_data['address'] = "";
                 $order_data['address_id'] = 0;
                 //$order_data['pick_id'] = $pick_id;
