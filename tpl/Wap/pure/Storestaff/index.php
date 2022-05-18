@@ -123,7 +123,7 @@
         $(function () {
             $(".order_list").height(all_height - header_height);
             $(".order_detail").height(all_height - header_height);
-            $('#detail_div').height(all_height - header_height - 70);
+            $('#detail_div').height(all_height - header_height - 100);
             $('.list_ul').height(all_height - header_height - 50);
             if(all_width > all_height){
                 $('.show_list').hide();

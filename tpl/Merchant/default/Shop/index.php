@@ -174,7 +174,7 @@
 			}else{		//关闭
 				type = 'close';
 			}
-			alert(type);
+
 			$.ajax({
 				//url:"{pigcms{:U('Shop/change_mall')}",
                 url:"{pigcms{:U('Shop/change_status')}",
@@ -188,7 +188,7 @@
 						}else{
 							_this.attr("checked",true);
 						}
-						bootbox.alert("操作失败");
+						bootbox.alert(d);
 					}
 					_this.attr("disabled",false);
 				}

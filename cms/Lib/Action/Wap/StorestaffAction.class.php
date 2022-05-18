@@ -1727,6 +1727,7 @@ class StorestaffAction extends BaseAction
             $data['status'] = 2;
             $data['order_status'] = 5;
             $condition['status'] = 1;
+            $data['use_time'] = time();
         }
 
         $data['last_staff'] = $this->staff_session['name'];
@@ -4016,7 +4017,10 @@ class StorestaffAction extends BaseAction
                 $add_time
             ];
             //Sms::sendSms2($sms_data);
-            $sms_txt = $store['name']." has informed us that they need another ".$add_time." min to finish preparing your food. We apologize for any inconvenience. Your driver will pick up your meal according to this new preparation time. Thank you for your patience!";
+            if($order['order_type'] == 0)
+                $sms_txt = $store['name']." has informed us that they need another ".$add_time." min to finish preparing your food. We apologize for any inconvenience. Your driver will pick up your meal according to this new preparation time. Thank you for your patience!";
+            else
+                $sms_txt = $store['name']." has informed us that they need another ".$add_time." min to finish preparing your order. Thank you for your patience!";
             //Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
             Sms::sendTwilioSms($order['userphone'],$sms_txt);
 

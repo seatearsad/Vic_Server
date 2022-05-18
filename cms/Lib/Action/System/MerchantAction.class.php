@@ -244,6 +244,7 @@ class MerchantAction extends BaseAction{
                     $storeIds[] = $store['store_id'];
                 }
                 D('Cart')->where(array('sid'=>array('in',$storeIds)))->delete();
+                D('Merchant_store')->where(array('mer_id'=>$_POST['mer_id']))->save(array('status'=>0));
             }
 
 			$database_merchant->data($_POST)->save();
@@ -460,6 +461,13 @@ class MerchantAction extends BaseAction{
 
             if(($store['have_shop'] != 0 || $store['is_pickup'] != 0) && $_POST['have_shop'] == 0 && $_POST['is_pickup'] == 0){
                 $_POST['status'] = 0;
+            }
+
+            if($_POST['status'] == 1){
+                $merchant = D("Merchant")->where(array('mer_id'=>$store['mer_id']))->find();
+                if($merchant['status'] == 0){
+                    $this->error('Failed! This store belongs to an inactive merchant. Please activate its merchant status first.');
+                }
             }
             if($_POST['status'] == 1 && $store['have_shop'] == 0 && $store['is_pickup'] == 0 && $_POST['have_shop'] == 0 && $_POST['is_pickup'] == 0){
                 $_POST['have_shop'] = 1;

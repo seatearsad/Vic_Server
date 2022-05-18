@@ -1760,6 +1760,8 @@ class ShopAction extends BaseAction
         if($order){
             $data['status'] = 2;
             $data['order_status'] = 5;
+            $data['use_time'] = time();
+            $data['last_time'] = time();
             D("Shop_order")->where($where)->save($data);
 
             //更新用户订单数量信息

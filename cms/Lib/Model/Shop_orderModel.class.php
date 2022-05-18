@@ -419,6 +419,7 @@ class Shop_orderModel extends Model
 	//手机端支付前订单处理
 	public function wap_befor_pay($order_info, $now_coupon, $merchant_balance, $now_user)
 	{
+		var_dump($order_info);die();
 		$pay_money = intval($order_info['order_total_money'] * 100) / 100; //本次支付的总金额
 
 		//减免配送费活动
