@@ -395,6 +395,8 @@
                     <span style="color: #294068">{pigcms{:L('QW_PLEASECONFIRM')}</span>
                 {{# }else if(d.order_status == 1){ }}
                     <span style="color: #294068">Preparing</span>
+                {{# }else if(d.order_status == 5){ }}
+                    <span style="color: #294068">{pigcms{:L('QW_COMPLETED')}</span>
                 {{# }else{ }}
                     <span style="color: #294068">Ready for Pickup</span>
                 {{# } }}

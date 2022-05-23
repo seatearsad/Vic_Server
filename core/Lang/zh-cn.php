@@ -1673,7 +1673,7 @@ return array(
     "V3_PICKEDUPSUB"=>"您的送餐员已取餐。",
     "V3_HEADINGTOYOU"=>"配送中",
     "V3_HEADINGTOYOUSUB"=>"您的送餐员正在向您赶来。",
-    "V3_COMPLETE"=>"订单已送达",
+    "V3_COMPLETE"=>"订单已完成",
     "V3_COMPLETESUB"=>"感谢您的订单！",
     "V3_DELIVER_NOTES"=>"例如：公寓房间号，Buzzer号码，前门/后门，到达后电话联系等给送餐员的备注",
     "V3_DELIVER_NOTES_TITLE"=>"快递备注",

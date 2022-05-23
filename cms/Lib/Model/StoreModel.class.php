@@ -869,7 +869,8 @@ class StoreModel extends Model
             $tarr['pid'] = $v['uid'];
             $tarr['order_id'] = $v['order_id'];
             $tarr['name'] = $v['nickname'];
-            $tarr['comment'] = $v['comment'];
+            $tarr['comment'] = htmlspecialchars_decode($v['comment']);
+            $tarr['comment'] = str_replace("&#39;","'",$tarr['comment']);
             $tarr['addtime'] = $v['add_time_hi'];
             $tarr['score'] = $v['score'];
             $tarr['score1'] = $v['score'];

@@ -3093,7 +3093,7 @@ class ShopAction extends BaseAction
                                 <table style="border-bottom: 1px solid #999;">
                                     <tr>
                                         <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
-                                            &nbsp;Merchant Discounts
+                                            &nbsp;Merchant Promotion Expenses
                                         </td>
                                         <td align="right" style="color:#666;font-size: 16px;width: 120px;">
                                             -'.floatval(sprintf("%.2f", $delivery['reduce'])).'
@@ -3219,7 +3219,7 @@ class ShopAction extends BaseAction
                                 <table style="border-bottom: 1px solid #999;">
                                     <tr>
                                         <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
-                                            &nbsp;Merchant Discounts
+                                            &nbsp;Merchant Promotion Expenses
                                         </td>
                                         <td align="right" style="color:#666;font-size: 16px;width: 120px;">
                                             -'.floatval(sprintf("%.2f", $pickup['reduce'])).'
@@ -3318,7 +3318,7 @@ class ShopAction extends BaseAction
                         </tr>
                         <tr>
                             <td colspan="2" style="font-size: 14px;font-family: Arial" align="center">
-                                2022 © Tutti Technologies * Please allow 5 to 7 business days for the funds to arrive.
+                                2022 © Kavl Technology Ltd * Please allow 5 to 7 business days for the funds to arrive.
                             </td>
                         </tr>
                     </tbody>
