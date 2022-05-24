@@ -36,14 +36,14 @@
     </div>
     <div class="grab_line"></div>
     <div class="copy_div">
-        Copyright © 2021 Kavl Technology Ltd. All rights reserved
+        Copyright © 2022 Kavl Technology Ltd. All rights reserved
     </div>
     <div class="link_icon">
         <ul>
             <li><a href="https://www.facebook.com/tuttidelivery" target="_blank"></a></li>
             <li><a href="https://www.instagram.com/tuttidelivery/" target="_blank"></a></li>
             <li><a href="https://twitter.com/tuttidelivery" target="_blank"></a></li>
-            <li><a href="https://www.linkedin.com/company/tuttilifestyle" target="_blank"></a></li>
+            <li><a href="https://www.instagram.com/tuttivancouver/?hl=en" target="_blank"></a></li>
             <li><a href="https://www.youtube.com/channel/UCdXYWCKbNRPysK9dZ9rtC2A" target="_blank"></a></li>
         </ul>
     </div>

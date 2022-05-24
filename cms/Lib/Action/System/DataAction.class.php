@@ -913,7 +913,8 @@ class DataAction extends BaseAction
             }
 
             $database_user = D('User');
-            $count_user = $database_user->field('u.*,a.city')->join(' as u left join '.C('DB_PREFIX').'user_adress as a on a.uid=u.uid')->where($where)->group('u.uid')->count();
+            $count_user = $database_user->field('u.*,a.city')->join(' as u left join '.C('DB_PREFIX').'user_adress as a on a.uid=u.uid')->where($where)->group('u.uid')->select();
+            $count_user = count($count_user);
 
             $length = ceil($count_user / 1000);
             for ($i = 0; $i < $length; $i++) {
@@ -1005,7 +1006,7 @@ class DataAction extends BaseAction
                         $index++;
                     }
                 }
-                sleep(2);
+                sleep(1);
             }
             //输出
             $objWriter = new PHPExcel_Writer_Excel5($objExcel);

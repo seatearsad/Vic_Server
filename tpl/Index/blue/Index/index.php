@@ -612,7 +612,7 @@
         <div class="white_line">
             <div class="serving_title">{pigcms{:L('4CITIES')}</div>
             <ul class="city_list">
-                <li style="font-size: 18px;">Vancouver&nbsp;DT</li>
+                <li>Vancouver</li>
                 <li>Victoria</li>
                 <li>Kelowna</li>
                 <li>Kamloops</li>

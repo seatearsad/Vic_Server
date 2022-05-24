@@ -111,7 +111,7 @@
             cursor: pointer;
         }
         .courier_desc{
-            height: 180px;
+            height: 220px;
             display: flex;
             margin-top: 80px;
         }
