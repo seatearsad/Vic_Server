@@ -1081,6 +1081,7 @@ var is_free_delivery = "{pigcms{$store['free_delivery']}";
 var is_jump = "{pigcms{$is_jump}";
 var jump_url = "{pigcms{$jump_url}";
 var from = "{pigcms{$_GET['from']}";
+var address_id = "{pigcms{$_GET['adress_id']}";
 
 $('#select_div').find('li').each(function () {
     if(($(this).data("type") == 0 && have_shop == "1") || ($(this).data("type") == 1 && is_pickup == "1")) {
@@ -1118,7 +1119,7 @@ $('#select_div').find('li').each(function () {
 if(typeof($.cookie('userModelSelect')) != 'undefined'){
     userModelSelect = $.cookie('userModelSelect');
 
-    if(from == "address") userModelSelect = 0;
+    if(from == "address" || address_id != '') userModelSelect = 0;
 
     if(userModelSelect == 0 && have_shop == "0") userModelSelect = 1;
     if(userModelSelect == 1 && is_pickup == "0") userModelSelect = 0;
