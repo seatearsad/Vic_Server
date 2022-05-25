@@ -1004,7 +1004,7 @@ $(document).ready(function () {
                     }
                     pageLoadHides();
                 }else{
-                    if(userModelSelect == 1 && pickup_distance > distance_tip) {
+                    if(userModelSelect == 1 && parseFloat(pickup_distance) > parseFloat(distance_tip)) {
                         layer.open({
                             content: "<label style='word-break: break-word;'>It looks like you’re "+pickup_distance+" km away from {pigcms{$store_name}. Please confirm that you are able to pick up this order.</label>",
                             btn: ['Yes', 'No'],
