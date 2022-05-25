@@ -220,7 +220,7 @@
             $.post("{pigcms{:U('Storestaff/shop_order_confirm')}",{order_id:click_id,status:1,dining_time:time_val},function(result){
                 is_send = false;
                 if(result.status == 1){
-                    printOrderToAndroid(time_val);
+                    if(this_order.status == 0) printOrderToAndroid(time_val);
                     setTimeout(function () {
                         layer.closeAll();
                         getNewOrder();
