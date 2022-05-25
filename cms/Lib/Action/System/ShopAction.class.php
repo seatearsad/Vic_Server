@@ -756,6 +756,11 @@ class ShopAction extends BaseAction
         $order = D('Shop_order')->get_order_detail(array('order_id' => intval($_GET['order_id'])));
         $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
 
+
+        $order_log = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'], 'status' => 2))->order('id DESC')->find();
+        $order['confirm_time'] = $order_log['dateline'] ? $order_log['dateline'] : null;
+        $order['pickup_time'] = $order['confirm_time'] + ($order['dining_time']*60);
+
         if (empty($order)) {
             $this->frame_error_tips('没有找到该订单的信息！');
         } else {//garfunkel 重新获取商品名称

@@ -1702,10 +1702,12 @@ class StorestaffAction extends BaseAction
             $this->error('该单已接，不要重复接单');
             exit;
         }
+        /**
         if ($order['is_refund']) {
             $this->error('用户正在退款中~！');
             exit;
         }
+         */
         if ($order['paid'] == 0) {
             $this->error('订单未支付，不能接单！');
             exit;
