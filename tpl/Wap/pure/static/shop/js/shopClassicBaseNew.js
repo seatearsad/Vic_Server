@@ -228,6 +228,7 @@ var firstMenuClick = false;
 var productSwiper = null;
 var productPicList = [];
 var isNewLoading=true;
+var userModelSelect;
 
 function showShop(shopId){
 
@@ -238,6 +239,8 @@ function showShop(shopId){
 
     $('#pageShop').css('height',document.body.clientHeight);
     $('#shopPageShade').hide();
+
+    userModelSelect = $.cookie('userModelSelect')
 
     nowPage = 'shop';
     is_refresh = false;
@@ -265,10 +268,11 @@ function showShop(shopId){
 		}
 
 		//点击子分类的事件
-		$('#shopMenuBar li').click(function(){
+		$('#shopMenuBar').find("li").click(function(){
 			if(firstMenuClick == false){
 				$('html,body').animate({scrollTop: $('#shopMenuBar').offset().top-50});
 			}
+
 			var tmpIndex = $(this).index();
 			var tmpNav = $(this).data('nav');
 			$(this).addClass('active').siblings().removeClass('active');
@@ -278,6 +282,21 @@ function showShop(shopId){
 				showShopContent(tmpNav);
 			});
 		});
+
+		$("#selectDiv").find("li").each(function () {
+            $(this).click(function () {
+                $(this).addClass("active").siblings().removeClass('active');
+                userModelSelect = $(this).data("type");
+
+                cartFunction('count');
+
+                if(userModelSelect == 0){
+                    $('#deliveryText').html(getLangStr('_PACK_PRICE_') +' $'+ nowShop.store.pack_fee);
+                }else{
+                    $('#deliveryText').html("<a href=\"https://maps.google.com/maps?q="+nowShop.store.adress+"&z=17&hl=en\" target=\"_blank\">" + pickupImg + nowShop.store.adress + "</a>");
+                }
+            });
+        });
 
 		$('#shopCatBar .title,#shopPageCatShade').click(function(){
 			if($('#shopCatBar .title').hasClass('show')){
@@ -329,7 +348,7 @@ function showShop(shopId){
 		cartEventReg();
 
         //设置可以切换到商家Tab的事件
-		$('#shopBanner,.shop_info').click(function(){$('#shopMenuBar li.merchant').trigger('click');});
+		//$('#shopBanner,.shop_info').click(function(){$('#shopMenuBar li.merchant').trigger('click');});
 
 		// 内容Tab切换 商品 、 评价 、 店铺信息
 		$(document).on('click','#shopProductLeftBar2 dd',function(){
@@ -843,7 +862,6 @@ function showShop(shopId){
 		changeWechatShare('shop',{title:nowShop.store.name,desc:nowShop.store.txt_info,imgUrl:nowShop.store.image,link:shopShareUrl+nowShop.store.id});
 
 	}else{  //一般情况下走这里，初始化
-
 		productCart=[];
 		productCartNumber = 0;
 		productCartMoney  = 0;
@@ -860,14 +878,39 @@ function showShop(shopId){
             $('#shopTitle_Header').css("opacity","0");
             $('#shopTitle_Header').html(result.store.name);
 
+            $("#selectDiv").show();
+
+            if(result.store.have_shop == 1){
+                if(result.store.is_delivery == 1)
+                    $("#delivery_li").find(".select_desc").html("$"+result.store.delivery_money);
+                else
+                    $("#delivery_li").find(".select_desc").html("Out of delivery zone");
+            }else{
+                $("#delivery_li").unbind("click");
+                $("#delivery_li").css("color","#707070");
+                if(userModelSelect == 0) userModelSelect = 1;
+            }
+
+            if(result.store.is_pickup == 1){
+                $("#pickup_li").find(".select_desc").html(result.store.pickup_distance + " km");
+            }else{
+                $("#pickup_li").unbind("click");
+                $("#pickup_li").css("color","#707070");
+                if(userModelSelect == 1) userModelSelect = 0;
+            }
+
+            $("#selectDiv").find("li").each(function () {
+                if($(this).data('type') == userModelSelect) $(this).addClass('active').siblings().removeClass('active');
+            });
+
             $('#stars_text').html(result.store.star);
 
             $('#background_area').css('background-image','url('+result.store.background+')');
 
-			if(result.store.delivery){
-                $('#deliveryText').html(getLangStr('_DELI_PRICE_') +' $'+result.store.delivery_money+' | '+ getLangStr('_PACK_PRICE_') +' $'+ result.store.pack_fee);//+ ' | ' + getLangStr('_DEIL_NUM_MIN_',result.store.delivery_time)
+			if(userModelSelect == 0){
+                $('#deliveryText').html(getLangStr('_PACK_PRICE_') +' $'+ result.store.pack_fee);
 			}else{
-                $('#deliveryText').html(getLangStr('_ONLY_SELF_'));
+                $('#deliveryText').html("<a href=\"https://maps.google.com/maps?q="+result.store.adress+"&z=17&hl=en\" target=\"_blank\">" + pickupImg + result.store.adress + "</a>");
 			}
 			$('#shopNoticeText').html(result.store.store_notice);
 			// $('#shopCouponText').html(parseCoupon(result.store.coupon_list,'text')+';'+result.store.store_notice);
@@ -964,7 +1007,9 @@ function scrollProductEvent(phoneType){
     $('#debug').html("top--"+scrollRightTop);
     //console.log(scrollRightTop);
     $('#shopMenuBar').css("max-width","640px");
-    if(scrollRightTop >=200){ // 已经折叠好，可以翻滚商品了
+
+    var topHeight = 260;
+    if(scrollRightTop >= topHeight){ // 已经折叠好，可以翻滚商品了
         //console.log(200);
         //if (scrollRightTop>200) document.documentElement.scrollTop=200;
         $('#shopMenuBar_Space').css("height","40px");
@@ -982,18 +1027,18 @@ function scrollProductEvent(phoneType){
         $('#shopMenuBar').css("position","sticky");
         //$('#shopMenuBar').css("max-width","");
         $('#shopProductRightBar2').css("overflow-y","hidden");
-        $('#shopBanner').css("opacity",1-(scrollRightTop/200));
+        $('#shopBanner').css("opacity",1-(scrollRightTop/topHeight));
         var start_fade_offset=160;
         if (scrollRightTop>start_fade_offset){
-            $('#shopTitle_Header').css("opacity",(scrollRightTop-start_fade_offset)/(200-start_fade_offset));
-            $('#shopTitle_Header').css("margin-top",5+15*(1-(scrollRightTop-start_fade_offset)/(200-start_fade_offset)));
+            $('#shopTitle_Header').css("opacity",(scrollRightTop-start_fade_offset)/(topHeight-start_fade_offset));
+            $('#shopTitle_Header').css("margin-top",5+15*(1-(scrollRightTop-start_fade_offset)/(topHeight-start_fade_offset)));
 
         }else{
             $('#shopTitle_Header').css("opacity","0");
             $('#shopTitle_Header').css("margin-top",20)
         }
 
-        $('#shopHeader').css('background','rgba(255,255,255,'+ scrollRightTop/200 +')')
+        $('#shopHeader').css('background','rgba(255,255,255,'+ scrollRightTop/topHeight +')')
     }
 }
 
@@ -1266,6 +1311,7 @@ function cartEventReg(){
     $('#checkCart').click(function(){
         pageLoadTips({showBg:false});
         //alert(check_cart_url+'&store_id='+nowShop.store.id);
+        $.cookie('userModelSelect', userModelSelect,{expires:700,path:"/"});
         window.location.href = check_cart_url+'&store_id='+nowShop.store.id+"&from=shop";
     });
 }
@@ -1583,14 +1629,16 @@ function cartFunction(type,obj,dataObj){
 		}else{
 			$('#checkCartEmpty').hide();
 			$('#checkCart').show();
-			if(nowShop.store.free_delivery == 1){
+			if(nowShop.store.free_delivery == 1 && userModelSelect == 0){
 				if(nowShop.store.event.use_price - productCartMoney.toFixed(2) <= 0){
 					$('#free_delivery').html("Enjoy <label style='color: #ffa52d'>Free</label> delivery!");
 				}else{
 					var cha = (nowShop.store.event.use_price - productCartMoney.toFixed(2)).toFixed(2);
 					$('#free_delivery').html("$" + (cha) + " to <label style='color: #ffa52d'>Free</label> delivery!");
 				}
-			}
+			}else{
+                $('#free_delivery').html("");
+            }
 		}
 		//console.log("close="+$('#shopProductCart').data('close'));
 
@@ -1703,7 +1751,7 @@ function showShopContent(nav){
             isNewLoading=false;
 		}else{
             //console.log("isNewLoading-->"+isNewLoading);
-            $(document).scrollTop(200);
+            $(document).scrollTop(260);
         }
 
 		if(nowShop.store.tmpl == '0'){
@@ -1827,7 +1875,7 @@ function showShopContent(nav){
 		$('#shopMenuBar').show();
         $('#shopProductBox').hide();
         $('#shopMerchantBox').show();
-        $(document).scrollTop(200);
+        $(document).scrollTop(260);
 
 		if($('#shopMerchantBox').data('isShow') != '1'){
             // $('#shopMerchantDescBox .phone').attr('data-phone',nowShop.store.phone).html(getLangStr('_SHOP_PHONE_')+': '+nowShop.store.phone);
@@ -1904,7 +1952,7 @@ function showShopContent(nav){
 		$('#shopCatBar').hide();
 		$('#shopMenuBar').show();
         $('#shopReplyBox').show();
-        $(document).scrollTop(200);
+        $(document).scrollTop(260);
 
 		if($('#shopReplyBox').data('isShow') != '1'){
 			$('#showMoreReply').data('page','2');

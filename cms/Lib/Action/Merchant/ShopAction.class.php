@@ -19,7 +19,7 @@ class ShopAction extends BaseAction
         $p = new Page($count_store, 30);
 
         $sql = "SELECT `s`.`store_id`, `s`.`mer_id`, `s`.`name`, `s`.`adress`, `s`.`phone`, `s`.`sort`, `s`.`status`, `ss`.`store_theme`, `ss`.`store_id` AS sid FROM ". C('DB_PREFIX') . "merchant_store AS s LEFT JOIN  ". C('DB_PREFIX') . "merchant_store_shop AS ss ON `s`.`store_id`=`ss`.`store_id`";
-        $sql .= " WHERE `s`.`mer_id`={$mer_id} AND (`s`.`status`='1' OR `s`.`status`='0') AND `s`.`have_shop`='1'";
+        $sql .= " WHERE `s`.`mer_id`={$mer_id} AND (`s`.`status`='1' OR `s`.`status`='0')";// AND (`s`.`have_shop`='1' OR `s`.`is_pickup`='1')
         $sql .= " ORDER BY `s`.`sort` DESC,`s`.`store_id` ASC";
         $sql .= " LIMIT {$p->firstRow}, {$p->listRows}";
         $store_list = D()->query($sql);
@@ -2343,13 +2343,24 @@ class ShopAction extends BaseAction
     public function change_status(){
         $now_store = $this->check_store(intval($_POST['id']));
         $store_status = $_POST['type'] == 'open' ? 1 : 0;
-        if(D('Merchant_store')->where(array('store_id'=>$now_store['store_id']))->save(array('status'=>$store_status))){
+
+        if($store_status == 1){
+            $merchant = D("Merchant")->where(array('mer_id'=>$now_store['mer_id']))->find();
+            if($merchant['status'] == 0){
+                exit('Failed! This store belongs to an inactive merchant. Please activate its merchant status first.');
+            }
+        }
+
+        $data = array('status'=>$store_status);
+        if($now_store['have_shop'] == 0 && $now_store['is_pickup'] == 0) $data['have_shop'] = 1;
+
+        if(D('Merchant_store')->where(array('store_id'=>$now_store['store_id']))->save($data)){
             if($store_status == 0){
                 D('Cart')->where(array('sid'=>$now_store['store_id']))->delete();
             }
             exit('1');
         }else{
-            exit('0');
+            exit('Failed!');
         }
     }
 
@@ -2464,6 +2475,23 @@ class ShopAction extends BaseAction
 
         $result_list = D()->query($sql);
 
+        $delivery = $this->caluOrderPrice($result_list,0);
+        $pickup = $this->caluOrderPrice($result_list,1);
+
+        $begin_time = date('m/d/Y',strtotime($_GET['begin_time'].' 00:00:00'));
+        $end_time = date('m/d/Y',strtotime($_GET['end_time'].' 00:00:00'));
+
+        import('@.ORG.mpdf.mpdf');
+        $mpdf = new mPDF();
+        //$html = $this->get_html($store,$begin_time,$end_time,$total_goods_price,$total_goods_tax,$total_packing_price,$total_deposit,$total_reduce,$total_goods_gst_tax,$total_goods_pst_tax,$total_packing_tax);
+        $html = $this->get_html_new($store,$begin_time,$end_time,$delivery,$pickup);
+
+        $mpdf->WriteHTML($html);
+        $fileName = $store['name'].'('.$begin_time.' - '.$end_time.').pdf';
+        $mpdf->Output($fileName,'I');
+    }
+
+    public function caluOrderPrice($result_list,$order_type){
         //计算订单税费及押金
         $all_tax = 0;
         $all_gst_tax = 0;
@@ -2494,69 +2522,64 @@ class ShopAction extends BaseAction
         //结束循环后是否存储最后一张订单，如果最后一张是代客下单为 false;
         $is_last = true;
         foreach ($result_list as &$val){
-            $curr_order = $val['real_orderid'];
-            if($val['uid'] == 0){//当用户ID(uid)为0时 -- 代客下单
-                //记录上一张订单的税费和押金
-                $all_record[$curr_order]['all_tax'] = $val['discount_price'];
-                $all_record[$curr_order]['all_deposit'] = $val['packing_charge'];
-                $val['packing_charge'] = 0;
-                $all_record[$curr_order]['freight_tax'] = $val['freight_charge']*$val['store_tax']/100;
-                $all_record[$curr_order]['packing_tax'] = $val['packing_charge']*$val['store_tax']/100;
-                $all_record[$curr_order]['total_tax'] = $val['discount_price'] + ($val['freight_charge']+$val['packing_charge'])*$val['store_tax']/100;
-
-                $all_record[$curr_order]['cash'] = $val['price'];
-                $is_last = false;
-
-                $total_goods_price += $val['goods_price'];
-                $total_goods_tax += $val['discount_price'];
-                $total_goods_gst_tax += $val['discount_price'];
-                $total_freight_price += $val['freight_charge'];
-                $total_freight_tax += $val['freight_charge']*$val['store_tax']/100;
-                $total_packing_price += $val['packing_charge'];
-                $total_packing_tax += $val['packing_charge']*$val['store_tax']/100;
-                $total_all_tax += $all_record[$curr_order]['total_tax'];
-                $total_deposit += $all_record[$curr_order]['all_deposit'];
-                $total_all_price += $val['price'];
-                $total_cash += $val['price'];
-                $total_reduce += $val['merchant_reduce'];
-            }else{
-                if($curr_order != $record_id){
+            if($val['order_type'] == $order_type) {
+                $curr_order = $val['real_orderid'];
+                if ($val['uid'] == 0) {//当用户ID(uid)为0时 -- 代客下单
                     //记录上一张订单的税费和押金
-                    if($record_id != '') {
-                        $all_record[$record_id]['all_tax'] = $all_tax;
-                        $all_record[$record_id]['all_gst_tax'] = $all_gst_tax;
-                        $all_record[$record_id]['all_pst_tax'] = $all_pst_tax;
-                        $all_record[$record_id]['all_deposit'] = $all_deposit;
-                        $all_record[$record_id]['total_tax'] = $all_tax + $all_record[$record_id]['freight_tax'] + $all_record[$record_id]['packing_tax'];
+                    $all_record[$curr_order]['all_tax'] = $val['discount_price'];
+                    $all_record[$curr_order]['all_deposit'] = $val['packing_charge'];
+                    $val['packing_charge'] = 0;
+                    $all_record[$curr_order]['freight_tax'] = $val['freight_charge'] * $val['store_tax'] / 100;
+                    $all_record[$curr_order]['packing_tax'] = $val['packing_charge'] * $val['store_tax'] / 100;
+                    $all_record[$curr_order]['total_tax'] = $val['discount_price'] + ($val['freight_charge'] + $val['packing_charge']) * $val['store_tax'] / 100;
 
-                        $total_goods_tax += $all_tax;
-                        $total_goods_gst_tax += $all_gst_tax;
-                        $total_goods_pst_tax += $all_pst_tax;
-                        $total_deposit += $all_deposit;
-                        $total_all_tax += $all_record[$record_id]['total_tax'];
-                    }
-                    //记录最新订单的基本数值
+                    $all_record[$curr_order]['cash'] = $val['price'];
+                    $is_last = false;
+
                     $total_goods_price += $val['goods_price'];
+                    $total_goods_tax += $val['discount_price'];
+                    $total_goods_gst_tax += $val['discount_price'];
                     $total_freight_price += $val['freight_charge'];
-                    $total_freight_tax += $val['freight_charge']*$val['store_tax']/100;
+                    $total_freight_tax += $val['freight_charge'] * $val['store_tax'] / 100;
                     $total_packing_price += $val['packing_charge'];
-                    $total_packing_tax += $val['packing_charge']*$val['store_tax']/100;
+                    $total_packing_tax += $val['packing_charge'] * $val['store_tax'] / 100;
+                    $total_all_tax += $all_record[$curr_order]['total_tax'];
+                    $total_deposit += $all_record[$curr_order]['all_deposit'];
                     $total_all_price += $val['price'];
+                    $total_cash += $val['price'];
                     $total_reduce += $val['merchant_reduce'];
+                } else {
+                    if ($curr_order != $record_id) {
+                        //记录上一张订单的税费和押金
+                        if ($record_id != '') {
+                            $all_record[$record_id]['all_tax'] = $all_tax;
+                            $all_record[$record_id]['all_gst_tax'] = $all_gst_tax;
+                            $all_record[$record_id]['all_pst_tax'] = $all_pst_tax;
+                            $all_record[$record_id]['all_deposit'] = $all_deposit;
+                            $all_record[$record_id]['total_tax'] = $all_tax + $all_record[$record_id]['freight_tax'] + $all_record[$record_id]['packing_tax'];
 
-                    $all_record[$curr_order]['freight_tax'] = $val['freight_charge']*$val['store_tax']/100;
-                    $all_record[$curr_order]['packing_tax'] = $val['packing_charge']*$val['store_tax']/100;
-                    if($val['pay_type'] == 'offline' || $val['pay_type'] == 'cash') {
-                        $all_record[$curr_order]['cash'] = $val['price'];
-                        $total_cash += $val['price'];
-                    }
+                            $total_goods_tax += $all_tax;
+                            $total_goods_gst_tax += $all_gst_tax;
+                            $total_goods_pst_tax += $all_pst_tax;
+                            $total_deposit += $all_deposit;
+                            $total_all_tax += $all_record[$record_id]['total_tax'];
+                        }
+                        //记录最新订单的基本数值
+                        $total_goods_price += $val['goods_price'];
+                        $total_freight_price += $val['freight_charge'];
+                        $total_freight_tax += $val['freight_charge'] * $val['store_tax'] / 100;
+                        $total_packing_price += $val['packing_charge'];
+                        $total_packing_tax += $val['packing_charge'] * $val['store_tax'] / 100;
+                        $total_all_price += $val['price'];
+                        $total_reduce += $val['merchant_reduce'];
 
-                    //Deliverect 税费的临时计算方法
-                    if($val['menu_version'] != 1) {
-                        $deliverectTax = $val['price'] - $val['goods_price'] - $val['freight_charge'] - $val['freight_charge']*$val['store_tax']/100 - $val['packing_charge'] - $val['packing_charge']*$val['store_tax']/100 - $val['service_fee'];
-                        $all_gst_tax = $deliverectTax;
-                        $all_tax = $deliverectTax;
-                    } else {
+                        $all_record[$curr_order]['freight_tax'] = $val['freight_charge'] * $val['store_tax'] / 100;
+                        $all_record[$curr_order]['packing_tax'] = $val['packing_charge'] * $val['store_tax'] / 100;
+                        if ($val['pay_type'] == 'offline' || $val['pay_type'] == 'cash') {
+                            $all_record[$curr_order]['cash'] = $val['price'];
+                            $total_cash += $val['price'];
+                        }
+
                         //清空商品税费
                         $all_tax = 0;//($val['freight_charge'] + $val['packing_charge'])*$val['store_tax']/100;
                         $all_gst_tax = 0;
@@ -2564,32 +2587,45 @@ class ShopAction extends BaseAction
                         //清空押金
                         $all_deposit = 0;
                     }
-                }
 
-                if($val['menu_version'] == 1) {
-                    $all_tax += $val['good_price'] * $val['good_tax'] / 100 * $val['good_num'];
-                    if ($val['good_tax'] <= 5) {
-                        $all_gst_tax += $val['good_price'] * $val['good_tax'] / 100 * $val['good_num'];
-                        $all_pst_tax += 0;
+                    /**
+                    <<<<<<< HEAD
+                    //Deliverect 税费的临时计算方法
+                    if($val['menu_version'] != 1) {
+                    $deliverectTax = $val['price'] - $val['goods_price'] - $val['freight_charge'] - $val['freight_charge']*$val['store_tax']/100 - $val['packing_charge'] - $val['packing_charge']*$val['store_tax']/100 - $val['service_fee'];
+                    $all_gst_tax = $deliverectTax;
+                    $all_tax = $deliverectTax;
                     } else {
-                        $all_gst_tax += $val['good_price'] * 5 / 100 * $val['good_num'];
-                        $all_pst_tax += $val['good_price'] * ($val['good_tax'] - 5) / 100 * $val['good_num'];
-                    }
-                }else{
-//                    $orderDetail = array('goods_id' => $val['goods_id'], 'num' => $val['good_num'], 'store_id' => $val['store_id'], 'dish_id' => $val['dish_id'], "good_price" => $val['good_price']);
-//                    $curr_order_tax = D('StoreMenuV2')->calculationTaxExportPdf($orderDetail);
-//
-//                    $all_gst_tax += $curr_order_tax['gst_tax'];
-//                    $all_pst_tax += $curr_order_tax['pst_tax'];
-//                    $all_tax += $curr_order_tax['all_tax'];
-                    $all_gst_tax -= $val['deposit_price']*$val['good_num'];
-                    $all_tax -= $val['deposit_price']*$val['good_num'];
-                }
-                $all_deposit += $val['deposit_price']*$val['good_num'];
-                $total_tax = $all_tax + ($val['freight_charge']+$val['packing_charge'])*$val['store_tax']/100;
+                    =======
+                     */
 
-                $record_id = $curr_order;
-                $is_last = true;
+                    if ($val['menu_version'] == 1) {
+                        $all_tax += $val['good_price'] * $val['good_tax'] / 100 * $val['good_num'];
+                        if ($val['good_tax'] <= 5) {
+                            $all_gst_tax += $val['good_price'] * $val['good_tax'] / 100 * $val['good_num'];
+                            $all_pst_tax += 0;
+                        } else {
+                            $all_gst_tax += $val['good_price'] * 5 / 100 * $val['good_num'];
+                            $all_pst_tax += $val['good_price'] * ($val['good_tax'] - 5) / 100 * $val['good_num'];
+                        }
+                    } else {
+                        $orderDetail = array('goods_id' => $val['goods_id'], 'num' => $val['good_num'], 'store_id' => $val['store_id'], 'dish_id' => $val['dish_id'], "good_price" => $val['good_price']);
+                        $curr_order_tax = D('StoreMenuV2')->calculationTaxExportPdf($orderDetail);
+
+                        $all_gst_tax += $curr_order_tax['gst_tax'];
+                        $all_pst_tax += $curr_order_tax['pst_tax'];
+                        $all_tax += $curr_order_tax['all_tax'];
+
+                        //$all_gst_tax -= $val['deposit_price']*$val['good_num'];
+                        //$all_tax -= $val['deposit_price']*$val['good_num'];
+                    }
+
+                    $all_deposit += $val['deposit_price'] * $val['good_num'];
+                    $total_tax = $all_tax + ($val['freight_charge'] + $val['packing_charge']) * $val['store_tax'] / 100;
+
+                    $record_id = $curr_order;
+                    $is_last = true;
+                }
             }
         }
         //记录最后一张订单
@@ -2607,16 +2643,16 @@ class ShopAction extends BaseAction
             $total_all_tax += $total_tax;
         }
 
-        $begin_time = date('m/d/Y',strtotime($_GET['begin_time'].' 00:00:00'));
-        $end_time = date('m/d/Y',strtotime($_GET['end_time'].' 00:00:00'));
+        $data['good_price'] = $total_goods_price;
+        $data['good_tax'] = $total_goods_tax;
+        $data['packing'] = $total_packing_price;
+        $data['deposit'] = $total_deposit;
+        $data['reduce'] = $total_reduce;
+        $data['gst_tax'] = $total_goods_gst_tax;
+        $data['pst_tax'] = $total_goods_pst_tax;
+        $data['packing_tax'] = $total_packing_tax;
 
-        import('@.ORG.mpdf.mpdf');
-        $mpdf = new mPDF();
-        $html = $this->get_html($store,$begin_time,$end_time,$total_goods_price,$total_goods_tax,$total_packing_price,$total_deposit,$total_reduce,$total_goods_gst_tax,$total_goods_pst_tax,$total_packing_tax);
-
-        $mpdf->WriteHTML($html);
-        $fileName = $store['name'].'('.$begin_time.' - '.$end_time.').pdf';
-        $mpdf->Output($fileName,'I');
+        return $data;
     }
 
     public function get_html($store,$begin_time,$end_time,$good_price,$good_tax,$packing,$deposit,$reduce,$gst_tax,$pst_tax,$packing_tax){
@@ -2633,8 +2669,8 @@ class ShopAction extends BaseAction
                             </td>
                             <td width="720">
                                 <p style="font-size:28px;color: #666;">TUTTI
-                                <p style="font-size: 16px;color:#999999;line-height: 20px;">218-852 Fort St.</p>
-                                <p style="font-size: 16px;color:#999999;line-height: 20px;">Victoria BC V8W 1H8</p>
+                                <p style="font-size: 16px;color:#999999;line-height: 20px;">500-789 West Pender St.</p>
+                                <p style="font-size: 16px;color:#999999;line-height: 20px;">Vancouver, BC V6C 1H2</p>
                                 <p style="font-size: 16px;color:#999999;line-height: 20px;">1-888-399-6668</p>
                             </td>
                         </tr>
@@ -2653,7 +2689,7 @@ class ShopAction extends BaseAction
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="height: 40px"></td>
+                            <td colspan="2" style="height: 20px"></td>
                         </tr>
                         <tr>
                             <td colspan="2" style="color:#333;font-size: 18px;font-weight: bold">
@@ -2663,7 +2699,7 @@ class ShopAction extends BaseAction
                         </tr>
                         <tr>
                             <td colspan="2" style="color:#333;font-size: 18px;">
-                                &nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;
                                 '.$store['name'].'
                             </td>
                         </tr>
@@ -2674,15 +2710,15 @@ class ShopAction extends BaseAction
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="height: 40px;border-bottom: 1px solid #999"></td>
+                            <td colspan="2" style="height: 20px;border-bottom: 1px solid #999"></td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="height: 40px"></td>
+                            <td colspan="2" style="height: 20px"></td>
                         </tr>
                         <tr>
                             <td colspan="3" style="color:#333;font-size: 18px;font-weight: bold;height: 25px">
                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                                Description
+                                DELIVERY
                             </td>
                         </tr>
                         <tr>
@@ -2803,11 +2839,501 @@ class ShopAction extends BaseAction
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="height: 460px"></td>
+                            <td colspan="2" style="height: 40px"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="color:#333;font-size: 18px;font-weight: bold;height: 25px">
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                PICKUP
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height: 10px"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="right">
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;Earnings before tax
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $good_price)).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;GST received from sales
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $gst_tax)).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;PST received from sales
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $pst_tax)).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;Merchant Discounts
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            -'.floatval(sprintf("%.2f", $reduce)).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;Packing Fee
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $packing)).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;Tax on Packing Fee
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $packing_tax)).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;Bottle Deposit
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $deposit)).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;'.$store['proportion'].'% (service charge on sales)
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            -'.floatval(sprintf("%.2f", $good_pro)).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;Service charge on tax (GST #721938728RT0001)
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            -'.floatval(sprintf("%.2f", $tax_pro)).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table>
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 40px;" align="left">
+                                            &nbsp;Net amount to be sent to vendor
+                                        </td>
+                                        <td align="right" style="color:#333;font-size: 18px;font-weight: bold;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $all_price)).'
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height: 40px"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="right">
+                                <table style="border-bottom: 1px solid #999;font-weight: bold;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 18px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;TOTAL AMOUNT TO BE SENT TO VENDOR
+                                        </td>
+                                        <td align="right" style="color:#333;font-size: 18px;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $good_price)).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height: 40px"></td>
                         </tr>
                         <tr>
                             <td colspan="2" style="font-size: 14px;font-family: Arial" align="center">
-                                2019 © Tutti Technologies * Please allow three to five business days for the funds to arrive.
+                                2022 © Tutti Technologies * Please allow 5 to 7 business days for the funds to arrive.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>';
+
+        return $html;
+    }
+
+    public function get_html_new($store,$begin_time,$end_time,$delivery,$pickup){
+        $delivery['good_pro'] = ($delivery['good_price'] - $delivery['reduce']) * $store['proportion'] / 100;
+        $delivery['tax_pro'] = $delivery['good_tax'] * $store['proportion'] / 100;
+
+        $pickup['good_pro'] = ($pickup['good_price'] - $pickup['reduce']) * $store['pickup_proprotion'] / 100;
+        $pickup['tax_pro'] = $pickup['good_tax'] * $store['pickup_proprotion'] / 100;
+
+        $delivery['all_price'] = $delivery['good_price'] + $delivery['good_tax'] + $delivery['packing'] + $delivery['deposit'] + $delivery['packing_tax'] - $delivery['good_pro'] - $delivery['tax_pro'] - $delivery['reduce'];
+
+        $pickup['all_price'] = $pickup['good_price'] + $pickup['good_tax'] + $pickup['packing'] + $pickup['deposit'] + $pickup['packing_tax'] - $pickup['good_pro'] - $pickup['tax_pro'] - $pickup['reduce'];
+
+        $html = '<table style="font-family:Roboto;border-collapse: collapse; width: 900px; position: relative;">
+                    <tbody>
+                        <tr>
+                            <td width="180">
+                                <img src="./static/tutti_branding.png" width="160" height="160" />
+                            </td>
+                            <td width="720">
+                                <p style="font-size:28px;color: #666;">TUTTI
+                                <p style="font-size: 16px;color:#999999;line-height: 20px;">500-789 West Pender St.</p>
+                                <p style="font-size: 16px;color:#999999;line-height: 20px;">Vancouver, BC V6C 1H2</p>
+                                <p style="font-size: 16px;color:#999999;line-height: 20px;">1-888-399-6668</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height: 20px"></td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 32px;font-weight: bold" colspan="2">
+                                Semi-monthly Statement
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="color:#777;font-size: 16px;font-weight: bold">
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                '.$begin_time.' - '.$end_time.'
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height: 20px"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="color:#333;font-size: 18px;font-weight: bold">
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                Statement for
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="color:#333;font-size: 18px;">
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                '.$store['name'].'
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="color:#333;font-size: 18px;">
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                '.$store['adress'].'
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height: 20px;border-bottom: 1px solid #999"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height: 20px"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="color:#333;font-size: 18px;font-weight: bold;height: 25px">
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                DELIVERY
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height: 10px"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="right">
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;Earnings before tax
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $delivery['good_price'])).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;GST received from sales
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $delivery['gst_tax'])).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;PST received from sales
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $delivery['pst_tax'])).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;Merchant Promotion Expenses
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            -'.floatval(sprintf("%.2f", $delivery['reduce'])).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;Packing Fee
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $delivery['packing'])).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;Tax on Packing Fee
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $delivery['packing_tax'])).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;Bottle Deposit
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $delivery['deposit'])).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;'.$store['proportion'].'% (service charge on sales)
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            -'.floatval(sprintf("%.2f", $delivery['good_pro'])).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;Service charge on tax (GST #721938728RT0001)
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            -'.floatval(sprintf("%.2f", $delivery['tax_pro'])).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table>
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 40px;" align="left">
+                                            &nbsp;Net amount to be sent to vendor
+                                        </td>
+                                        <td align="right" style="color:#333;font-size: 18px;font-weight: bold;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $delivery['all_price'])).'
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height: 40px"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="color:#333;font-size: 18px;font-weight: bold;height: 25px">
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                PICKUP
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height: 10px"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="right">
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;Earnings before tax
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $pickup['good_price'])).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;GST received from sales
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $pickup['gst_tax'])).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;PST received from sales
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $pickup['pst_tax'])).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;Merchant Promotion Expenses
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            -'.floatval(sprintf("%.2f", $pickup['reduce'])).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;Packing Fee
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $pickup['packing'])).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;Tax on Packing Fee
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $pickup['packing_tax'])).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;Bottle Deposit
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $pickup['deposit'])).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;'.$store['pickup_proprotion'].'% (service charge on sales)
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            -'.floatval(sprintf("%.2f", $pickup['good_pro'])).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table style="border-bottom: 1px solid #999;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;Service charge on tax (GST #721938728RT0001)
+                                        </td>
+                                        <td align="right" style="color:#666;font-size: 16px;width: 120px;">
+                                            -'.floatval(sprintf("%.2f", $pickup['tax_pro'])).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table>
+                                    <tr>
+                                        <td style="color:#333;font-size: 16px;width: 755px;height: 40px;" align="left">
+                                            &nbsp;Net amount to be sent to vendor
+                                        </td>
+                                        <td align="right" style="color:#333;font-size: 18px;font-weight: bold;width: 120px;">
+                                            '.floatval(sprintf("%.2f", $pickup['all_price'])).'
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height: 40px"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="right">
+                                <table style="border-bottom: 1px solid #999;font-weight: bold;">
+                                    <tr>
+                                        <td style="color:#333;font-size: 18px;width: 755px;height: 30px;" align="left">
+                                            &nbsp;TOTAL AMOUNT TO BE SENT TO VENDOR
+                                        </td>
+                                        <td align="right" style="color:#333;font-size: 18px;width: 120px;">
+                                            $'.floatval(sprintf("%.2f", $delivery['all_price']+$pickup['all_price'])).'
+                                            &nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height: 40px"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="font-size: 14px;font-family: Arial" align="center">
+                                2022 © Kavl Technology Ltd * Please allow 5 to 7 business days for the funds to arrive.
                             </td>
                         </tr>
                     </tbody>

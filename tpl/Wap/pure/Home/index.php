@@ -33,7 +33,7 @@
         var address_url = "{pigcms{:U('Home/address')}";
         var static_url = "{pigcms{$static_public}";
     </script>
-    <script type="text/javascript" src="{pigcms{$static_path}js/index.js?v=1.8" charset="utf-8"></script>
+    <script type="text/javascript" src="{pigcms{$static_path}js/index.js?v=2.0" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_path}js/common.js" charset="utf-8"></script>
     <script type="text/javascript" src="{pigcms{$static_public}js/mobileSelect/mobileSelect.js"></script>
@@ -104,7 +104,7 @@
         }
         #container{
             width: 100%;
-            padding-top: 60px;
+            padding-top: 120px;
             max-width: 640px;
             min-width: 320px;
             margin: 0 auto;
@@ -411,6 +411,7 @@
         #recommendList ul::-webkit-scrollbar,#category ul::-webkit-scrollbar,.store_img ul::-webkit-scrollbar{
             display: none;
         }
+
         #system_message{
             position: absolute;
             top:0;
@@ -440,22 +441,9 @@
 <include file="Public:header"/>
 <div id="container">
     <div id="scroller">
-        <if condition="$wap_index_top_adver">
-            <section id="banner_hei" class="banner">
-                <div class="swiper-container swiper-container1">
-                    <div class="swiper-wrapper">
-                        <volist name="wap_index_top_adver" id="vo">
-                            <div class="swiper-slide">
-                                <a href="{pigcms{$vo.url}">
-                                    <img src="{pigcms{$vo.pic}"/>
-                                </a>
-                            </div>
-                        </volist>
-                    </div>
-                    <div class="swiper-pagination swiper-pagination1"></div>
-                </div>
-            </section>
-        </if>
+        <section id="banner_hei" class="banner">
+
+        </section>
         <div id="category">
             <div class="cate_left"></div>
             <ul>
@@ -531,9 +519,15 @@
                         <img src="./static/images/icon-star-enter.png" width="12">
                         {{# } }}
                     </div>
-                    <div class="brand" style="margin-left: 10px;font-size: 12px;color: grey">${{ d[i].delivery_money }} + · {{ d[i].keywords }}</div>
+                    <div class="brand" style="margin-left: 10px;font-size: 12px;color: grey">
+                        {{# if(userModelSelect == 0){ }}
+                            ${{ d[i].delivery_money }} + · {{ d[i].keywords }}
+                        {{# }else{ }}
+                            {{ d[i].pickup_distance }} km · {{ d[i].keywords }}
+                        {{# } }}
+                    </div>
                     <div class="brand" style="margin-left: 10px;margin-bottom: 5px;">
-                        {{# if(d[i].free_delivery == 1){ }}
+                        {{# if(d[i].free_delivery == 1 && userModelSelect == 0){ }}
                         <span class="show_span" style="margin-right: 5px;">{{ d[i].event.desc }}</span>
                         {{# } }}
                         {{# if(d[i].merchant_reduce_list){ }}
@@ -556,7 +550,13 @@
                         {{# if(d[i].delivery){ }}
                         <div class="price">
                             <!--span>{pigcms{:L('_MIN_DELI_PRICE_')} ${{ d[i].delivery_price }}</span-->
-                            <span class="delivery">{pigcms{:L('_DELI_PRICE_')} ${{ d[i].delivery_money }}+</span>
+                            <span class="delivery">
+                                {{# if(userModelSelect == 0){ }}
+                                    ${{ d[i].delivery_money }} + · {{ d[i].keywords }}
+                                {{# }else{ }}
+                                    {{ d[i].pickup_distance }} km · {{ d[i].keywords }}
+                                {{# } }}
+                            </span>
                             <!--span class="delivery">{pigcms{:L('_PACK_PRICE_')} ${{ d[i].pack_fee }}</span-->
                             {{# if(d[i].delivery_system){ }}
                             <!--em class="location-right">{pigcms{:L('_PLAT_DIST_')}</em-->
@@ -602,7 +602,7 @@
                         {{# } }}
                     </div>
                     {{# } }}
-                    {{# if(d[i].free_delivery == 1){ }}
+                    {{# if(d[i].free_delivery == 1 && userModelSelect == 0){ }}
                         <div class="free_delivery"></div>
                     {{# } }}
                 </dd>
@@ -712,6 +712,19 @@
                 {{# } }}
                 {{# } }}
             </if>
+        </script>
+
+        <script id="indexTopAdver" type="text/html">
+            <div class="swiper-container swiper-container1">
+                <div class="swiper-wrapper">
+                    {{# for(var i = 0, len = d.length; i < len; i++){ }}
+                    <div class="swiper-slide">
+                        <a href="{{ d[i].url }}"><img src="{{ d[i].pic }}"/></a>
+                    </div>
+                    {{# } }}
+                </div>
+                <div class="swiper-pagination swiper-pagination1"></div>
+            </div>
         </script>
 
         <script id="indexRecommendListTpl" type="text/html">

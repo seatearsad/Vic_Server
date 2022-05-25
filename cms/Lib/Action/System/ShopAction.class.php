@@ -564,19 +564,13 @@ class ShopAction extends BaseAction
         }
 
         $status = isset($_GET['status']) ? intval($_GET['status']) : -1;
-        $type = isset($_GET['type']) && $_GET['type'] ? $_GET['type'] : '';
+        $type = isset($_GET['type']) && $_GET['type'] ? $_GET['type'] : 'delivery';
         $sort = isset($_GET['sort']) && $_GET['sort'] ? $_GET['sort'] : '';
         $pay_type = isset($_GET['pay_type']) && $_GET['pay_type'] ? $_GET['pay_type'] : '';
 
         if ($sort != 'DESC' && $sort != 'ASC') $sort = '';
-        if ($type != 'price' && $type != 'pay_time') $type = '';
-        $order_sort = '';
-        if ($type && $sort) {
-            $order_sort .= $type . ' ' . $sort . ',';
-            $order_sort .= 'pay_time DESC';
-        } else {
-            $order_sort .= 'pay_time DESC';
-        }
+        $order_sort = 'pay_time DESC';
+
         if ($status == 100) {
             $where['paid'] = 0;
         } elseif ($status == 2) {
@@ -596,6 +590,17 @@ class ShopAction extends BaseAction
             $where['_string'] = $where['_string'] == "" ? "`pay_type`<>'Cash' and (`balance_pay`<>0 OR `merchant_balance` <> 0 )" : $where['_string'] . " and `pay_type`<>'Cash' and (`balance_pay`<>0 OR `merchant_balance` <> 0 )";
         } else if ($pay_type == 'merchant_request'){
             $where['_string'] = $where['_string'] == "" ? " `uid`=0" : $where['_string'] . " and `uid`=0 ";
+        }
+
+        switch ($type){
+            case "delivery":
+                $where['_string'] .= ($where['_string'] ? ' AND ' : '') . " order_type=0";
+                break;
+            case "pickup":
+                $where['_string'] .= ($where['_string'] ? ' AND ' : '') . " order_type=1";
+                break;
+            default:
+                break;
         }
 
         //筛选时间
@@ -664,11 +669,33 @@ class ShopAction extends BaseAction
 
         $this->assign($result);
 
+        /**
         $field = 'sum(price) AS total_price, sum(price - card_price - merchant_balance - balance_pay - payment_money - score_deducte - coupon_price - card_give_money - merchant_reduce) AS offline_price, sum(card_price + merchant_balance + balance_pay + payment_money + score_deducte + coupon_price + card_give_money) AS online_price';
         $count_where = "paid=1 AND status<>4 AND status<>5 AND (pay_type<>'offline' OR (pay_type='offline' AND third_id<>''))";
         $result_total = D('Shop_order')->field($field)->where($count_where)->select();
         $result_total = isset($result_total[0]) ? $result_total[0] : '';
         $this->assign($result_total);
+         */
+
+        $pickup_settings = D('Config')->where(array('gid'=>52))->select();
+        foreach ($pickup_settings as $v){
+            if($v['name'] == "pickup_pay_time_tip") $pickup_pay_time_tip = $v['value'];
+            if($v['name'] == "pickup_complete_time_tip") $pickup_complete_time_tip = $v['value'];
+        }
+
+        $is_tip = 0;
+        $checkTime = time() - $pickup_pay_time_tip*60;
+        $pay_count = D('Shop_order')->where(array("paid"=>1,"status"=>0,"pay_time"=>array("lt",$checkTime),"order_type"=>1,"is_del"=>0))->count();
+        if($pay_count > 0){
+            $is_tip = 1;
+        }else{
+            $curr_time = time() - $pickup_complete_time_tip*60;
+            $complete_count = D('Shop_order')->join('as o left join '.C('DB_PREFIX').'shop_order_log as l on o.order_id=l.order_id')->where(array("o.paid"=>1,"o.status"=>1,"o.order_type"=>1,"o.is_del"=>0,"l.status"=>2,"l.dateline"=>array('lt',$curr_time)))->count();
+            if($complete_count > 0){
+                $is_tip = 1;
+            }
+        }
+        $this->assign("is_tip",$is_tip);
 
         $this->display();
     }
@@ -728,6 +755,11 @@ class ShopAction extends BaseAction
 
         $order = D('Shop_order')->get_order_detail(array('order_id' => intval($_GET['order_id'])));
         $store = D('Merchant_store')->field(true)->where(array('store_id' => $order['store_id']))->find();
+
+
+        $order_log = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'], 'status' => 2))->order('id DESC')->find();
+        $order['confirm_time'] = $order_log['dateline'] ? $order_log['dateline'] : null;
+        $order['pickup_time'] = $order['confirm_time'] + ($order['dining_time']*60);
 
         if (empty($order)) {
             $this->frame_error_tips('没有找到该订单的信息！');
@@ -1108,7 +1140,7 @@ class ShopAction extends BaseAction
             $this->assign('city_id', 0);
         }
 
-        $where = "s.status=1 AND s.have_shop=1 AND sh.deliver_type IN (0, 3)".$where_city;//array('status' => 1);
+        $where = "s.status=1 AND (s.have_shop=1 OR is_pickup=1) AND sh.deliver_type IN (0, 3)".$where_city;//array('status' => 1);
 
         if (!empty($_GET['keyword'])) {
             $where .= " AND s.name LIKE '%{$_GET['keyword']}%'";
@@ -1724,6 +1756,29 @@ class ShopAction extends BaseAction
         header("Content-Transfer-Encoding:binary");
         $objWriter->save('php://output');
         exit();
+    }
+
+    public function pickup_complete(){
+        $order_id = $_GET['order_id'];
+        $where = array("order_id"=>$order_id,"order_type"=>1,"order_status"=>array("between",array(1,4)));
+        $order = D("Shop_order")->where($where)->find();
+        if($order){
+            $data['status'] = 2;
+            $data['order_status'] = 5;
+            $data['use_time'] = time();
+            $data['last_time'] = time();
+            D("Shop_order")->where($where)->save($data);
+
+            //更新用户订单数量信息
+            //$user = D('User')->where(array('uid'=>$order['uid']))->find();
+            //$userData = array('order_num'=>($user['order_num']+1),'last_order_time'=>$data['use_time']);
+            //D('User')->where(array('uid'=>$order['uid']))->save($userData);
+
+            D('Shop_order_log')->add_log(array('order_id' => $order['order_id'], 'status' => 6, 'name' => '系统管理员：' . $this->system_session['realname'], 'phone' => $this->system_session['phone']));
+            exit(json_encode(array('error_code' => false, 'msg' => "Successful")));
+        }else{
+            exit(json_encode(array('error_code' => true, 'msg' => "更新状态失败")));
+        }
     }
 
     public function export_total()

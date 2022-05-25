@@ -414,7 +414,7 @@ $(document).ready(function(){
     var link_url = "{pigcms{:U('Storestaff/shop_list')}";
     var sound_url = "{pigcms{$static_public}sound/soft-bells.mp3";
 </script>
-<script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=1.8"></script>
+<script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=2.1.0"></script>
 {pigcms{$shareScript}
 <script type="text/javascript">
 function is_mobile(){

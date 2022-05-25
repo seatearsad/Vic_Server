@@ -92,6 +92,7 @@
                 <div id="shopcomment-add-wrapper">
                     <div id="widget-shopcomment-add">
                         <div class="gradecon" id="Addnewskill_119">
+                            <if condition="$now_order['order_type'] eq 0">
                             <ul class="rev_pro clearfix">
                                 <li class="clearfix"> <div class="review_title">{pigcms{$c_title}</div>
                                     <div class="revinp">
@@ -111,6 +112,7 @@
                                 </li>
                             </ul>
                             <div style="height: 15px"></div>
+                            </if>
                             <ul class="rev_pro clearfix">
                                 <li class="clearfix"> <div class="review_title">{pigcms{$s_title}</div>
                                     <div class="revinp">

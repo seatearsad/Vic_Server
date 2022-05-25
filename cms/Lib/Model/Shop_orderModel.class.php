@@ -285,8 +285,12 @@ class Shop_orderModel extends Model
                 	'merchant_reduce_type'	=>	$now_order['merchant_reduce_type'],
 					'service_fee'		=>	$now_order['service_fee'],
 					'store_service_fee' =>	$merchant_store['service_fee'],
-               		 'coupon_id' 		=>	$now_order['coupon_id'],
-				     'coupon_price' 	=>	$now_order['coupon_price']
+					'coupon_id' 		=>	$now_order['coupon_id'],
+					'coupon_price' 		=>	$now_order['coupon_price'],
+					'orderType'			=> 	$now_order['order_type'],
+					'store_address'		=>  $merchant_store['adress'],
+                	'store_lat'		=>  $merchant_store['lat'],
+                	'store_lng'		=>  $merchant_store['long'],
 			);
 		} else {
 			$order_info = array(
@@ -337,10 +341,16 @@ class Shop_orderModel extends Model
                 'service_fee'		=>	$now_order['service_fee'],
                 'store_service_fee' =>	$merchant_store['service_fee'],
                 'coupon_id' 		=>	$now_order['coupon_id'],
-                'coupon_price' 	=>	$now_order['coupon_price']
+                'coupon_price' 		=>	$now_order['coupon_price'],
+                'orderType'			=> 	$now_order['order_type'],
+				'store_address'		=>  $merchant_store['adress'],
+                'store_lat'			=>  $merchant_store['lat'],
+                'store_lng'			=>  $merchant_store['long'],
 			);
 		}
         //var_dump($order_info);
+		if($order_info['orderType'] == 1) $order_info['store_service_fee'] = $merchant_store['pickup_service_fee'];
+
 		return array('error' => 0, 'order_info' => $order_info);
 	}
 
@@ -409,7 +419,7 @@ class Shop_orderModel extends Model
 	//手机端支付前订单处理
 	public function wap_befor_pay($order_info, $now_coupon, $merchant_balance, $now_user)
 	{
-		$pay_money = round($order_info['order_total_money'] * 100) / 100; //本次支付的总金额
+		$pay_money = intval($order_info['order_total_money'] * 100) / 100; //本次支付的总金额
 
 		//减免配送费活动
 		if($order_info['delivery_discount'] > 0){
@@ -461,7 +471,7 @@ class Shop_orderModel extends Model
 				return $this->wap_after_pay_before($order_info);
 			}
 			$pay_money -= round($now_coupon['coupon_price'] * 100)/100;
-			$pay_money = round($pay_money * 100)/100;
+			$pay_money = intval($pay_money * 100)/100;
 		}
 
 		// 使用积分
@@ -477,7 +487,7 @@ class Shop_orderModel extends Model
 				return $this->wap_after_pay_before($order_info);
 			}
 			$pay_money -= $order_info['score_deducte'];
-			$pay_money = round($pay_money * 100)/100;
+			$pay_money = intval($pay_money * 100)/100;
 		}
 
 		//判断商家余额
@@ -495,7 +505,7 @@ class Shop_orderModel extends Model
 				$data_shop_order['merchant_balance'] = $merchant_balance['card_money'];
 			}
 			$pay_money -= $merchant_balance['card_money'];
-			$pay_money = round($pay_money * 100)/100;
+			$pay_money = intval($pay_money * 100)/100;
 		}
 
 		if(!empty($merchant_balance['card_give_money'])&&$order_info['use_merchant_balance']){
@@ -514,7 +524,7 @@ class Shop_orderModel extends Model
 
 		//判断帐户余额
 		if(!empty($now_user['now_money'])&&$order_info['use_balance']){
-			$now_user['now_money'] = round($now_user['now_money'] * 100)/100;
+			$now_user['now_money'] = intval($now_user['now_money'] * 100)/100;
 			if($now_user['now_money'] >= $pay_money){
 				$data_shop_order['balance_pay'] = $pay_money;
 				$order_info['balance_pay'] = $pay_money;

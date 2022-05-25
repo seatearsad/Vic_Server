@@ -244,6 +244,7 @@ class MerchantAction extends BaseAction{
                     $storeIds[] = $store['store_id'];
                 }
                 D('Cart')->where(array('sid'=>array('in',$storeIds)))->delete();
+                D('Merchant_store')->where(array('mer_id'=>$_POST['mer_id']))->save(array('status'=>0));
             }
 
 			$database_merchant->data($_POST)->save();
@@ -426,8 +427,8 @@ class MerchantAction extends BaseAction{
 
 	public function store_edit(){
 		$database_merchant_store = D('Merchant_store');
-		$condition_merchant_store['store_id'] = intval($_GET['store_id']);
-		$store = $database_merchant_store->field(true)->where($condition_merchant_store)->find();
+		$condition_merchant_store['st.store_id'] = intval($_GET['store_id']);
+		$store = $database_merchant_store->field('st.*,sh.delivery_radius,sh.pickup_radius')->join('as st left join '.C('DB_PREFIX').'merchant_store_shop as sh on st.store_id=sh.store_id')->where($condition_merchant_store)->find();
 		if(empty($store)){
 			$this->frame_error_tips('数据库中没有查询到该店铺的信息！',5);
 		}
@@ -447,6 +448,7 @@ class MerchantAction extends BaseAction{
 
 	public function store_amend(){
 		if(IS_POST){
+		    $store = D("Merchant_store")->where(array('store_id'=>$_POST['store_id']))->find();
 			$long_lat = explode(',',$_POST['long_lat']);
 			$_POST['long'] = $long_lat[0];
 			$_POST['lat'] = $long_lat[1];
@@ -456,8 +458,24 @@ class MerchantAction extends BaseAction{
             $area = D('Area')->where(array('area_id'=>$_POST['city_id']))->find();
             $_POST['province_id'] = $area ? $area['area_pid'] : 0;
             $_POST['area_id'] = 0;
+
+            if(($store['have_shop'] != 0 || $store['is_pickup'] != 0) && $_POST['have_shop'] == 0 && $_POST['is_pickup'] == 0){
+                $_POST['status'] = 0;
+            }
+
+            if($_POST['status'] == 1){
+                $merchant = D("Merchant")->where(array('mer_id'=>$store['mer_id']))->find();
+                if($merchant['status'] == 0){
+                    $this->error('Failed! This store belongs to an inactive merchant. Please activate its merchant status first.');
+                }
+            }
+            if($_POST['status'] == 1 && $store['have_shop'] == 0 && $store['is_pickup'] == 0 && $_POST['have_shop'] == 0 && $_POST['is_pickup'] == 0){
+                $_POST['have_shop'] = 1;
+            }
+
 			$database_merchant_store = D('Merchant_store');
 			if($database_merchant_store->data($_POST)->save()){
+			    D("Merchant_store_shop")->where(array('store_id'=>$_POST['store_id']))->save(array('delivery_radius'=>$_POST['delivery_radius'],'pickup_radius'=>$_POST['pickup_radius']));
 				$this->success('Success');
 			}else{
 				$this->error(L('J_MODIFICATION_FAILED2'));
@@ -1648,7 +1666,7 @@ class MerchantAction extends BaseAction{
         import('@.ORG.system_page');
         $count_store = D('Merchant_store')->join('as s left join '.C('DB_PREFIX').'merchant m ON m.mer_id = s.mer_id ')->where($where)->count();
         $p = new Page($count_store, 15);
-        $store_list = D('Merchant_store')->field('s.*,m.name as merchant_name')->join('as s left join '.C('DB_PREFIX').'merchant m ON m.mer_id = s.mer_id ')->where($where)->order('m.mer_id DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
+        $store_list = D('Merchant_store')->field('s.*,m.name as merchant_name,p.delivery_radius,p.pickup_radius')->join('as s left join '.C('DB_PREFIX').'merchant m ON m.mer_id = s.mer_id left join '.C('DB_PREFIX').'merchant_store_shop as p ON s.store_id=p.store_id')->where($where)->order('m.mer_id DESC')->limit($p->firstRow . ',' . $p->listRows)->select();
         foreach ($store_list as &$store){
             $is_all_zero = true;
             for($i=1;$i<=21;++$i){

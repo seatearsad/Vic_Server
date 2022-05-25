@@ -205,6 +205,32 @@
         background-repeat: no-repeat;
         background-position: right center;
     }
+    .pickup_btn{
+        display: flex;
+        margin-top: 8px;
+    }
+    .pickup_btn span{
+        flex: 1 1 100%;
+        line-height: 38px;
+        text-align: center;
+        border-radius: 5px;
+        padding-left: 8px;
+        background-color: #F4F4F4;
+        background-repeat: no-repeat;
+        background-position: left 5px center;
+    }
+    .pickup_btn span:nth-child(1){
+        background-size: auto 28px;
+        background-image: url("./tpl/Static/blue/images/new/icon_direction.png");
+    }
+    .pickup_btn span:nth-child(2){
+        margin-left: 20px;
+        background-size: auto 24px;
+        background-image: url("./tpl/Static/blue/images/new/icon_orange_phone.png");
+    }
+    .pickup_btn span a{
+        display: block;
+    }
 </style>
 <body style="max-width: 640px;background-color: white;">
 <include file="Public:header"/>
@@ -219,7 +245,7 @@
 <!--        <div class="header_active">{pigcms{:L('_ORDER_INFO_TXT_')}</div>-->
 <!--    </div>-->
 <section class="g_details">
-    <if condition="$order.statusLog gt 3 AND 6 gt $order.statusLog AND $order.deliver_lng neq null AND $order.deliver_lat neq null">
+    <if condition="($order.status neq 4 and $order.status neq 5) and ($order.statusLog gt 3 AND 6 gt $order.statusLog or ($order_details['orderType'] eq 1 and $order.statusLog eq 2))">
         <div class="map_infor" id="web_map"></div>
     <else />
         <div class="bg_infor"><img src="{pigcms{$store['logo']}"> </div>
@@ -250,6 +276,25 @@
                     <div style="margin-top: 5px;">will deliver your order to you</div>
                 </div>
             </a>
+        </div>
+        <div class="gray_line"></div>
+    </if>
+
+    <if condition="$order.statusLog gt 1 AND 6 gt $order.statusLog AND $order_details['orderType'] eq 1 and ($order.status neq 4 and $order.status neq 5)">
+        <div class="infor" style="margin-bottom: 0px;">
+            <div style="padding:0 10px;">
+                <div style="font-size: 18px;font-weight: bold">Order #{pigcms{$order['order_id']}</div>
+                <div style="font-size: 16px;font-weight: bold;margin-top: 5px;">{pigcms{$store['adress']}</div>
+                <div style="margin-top: 5px;">{pigcms{$store['trafficroute']}</div>
+                <div class="pickup_btn">
+                    <span>
+                        <a href="https://maps.google.com/maps?q={pigcms{$store['adress']}&z=17&hl=en" target="_blank">Get Directions</a>
+                    </span>
+                    <span>
+                        <a href="tel:{pigcms{$store['phone']}">Call Merchant</a>
+                    </span>
+                </div>
+            </div>
         </div>
         <div class="gray_line"></div>
     </if>
@@ -288,10 +333,12 @@
         </dl>
         <div class="mealfee">
             <dl>
+                <if condition="$order_details['orderType'] eq 0">
                 <dd class="clr">
                     <div class="fl">{pigcms{:L('_DELI_PRICE_')}</div>
                     <div class="fr">${pigcms{$order_details['freight_charge']}</div>
                 </dd>
+                </if>
                 <dd class="clr">
                     <div class="fl"><span style="line-height: 20px;display: inline-block;">{pigcms{:L('V2_SERVICEFEE')}</span> <img src="{pigcms{$static_path}img/index/tax_fee.png" id="tax_fee_img" width="20" style="vertical-align: middle;margin-left: 5px;" /></div>
                     <div class="fr">${pigcms{:number_format($order_details['packing_charge'] + $order_details['tax_price'] + $order_details['deposit_price'] + $order_details['service_fee'],2)}</div>
@@ -369,7 +416,13 @@
     <div class="infor">
         <ul>
                 <li class="clr first">
-                    <div class="fl match">{pigcms{:L('_ORDER_INFO_')}</div>
+                    <div class="fl match">
+                        <if condition="$order_details['orderType'] eq 0">
+                            Delivery Order
+                            <else/>
+                            Pickup Order
+                        </if>
+                    </div>
                 </li>
                 <li class="clr">
                     <div class="fl">{pigcms{:L('V3_ORDER_DETAIL_ORDERNUMBER')}</div>
@@ -379,6 +432,7 @@
                     <div class="fl">{pigcms{:L('_PAYMENT_MODE_')}</div>
                     <div class="fr">{pigcms{$order_details['pay_type']}</div>
                 </li>
+                <if condition="$order_details['orderType'] eq 0">
                 <li class="clr">
                     <div class="fl">{pigcms{:L('_RECE_INFO_')}</div>
                     <div class="p90">
@@ -386,6 +440,7 @@
                         <p>{pigcms{$order_details['username']} {pigcms{$order_details['userphone']}</p>
                     </div>
                 </li>
+                </if>
                 <!--li class="clr">
                     <div class="fl">{pigcms{:L('_DIST_MODE_')}</div>
                     <div class="fr">{pigcms{:L('_PLAT_DIST_')}</div>
@@ -468,7 +523,7 @@
     }
 </style>
 
-<if condition="$order.statusLog gt 3 AND 6 gt $order.statusLog AND $order.deliver_lng neq null AND $order.deliver_lat neq null">
+<if condition="($order.status neq 4 and $order.status neq 5) and ($order.statusLog gt 3 AND 6 gt $order.statusLog or ($order_details['orderType'] eq 1 and $order.statusLog eq 2))">
  <script>
     var store_lat = "{pigcms{$order.store_lat}";
     var store_lng = "{pigcms{$order.store_lng}";
@@ -477,8 +532,10 @@
     var deliver_lat ="{pigcms{$order.deliver_lat}";
     var deliver_lng = "{pigcms{$order.deliver_lng}";
 
-    var deliver_icon = "{pigcms{$static_public}images/deliver/icon_deliver_map.png";
-    var store_icon = "{pigcms{$static_public}images/deliver/icon_store_map.png";
+    var deliver_icon = "{pigcms{$static_public}images/deliver/icon_map_deliver.png";
+    var store_icon = "{pigcms{$static_public}images/deliver/icon_map_store.png";
+    var user_icon = "{pigcms{$static_public}images/deliver/icon_map_user.png";
+    var local_icon = "{pigcms{$static_public}images/deliver/icon_blue_point.png";
 
     //获取get传值的方法
     function getQueryString(name) {
@@ -488,8 +545,8 @@
         return null;
     }
     var map;
+    var orderType = "{pigcms{$order_details['orderType']}";
     function initMap() {
-        // The location of Uluru
         var lng= Number(getQueryString("lng"));
         var lat=Number(getQueryString("lat"));
         var label=getQueryString("label");
@@ -498,13 +555,7 @@
         var user_pos = {lat:parseFloat(user_lat), lng:parseFloat(user_lng)};
         // The map, centered at Uluru
         var map = new google.maps.Map(
-            document.getElementById('web_map'), {zoom: 18, center: uluru});
-
-        var deliver = {
-            url:deliver_icon,
-            scaledSize: new google.maps.Size(35,35),
-            size: new google.maps.Size(35,35)
-        };
+            document.getElementById('web_map'), {zoom: 18, center: store_lng});
 
         var store =  {
             url:store_icon,
@@ -512,14 +563,40 @@
             size: new google.maps.Size(35,35)
         };
 
-        // The marker, positioned at Uluru
-        var marker_deliver = new google.maps.Marker({position: uluru, map: map,icon:deliver});
+        var user =  {
+            url:user_icon,
+            scaledSize: new google.maps.Size(35,35),
+            size: new google.maps.Size(35,35)
+        };
+
+        var local  =  {
+            url:local_icon,
+            scaledSize: new google.maps.Size(35,35),
+            size: new google.maps.Size(35,35)
+        };
+
         var marker_store = new google.maps.Marker({position: store_pos, map: map,icon:store});
-        var marker_user = new google.maps.Marker({position: user_pos, map: map});
+
 
         var bounds = new google.maps.LatLngBounds();
-        bounds.extend(new   google.maps.LatLng(marker_deliver.getPosition().lat()
-            ,marker_deliver.getPosition().lng()));
+
+        if(orderType == 0) {
+            var marker_user = new google.maps.Marker({position: user_pos, map: map,icon:user});
+
+            var deliver = {
+                url: deliver_icon,
+                scaledSize: new google.maps.Size(35, 35),
+                size: new google.maps.Size(35, 35)
+            };
+
+            var marker_deliver = new google.maps.Marker({position: uluru, map: map,icon:deliver});
+
+            bounds.extend(new   google.maps.LatLng(marker_deliver.getPosition().lat()
+                ,marker_deliver.getPosition().lng()));
+        }else{
+            var marker_user = new google.maps.Marker({position: user_pos, map: map,icon:local});
+        }
+
         bounds.extend(new   google.maps.LatLng(marker_store.getPosition().lat()
             ,marker_store.getPosition().lng()));
         bounds.extend(new   google.maps.LatLng(marker_user.getPosition().lat()
@@ -597,7 +674,7 @@
         "<div class='b_font' style='width: "+width+"px;margin-top: 10px'>{pigcms{:L('V2_BOTTLEDEPOSIT')}:${pigcms{:number_format($order_details['deposit_price'],2)}</div>" +
         "<div style='width: "+width+"px;'>{pigcms{:L('V2_BOTTLEDEPOSITDES')}</div>" +
         "<div class='b_font' style='width: "+width+"px;margin-top: 10px'>{pigcms{:L('V2_SERVICEFEEDES')}:${pigcms{:number_format($order_details['service_fee'],2)}</div>" +
-        "<div style='width: "+width+"px;'>{pigcms{:replace_lang_str(L('V2_TOTALTAXNFEES'),$store['service_fee'])}</div>" +
+        "<div style='width: "+width+"px;'>{pigcms{:replace_lang_str(L('V2_TOTALTAXNFEES'),$order_details['store_service_fee'])}</div>" +
         "<div class='b_font' style='width: "+width+"px;text-align: right;margin-top: 15px;margin-bottom: 10px;'>{pigcms{:L('V2_SERVICEFEE')}:{pigcms{:number_format($order_details['packing_charge'] + $order_details['tax_price'] + $order_details['deposit_price'] + $order_details['service_fee'],2)}</div>";
 
     $('#tax_fee_img').click(function () {

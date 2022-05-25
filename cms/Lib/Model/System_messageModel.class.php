@@ -21,9 +21,12 @@ class System_messageModel extends Model
      * @param $from 0Wap 1iOS 2Android
      * @param $version App的版本号
      * @param $city_id 城市id
+     * @param $lat
+     * @param $lng
+     * @param $selectType 0 Delivery 1 Pickup
      * @return array
      */
-    public function getSystemMessage($from,$version,$city_id,$lat,$lng){
+    public function getSystemMessage($from,$version,$city_id,$lat,$lng,$selectType){
         $where = array('status'=>1);
         switch ($from){
             case 0:
@@ -56,7 +59,7 @@ class System_messageModel extends Model
 
             foreach ($list as &$v){
                 if($v['city_id'] == $city_id){
-                    if(($is_continue && $v['in_area'] == 1) || (!$is_continue && $v['in_area'] == 0)){
+                    if(($is_continue && $v['in_area'] == 1) || (!$is_continue && $v['in_area'] == 0 && $selectType == 0)){
                         $newList[] = $v;
                     }
                 }else{

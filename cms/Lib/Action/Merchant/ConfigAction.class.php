@@ -394,6 +394,13 @@ class ConfigAction extends BaseAction{
 				$_POST['status'] = '1';
 			}
 
+			$city_id = ($_POST['city_id'] && $_POST['city_id'] != '') ? $_POST['city_id'] : 0;
+			$city = D('Area')->where(array('area_id'=>$city_id))->find();
+			$_POST['service_fee'] = $city['delivery_service_fee'];
+            $_POST['proprotion'] = $city['delivery_proprotion'];
+            $_POST['pickup_service_fee'] = $city['pickup_service_fee'];
+            $_POST['pickup_proprotion'] = $city['pickup_proprotion'];
+
 			$_POST['discount_txt'] = '';
 			$discount_type = isset($_POST['discount_type']) ? intval($_POST['discount_type']) : 0;
 			if ($discount_type == 1) {

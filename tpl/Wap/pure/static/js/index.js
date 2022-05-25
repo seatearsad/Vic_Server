@@ -1,4 +1,4 @@
-var myScroll,wx;
+var myScroll,wx,userModelSelect;
 $(function(){
 	/*if(!app_version){
 	$(window).resize(function(){
@@ -37,6 +37,30 @@ $(function(){
 			}
 		},1000);
 	}
+
+
+
+	$('#select_div').find('li').click(function () {
+		$(this).addClass('active').siblings().removeClass('active');
+		if($(this).data('type') != $.cookie('userModelSelect')) {
+			$.cookie('userModelSelect', $(this).data('type'),{expires:700,path:"/"});
+            userModelSelect = $.cookie('userModelSelect');
+        }
+
+        like_page = 1;
+		getRecommendList();
+    });
+
+	if(typeof($.cookie('userModelSelect')) != 'undefined'){
+        $('#select_div').find('li').each(function () {
+            if($(this).data('type') == $.cookie('userModelSelect')) $(this).addClass('active').siblings().removeClass('active');
+        });
+        userModelSelect = $.cookie('userModelSelect');
+	}else{
+        $.cookie('userModelSelect', 0,{expires:700,path:"/"});
+        userModelSelect = 0;
+	}
+
 	var upIcon = $("#up-icon"),
 		downIcon = $("#pullDown");
 	// myScroll = new IScroll('#container', { probeType: 3,disableMouse:true,disablePointer:true,mouseWheel: false,scrollX: false, scrollY:true,click:false,scrollbars:true,shrinkScrollbars: 'scale',resizeScrollbars:false,fadeScrollbars:true});
@@ -86,15 +110,6 @@ $(function(){
 		}
 	});*/
 
-	var mySwiper = $('.swiper-container1').swiper({
-		pagination:'.swiper-pagination1',
-		loop:true,
-		grabCursor: true,
-		paginationClickable: true,
-		autoplay:3000,
-		autoplayDisableOnInteraction:false,
-		simulateTouch:false
-	});
 	var mySwiper2 = $('.swiper-container2').swiper({
 		pagination:'.swiper-pagination2',
 		loop:true,
@@ -220,6 +235,23 @@ function getRecommendList(){
                 laytpl($('#indexRecommendListTpl').html()).render(result.recommend, function (html) {
                     $('#recommendList').html(html);
                 });
+
+                var mySwiper;
+                if(result.adver != null) {
+                    laytpl($('#indexTopAdver').html()).render(result.adver, function (html) {
+                        $('#banner_hei').html(html);
+                        if (typeof (mySwiper) != "undefined") mySwiper.swipeReset();
+                        mySwiper = $('.swiper-container1').swiper({
+                            pagination: '.swiper-pagination1',
+                            loop: true,
+                            grabCursor: true,
+                            paginationClickable: true,
+                            autoplay: 3000,
+                            autoplayDisableOnInteraction: false,
+                            simulateTouch: false
+                        });
+                    });
+                }
 
                 if(result.system_message != null){
                 	var system_message = result.system_message;

@@ -283,28 +283,36 @@ class IndexAction extends BaseAction {
 
             exit(json_encode($data));
         }else {
-            $order_id = $_GET['order_id'];
-            $data['order_id'] = $order_id;
-            $data['store_lat'] = 0;
-            $data['store_lng'] = 0;
-            $data['user_lat'] = 0;
-            $data['user_lng'] = 0;
-            $data['deliver_lat'] = 0;
-            $data['deliver_lng'] = 0;
-            if ($order_id) {
-                $supply = D('Deliver_supply')->where(array('order_id' => $order_id))->find();
-                if ($supply) {
-                    $deliver_id = $supply['uid'];
-                    $deliver = D('Deliver_user')->where(array('uid' => $deliver_id))->find();
-                    $data['store_lat'] = $supply['from_lat'];
-                    $data['store_lng'] = $supply['from_lnt'];
-                    $data['user_lat'] = $supply['aim_lat'];
-                    $data['user_lng'] = $supply['aim_lnt'];
-                    $data['deliver_lat'] = $deliver['lat'];
-                    $data['deliver_lng'] = $deliver['lng'];
+            $type = $_GET['type'];
+            $data['type'] = $type;
+            if($type == 3){
+                $data["store_lat"] = $_GET["store_lat"];
+                $data["store_lng"] = $_GET["store_lng"];
+                $data["user_lat"] = $_GET["user_lat"];
+                $data["user_lng"] = $_GET["user_lng"];
+            }else {
+                $order_id = $_GET['order_id'];
+                $data['order_id'] = $order_id;
+                $data['store_lat'] = 0;
+                $data['store_lng'] = 0;
+                $data['user_lat'] = 0;
+                $data['user_lng'] = 0;
+                $data['deliver_lat'] = 0;
+                $data['deliver_lng'] = 0;
+                if ($order_id) {
+                    $supply = D('Deliver_supply')->where(array('order_id' => $order_id))->find();
+                    if ($supply) {
+                        $deliver_id = $supply['uid'];
+                        $deliver = D('Deliver_user')->where(array('uid' => $deliver_id))->find();
+                        $data['store_lat'] = $supply['from_lat'];
+                        $data['store_lng'] = $supply['from_lnt'];
+                        $data['user_lat'] = $supply['aim_lat'];
+                        $data['user_lng'] = $supply['aim_lnt'];
+                        $data['deliver_lat'] = $deliver['lat'];
+                        $data['deliver_lng'] = $deliver['lng'];
+                    }
                 }
             }
-
             $this->assign('data', $data);
             $this->display();
         }

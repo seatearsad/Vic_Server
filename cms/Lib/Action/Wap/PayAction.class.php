@@ -743,7 +743,7 @@ class PayAction extends BaseAction{
         }
 
         $order_info = $now_order['order_info'];
-        //var_dump($order_info);
+
         $result_url=$this->get_result_url($_POST['order_id']);
 
         $now_merchant = D('Merchant')->get_info($order_info['mer_id']);

@@ -8,7 +8,7 @@
 
 class StoreModel extends Model
 {
-    public function get_store_by_id($store_id,$lat,$lng)
+    public function get_store_by_id($store_id,$lat=0,$lng=0,$city_id=0)
     {
         $where = array('store_id' => $store_id);
         $now_store = D('Merchant_store')->field(true)->where($where)->find();
@@ -48,6 +48,9 @@ class StoreModel extends Model
         $store['pay_method'] = $row['pay_method'];
         $store['delivery_radius'] = $row['delivery_radius'];
         $store['menu_version'] = $row['menu_version'];
+        $store['have_shop'] = $row['have_shop'];
+        $store['is_pickup'] = $row['is_pickup'];
+        $store['pickup_service_fee'] = $row['pickup_service_fee'];
 
         if($row['background'] && $row['background'] != '') {
             $image_tmp = explode(',', $row['background']);
@@ -257,6 +260,7 @@ class StoreModel extends Model
         $store['deposit_price'] = floatval($row['deposit_price']);
         $store['service_fee'] = $row['service_fee'];
         $store['city_id'] = $row['city_id'];
+        $store['pickup_instruction'] = $row['trafficroute'];
 
         //$store['deliver_name'] = $delivers[$row['deliver_type']];
         $is_have_two_time = 0;//是否是第二时段的配送显示
@@ -332,29 +336,77 @@ class StoreModel extends Model
         }
         //modify garfunkel
         if($lat != 0 && $lng != 0) {
-            $from = $row['lat'].','.$row['long'];
-            $aim = $lat.','.$lng;
-            $distance = getDistanceByGoogle($from,$aim);
-            $store['shipfee'] = calculateDeliveryFee($distance,$store['city_id']);
-            //$store['shipfee'] = getDeliveryFee($row['lat'], $row['long'], $lat, $lng,$row['city_id']);
+            if($row['have_shop'] == 1) {
+                $from = $row['lat'] . ',' . $row['long'];
+                $aim = $lat . ',' . $lng;
+                $distance = getDistanceByGoogle($from, $aim);
+                $store['shipfee'] = calculateDeliveryFee($distance, $store['city_id']);
 
-            //$distance = getDistance($row['lat'], $row['long'], $lat, $lng);
-            $store['free_delivery'] = 0;
-            $store['event'] = array("use_price"=>"0","discount"=>"0","miles"=>0);
-            if($delivery_coupon != "" && $delivery_coupon['limit_day']*1000 >= $distance*1000){
-                $store['free_delivery'] = 1;
-                $t_event['use_price'] = $delivery_coupon['use_price'];
-                $t_event['discount'] = $delivery_coupon['discount'];
-                $t_event['miles'] = $delivery_coupon['limit_day']*1000;
-                $t_event['desc'] = $delivery_coupon['desc'];
-                $t_event['event_type'] = $delivery_coupon['event_type'];
+                //$store['shipfee'] = getDeliveryFee($row['lat'], $row['long'], $lat, $lng,$row['city_id']);
 
-                $store['event'] = $t_event;
+                //$distance = getDistance($row['lat'], $row['long'], $lat, $lng);
+                $store['free_delivery'] = 0;
+                $store['event'] = array("use_price" => "0", "discount" => "0", "miles" => 0);
+                if ($delivery_coupon != "" && $delivery_coupon['limit_day'] * 1000 >= $distance * 1000) {
+                    $store['free_delivery'] = 1;
+                    $t_event['use_price'] = $delivery_coupon['use_price'];
+                    $t_event['discount'] = $delivery_coupon['discount'];
+                    $t_event['miles'] = $delivery_coupon['limit_day'] * 1000;
+                    $t_event['desc'] = $delivery_coupon['desc'];
+                    $t_event['event_type'] = $delivery_coupon['event_type'];
 
-                //$temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
+                    $store['event'] = $t_event;
+
+                    //$temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
+                }
+
+                $city_id = $city_id != 0 ? $city_id : D('Store')->geocoderGoogle($lat,$lng);
+                if($store['city_id'] != $city_id){
+                    $store['is_delivery'] = "0";
+                }else {
+                    if ($distance <= $row['delivery_radius']) {
+                        //获取特殊城市属性
+                        $city = D('Area')->where(array('area_id' => $city_id))->find();
+                        if ($city['range_type'] != 0) {
+                            switch ($city['range_type']) {
+                                case 1://按照纬度限制的城市 小于某个纬度
+                                    if ($lat >= $city['range_para']) $store['is_delivery'] = "0";
+                                    else $store['is_delivery'] = "1";
+                                    break;
+                                case 2://自定义区域
+                                    import('@.ORG.RegionalCalu.RegionalCalu');
+                                    $region = new RegionalCalu();
+                                    if ($region->checkCity($city, $lng, $lat)) {
+                                        $store['is_delivery'] = "1";
+                                    } else {
+                                        $store['is_delivery'] = "0";
+                                    }
+                                    break;
+                                default:
+                                    $store['is_delivery'] = "1";
+                                    break;
+                            }
+                        } else {
+                            $store['is_delivery'] = "1";
+                        }
+                    } else {
+                        $store['is_delivery'] = "0";
+                    }
+                }
+            }else{
+                $store['is_delivery'] = "0";
             }
-        }else
+        } else {
             $store['shipfee'] = C('config.delivery_distance_1');
+            $store['is_delivery'] = "0";
+        }
+
+        if($row['is_pickup'] == 1){
+            $store['pickup_distance'] = round(getDistance($row['lat'], $row['long'], $lat, $lng)/1000,2);
+        }else{
+            $store['pickup_distance'] = 0;
+        }
+
         //$store['delivery_money'] = floatval($store['delivery_money']);
 // 		$store['delivery_money'] = $row['deliver_type'] == 0 ? C('config.delivery_fee') : $row['delivery_fee'];//配送费
 // 		$store['delivery_money'] = floatval($store['delivery_money']);//配送费
@@ -817,7 +869,8 @@ class StoreModel extends Model
             $tarr['pid'] = $v['uid'];
             $tarr['order_id'] = $v['order_id'];
             $tarr['name'] = $v['nickname'];
-            $tarr['comment'] = $v['comment'];
+            $tarr['comment'] = htmlspecialchars_decode($v['comment']);
+            $tarr['comment'] = str_replace("&#39;","'",$tarr['comment']);
             $tarr['addtime'] = $v['add_time_hi'];
             $tarr['score'] = $v['score'];
             $tarr['score1'] = $v['score'];
@@ -1078,7 +1131,7 @@ class StoreModel extends Model
         return $status_list[$status];
     }
 
-    public function getOrderStatusLogName($status){
+    public function getOrderStatusLogName($status,$order_type = 0){
         $status_list = array(
             L('V3_CONFIRMING'),
             L('V3_CONFIRMING'),
@@ -1097,12 +1150,17 @@ class StoreModel extends Model
             L('_ORDER_STATUS_14_'),
             L('_ORDER_STATUS_15_'),
             30 => L('_ORDER_STATUS_30_'),
-            33 => L('_ORDER_STATUS_33_'));
+            33 => L('_ORDER_STATUS_33_')
+        );
+
+        if($order_type == 1) {
+            $status_list[5] = "Order is ready";
+        }
 
         return $status_list[$status];
     }
 
-    public function getOrderStatusDesc($status,$order,$log,$storeName,$add_time=0){
+    public function getOrderStatusDesc($status,$order,$log,$storeName,$add_time=0,$store_id){
         $desc = "";
 //        echo $status;
 //        echo "--------------";
@@ -1124,23 +1182,48 @@ class StoreModel extends Model
                 }
             }
 
-            if($now_time < $check_time){
-                if ($add_time == 0)
-                    $desc = replace_lang_str(L('V3_PREPARINGSUB1'),date("H:i", $check_time));
-                else {
-                    $desc = replace_lang_str(L('V3_PREPARINGSUB2_1'), $add_time);
-                    $desc .= replace_lang_str(L('V3_PREPARINGSUB2_2'), date("H:i", $check_time));
+            if ($order['order_type'] == 1){
+                $order['preparing_time'] = date("H:i",($order['last_time'] + $order['dining_time']*60));
+                if($order['order_status'] == 1){
+                    $preparing_time = time() - ($order['last_time'] + $order['dining_time']*60);
+                    if($preparing_time > 0) {
+                        $desc = "Your order should be ready but the merchant has not confirmed. Please contact the restaurant before picking up your order!";
+                    }else{
+                        if($add_time == 0)
+                            $desc = replace_lang_str(L('V3_PREPARINGSUB1'),$order['preparing_time']);
+                        else {
+                            $desc = replace_lang_str(L('V3_PREPARINGSUB2_1'), $add_time);
+                            $desc .= replace_lang_str(L('V3_PREPARINGSUB2_2'), $order['preparing_time']);
+                        }
+                    }
+                }else{
+                    $desc = replace_lang_str(L('V3_PREPARINGSUB1'),$order['preparing_time']);
                 }
             }else {
-                $desc = L('V3_PREPARINGSUB3');
+                if ($now_time < $check_time) {
+                    if ($add_time == 0)
+                        $desc = replace_lang_str(L('V3_PREPARINGSUB1'), date("H:i", $check_time));
+                    else {
+                        $desc = replace_lang_str(L('V3_PREPARINGSUB2_1'), $add_time);
+                        $desc .= replace_lang_str(L('V3_PREPARINGSUB2_2'), date("H:i", $check_time));
+                    }
+                } else {
+                    $desc = L('V3_PREPARINGSUB3');
+                }
             }
         }
 
         if($status == 4)
             $desc = L('V3_PICKEDUPSUB');
 
-        if($status == 5)
-            $desc = L('V3_HEADINGTOYOUSUB');
+        if($status == 5) {
+            if($order['order_type'] == 0)
+                $desc = L('V3_HEADINGTOYOUSUB');
+            else {
+                $close_time = $this->getCurrEndTime($store_id);
+                $desc = "Please note that this merchant closes at (" . $close_time . ").";
+            }
+        }
 
         if($status == 6 || $status == 7 || $status == 8)
             $desc = L('V3_COMPLETESUB');
@@ -1303,5 +1386,20 @@ class StoreModel extends Model
         }
 
         return $city_id;
+    }
+
+    public function getCurrEndTime($store_id){
+        $store = D("Merchant_store")->where(array("store_id"=>$store_id))->find();
+        $week = date("w");
+        $time = date("His");
+
+        $close_time = "";
+        for ($i = $week*3;$i > $week*3-3;$i--){
+            if(str_replace(':','',$store['open_'.$i]) <= $time && str_replace(':','',$store['close_'.$i]) > $time){
+                $close_time = $store['close_'.$i];
+            }
+        }
+
+        return $close_time;
     }
 }

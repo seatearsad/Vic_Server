@@ -10,7 +10,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="format-detection" content="address=no">
     <link href="{pigcms{$static_path}css/eve.7c92a906.css" rel="stylesheet"/>
-    <link href="{pigcms{$static_path}css/staff.css?v=1.1" rel="stylesheet"/>
+    <link href="{pigcms{$static_path}css/staff.css?v=1.2" rel="stylesheet"/>
     <script src="{pigcms{:C('JQUERY_FILE')}"></script>
     <script src="{pigcms{$static_public}js/laytpl.js"></script>
     <script src="{pigcms{$static_path}layer/layer.m.js"></script>
@@ -82,7 +82,7 @@
         var sound_url = "{pigcms{$static_public}sound/soft-bells.mp3";
         var detail_url = "{pigcms{:U('Storestaff/getOrderDetail')}";
     </script>
-    <script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=2.0.1"></script>
+    <script type="text/javascript" src="{pigcms{$static_path}js/new_order.js?v=2.1.0"></script>
     <script>
         //更新app 设备token
         function pushDeviceToken(token) {
@@ -123,7 +123,7 @@
         $(function () {
             $(".order_list").height(all_height - header_height);
             $(".order_detail").height(all_height - header_height);
-            $('#detail_div').height(all_height - header_height - 70);
+            $('#detail_div').height(all_height - header_height - 100);
             $('.list_ul').height(all_height - header_height - 50);
             if(all_width > all_height){
                 $('.show_list').hide();
@@ -191,9 +191,28 @@
         var is_send = false;
         $('.confirm_btn').click(function () {
             if(is_send) return false;
+            if(this_order.order_status == 3){
+                layer.open({
+                    title: '',
+                    content: 'Please confirm the customer has picked up this order',
+                    btn: ['Confirm', 'Cancel'],
+                    shadeClose: false,
+                    yes: function() {
+                        layer.closeAll();
+                        updateStatus();
+                    }
+                });
+            }else{
+                updateStatus();
+            }
+
+            return false;
+        });
+
+        function updateStatus() {
             layer.open({
-                type:2,
-                content:'Loading...'
+                type: 2,
+                content: 'Loading...'
             });
             var time_val = $('select[name="dining_time"] option:selected').val();
             is_send = true;
@@ -201,7 +220,7 @@
             $.post("{pigcms{:U('Storestaff/shop_order_confirm')}",{order_id:click_id,status:1,dining_time:time_val},function(result){
                 is_send = false;
                 if(result.status == 1){
-                    printOrderToAndroid(time_val);
+                    if(this_order.status == 0) printOrderToAndroid(time_val);
                     setTimeout(function () {
                         layer.closeAll();
                         getNewOrder();
@@ -217,8 +236,7 @@
                     });
                 }
             },'json');
-            return false;
-        });
+        }
 
         function printOrderToAndroid(time_val){
             if(typeof (time_val) == "undefined" || !/^[0-9]*$/.test(time_val)){
@@ -330,29 +348,58 @@
             <span>#{{ d[i].order_id }}</span>
             <span>{{ d[i].username }}</span>
             {{# if(d[i].status == 1){ }}
-            <span class="confirm_order">{pigcms{:L('QW_CONFIRMED')}</span>
+                {{# if(d[i].order_type == 0){ }}
+                <span class="confirm_order">{pigcms{:L('QW_CONFIRMED')}</span>
+                {{# }else{ }}
+                <span class="confirm_order" style="color: #294068">
+                    {{# if(d[i].order_status == 1){ }}
+                        Preparing
+                    {{# }else{ }}
+                        Ready
+                    {{# } }}
+                </span>
+                {{# } }}
             {{# }else{ }}
-            <span class="new_order">{pigcms{:L('QW_NEW')}</span>
+                {{# if(d[i].order_type == 0){ }}
+                    <span class="new_order">{pigcms{:L('QW_NEW')}</span>
+                {{# }else{ }}
+                    <span class="new_order" style="background-color: #294068;">{pigcms{:L('QW_NEW')}</span>
+                {{# } }}
             {{# } }}
         </li>
         {{# } }}
     </script>
     <script id="OrderDetailTpl" type="text/html">
         <div class="detail_title">
+            {{# if(d.order_type == 1){ }}
+                <span style="background-color: #294068;color: white;padding: 5px 10px;border-radius: 5px;">{pigcms{:L('_SELF_LIFT_')}</span>
+            {{# } }}
             Order #{{ d.order_id }}
             (
-            {{# if(d.status == 0){ }}
-            <span class="t_color">{pigcms{:L('QW_PLEASECONFIRM')}</span>
-            {{# }else if(d.order_status == 1){ }}
-            <span class="t_color">{pigcms{:L('QW_WAITING')}</span>
-            {{# }else if(d.order_status == 2){ }}
-            <span class="t_color">{pigcms{:L('QW_Accepted')}</span>
-            {{# }else if(d.order_status == 3){ }}
-            <span class="t_color">{pigcms{:L('QW_PICKED')}</span>
-            {{# }else if(d.order_status == 4){ }}
-            <span class="t_color">{pigcms{:L('QW_ARRIVING')}</span>
-            {{# }else if(d.order_status == 5){ }}
-            <span class="t_color">{pigcms{:L('QW_COMPLETED')}</span>
+            {{# if(d.order_type == 0){ }}
+                {{# if(d.status == 0){ }}
+                <span class="t_color">{pigcms{:L('QW_PLEASECONFIRM')}</span>
+                {{# }else if(d.order_status == 1){ }}
+                <span class="t_color">{pigcms{:L('QW_WAITING')}</span>
+                {{# }else if(d.order_status == 2){ }}
+                <span class="t_color">{pigcms{:L('QW_Accepted')}</span>
+                {{# }else if(d.order_status == 3){ }}
+                <span class="t_color">{pigcms{:L('QW_PICKED')}</span>
+                {{# }else if(d.order_status == 4){ }}
+                <span class="t_color">{pigcms{:L('QW_ARRIVING')}</span>
+                {{# }else if(d.order_status == 5){ }}
+                <span class="t_color">{pigcms{:L('QW_COMPLETED')}</span>
+                {{# } }}
+            {{# }else{ }}
+                {{# if(d.status == 0){ }}
+                    <span style="color: #294068">{pigcms{:L('QW_PLEASECONFIRM')}</span>
+                {{# }else if(d.order_status == 1){ }}
+                    <span style="color: #294068">Preparing</span>
+                {{# }else if(d.order_status == 5){ }}
+                    <span style="color: #294068">{pigcms{:L('QW_COMPLETED')}</span>
+                {{# }else{ }}
+                    <span style="color: #294068">Ready for Pickup</span>
+                {{# } }}
             {{# } }}
             )
             {{# if(d.status > 0 && d.status < 4 && d.is_app){ }}
@@ -362,12 +409,21 @@
         <div class="detail_user">
             Placed by {{ d.username }} ({{ d.userphone }}) at {{ d.date }}
         </div>
-        <div class="detail_note">
-            {pigcms{:L('QW_NOTE')}:
-        <span class="t_color">
-            {{ d.desc }}
-        </span>
-        </div>
+        {{# if(d.order_type == 0){ }}
+            <div class="detail_note">
+                {pigcms{:L('QW_NOTE')}:
+                <span class="t_color">
+                    {{ d.desc }}
+                </span>
+            </div>
+        {{# }else{ }}
+            <div class="detail_note" style="border-color: #294068;">
+                {pigcms{:L('QW_NOTE')}:
+                <span class="t_color">
+                        {{ d.desc }}
+                    </span>
+            </div>
+        {{# } }}
         {{# if(d.link_type == 0){ }}
         {{# if(d.info != null){ }}
         {{# for(var i = 0, len = d.info.length; i < len; i++){ }}
@@ -376,7 +432,11 @@
         {{# } }}
         <div class="order_item">
             {{# if(d.info[i].num > 1){ }}
-            <span class="item_num num_more">x{{ d.info[i].num }}</span>
+                {{# if(d.order_type == 1){ }}
+                    <span class="item_num num_more" style="border: 2px solid #294068;background: #294068;">x{{ d.info[i].num }}</span>
+                {{# }else{ }}
+                    <span class="item_num num_more">x{{ d.info[i].num }}</span>
+                {{# } }}
             {{# }else{ }}
             <span class="item_num num_one">x{{ d.info[i].num }}</span>
             {{# } }}

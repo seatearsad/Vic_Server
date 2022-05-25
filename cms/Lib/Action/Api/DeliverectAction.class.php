@@ -332,7 +332,7 @@ class DeliverectAction
             $data['last_time'] = time();
             $condition['status'] = 0;
             if ($database->where($condition)->save($data)) {
-                if ($order['is_pick_in_store'] != 2 && $order['is_pick_in_store'] != 3) {
+                if ($order['is_pick_in_store'] != 2 && $order['is_pick_in_store'] != 3 && $order['order_type'] == 0) {
                     $result = D('Deliver_supply')->saveOrder($order_id, $store);
                     if ($result['error_code']) {
                         D('Shop_order')->where(array('order_id' => $order_id))->save(array('status' => 0, 'order_status' => 0, 'last_time' => time()));
@@ -346,17 +346,17 @@ class DeliverectAction
                 //add garfunkel
                 $userInfo = D('User')->field(true)->where(array('uid' => $order['uid']))->find();
                 if ($userInfo['device_id'] != "") {
-                    $message = 'Your order has been accepted by the store, they are preparing it now. Our Courier is on the way, thank you for your patience!';
+                    if($order['order_type'] == 0)
+                        $message = 'Your order has been accepted by the store, they are preparing it now. Our Courier is on the way, thank you for your patience!';
+                    else
+                        $message = 'Your order has been accepted by the store, and they are preparing it now!';
                     Sms::sendMessageToGoogle($userInfo['device_id'], $message);
                 } else {
-                    $sms_data['uid'] = $order['uid'];
-                    $sms_data['mobile'] = $order['userphone'];
-                    $sms_data['sendto'] = 'user';
-                    $sms_data['tplid'] = 172700;
-                    $sms_data['params'] = [];
-                    //Sms::sendSms2($sms_data);
-                    $sms_txt = "Your order has been accepted by the store, they are preparing your order now. Our Courier is on the way, thank you for your patience.";
-                    //Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
+                    if($order['order_type'] == 0)
+                        $sms_txt = "Your order has been accepted by the store, they are preparing your order now. Our Courier is on the way, thank you for your patience.";
+                    else
+                        $sms_txt = 'Your order has been accepted by the store, and they are preparing it now!';
+
                     Sms::sendTwilioSms($order['userphone'], $sms_txt);
                 }
 

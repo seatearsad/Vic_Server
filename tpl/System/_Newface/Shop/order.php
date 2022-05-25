@@ -66,12 +66,22 @@
                         <!-------------------------------- 工具条 -------------------------------------->
                             <div style="margin-bottom: 15px;min-height: 70px">
 
-                            <div id="tool_bar" style="form-group " >
+                            <div id="tool_bar" style="form-group">
+                                <span class="float-right text-right">
+                                    <div class="btn-group" id="order_select">
+                                        <button class="btn btn-white <if condition="$_GET['type'] and $_GET['type'] eq 'all'">active</if>" data-type="all">{pigcms{:L('_ALL_TXT_')}</button>
+                                        <button class="btn btn-white <if condition="!$_GET['type'] or $_GET['type'] eq 'delivery'">active</if>" data-type="delivery">{pigcms{:L('_DELI_TXT_')}</button>
+                                        <button class="btn btn-white <if condition="$_GET['type'] and $_GET['type'] eq 'pickup'">active</if>" data-type="pickup" <if condition="$is_tip eq 1">style="background-color:red;color:white;"</if>>{pigcms{:L('_SELF_LIFT_')}</button>
+                                    </div>
+                                    <if condition="$is_tip eq 1">
+                                        <span class="fa fa-exclamation-circle tutti_icon_danger" style="vertical-align: middle;"></span>
+                                    </if>
+                                </span>
 
                                 <form action="{pigcms{:U('Shop/order')}" method="get" class="form-inline ">
                                     <input type="hidden" name="c" value="Shop"/>
                                     <input type="hidden" name="a" value="order"/>
-
+                                    <input type="hidden" name="type" value="{pigcms{$_GET['type']}">
                                     <div style="width:100%;">
                                         <if condition="$system_session['level'] neq 3">
                                             City:&nbsp;&nbsp;
@@ -152,17 +162,16 @@
                         </div>
                         <!------------------------------------------------------------------------------>
                         <!-- <form name="myform" id="myform" action="" method="post">-->
-                        <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="20"
-                               data-sorting="false">
+                            <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="20" data-sorting="false" <if condition="$_GET['type'] and $_GET['type'] eq 'pickup'">style="background-color: #FFF5E8;"</if>>
                             <thead>
                             <tr>
                                 <th data-sort-ignore="true">Order ID</th>
                                 <th data-sort-ignore="true" style="width:15%">{pigcms{:L('_BACK_STORE_NAME_')}</th>
-                                <th  data-sort-ignore="true">{pigcms{:L('_BACK_STORE_PHONE_')}</th>
-                                <th  data-sort-ignore="true">{pigcms{:L('_BACK_USER_NAME_')}</th>
-                                <th  data-sort-ignore="true">{pigcms{:L('_BACK_USER_PHONE_')}</th>
-                                <th  data-sort-ignore="true">{pigcms{:L('_BACK_INIT_TOTAL_')}</th>
-                                <th  data-sort-ignore="true">{pigcms{:L('_BACK_TOTAL_')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_STORE_PHONE_')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_USER_NAME_')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_USER_PHONE_')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_INIT_TOTAL_')}</th>
+                                <th data-sort-ignore="true">{pigcms{:L('_BACK_TOTAL_')}</th>
                                 <th data-sort-ignore="true">{pigcms{:L('_BACK_TIPS_')}</th>
                                 <th data-sort-ignore="true">{pigcms{:L('_BACK_TUTTI_DIS_')}</th>
                                 <th data-sort-ignore="true">{pigcms{:L('_BACK_MER_DIS_')}</th>
@@ -185,7 +194,14 @@
                             <if condition="is_array($order_list)">
                                 <volist name="order_list" id="vo">
                                     <tr>
-                                        <td>{pigcms{$vo.order_id}</td>
+                                        <td>
+                                            {pigcms{$vo.order_id}
+                                            <if condition="$vo.order_type eq 0">
+                                                <img src="./tpl/Static/blue/images/new/car.png" width="20" />
+                                                <else />
+                                                <img src="./tpl/Static/blue/images/new/pickup_icon.png" width="20" />
+                                            </if>
+                                        </td>
                                         <td>{pigcms{$vo.store_name}</td>
                                         <td>{pigcms{$vo.store_phone}</td>
                                         <td>{pigcms{$vo.username}</td>
@@ -245,13 +261,25 @@
                                             {pigcms{$vo.reg_user_phone}
                                         </td>
                                         <td>
-                                            {pigcms{$vo.address}<if condition="$vo['address_detail'] neq ''">&nbsp;- {pigcms{$vo.address_detail}</if>
+                                            <if condition="$vo.order_type eq 0">
+                                                {pigcms{$vo.address}<if condition="$vo['address_detail'] neq ''">&nbsp;- {pigcms{$vo.address_detail}</if>
+                                                <else />
+                                                -
+                                            </if>
                                         </td>
                                         <td>
-                                            {pigcms{$vo.deliver_status_str}
+                                            <if condition="$vo.order_type eq 0">
+                                                {pigcms{$vo.deliver_status_str}
+                                                <else />
+                                                -
+                                            </if>
                                         </td>
                                         <td>
-                                            {pigcms{$vo.deliverinfo_forbk}
+                                            <if condition="$vo.order_type eq 0">
+                                                {pigcms{$vo.deliverinfo_forbk}
+                                                <else />
+                                                -
+                                            </if>
                                         </td>
                                         <!--                                        {pigcms{$vo.pay_status} -({pigcms{$vo.pay_type})--->
                                         <td><span style="color: green">{pigcms{$vo.pay_type_str}</span>
@@ -287,6 +315,9 @@
                                                         <li class="fa fa-trash-o tutti_icon_dark"
                                                             title="{pigcms{:L('_BACK_DEL_')}"></li>
                                                     </a>
+                                                    <if condition="$vo['order_type'] eq 1 and $vo['order_status'] gt 0 and $vo['order_status'] lt 5">
+                                                        <li class="fa fa-check-square-o tutti_icon_ok fa_action" onclick="set_done({pigcms{$vo['order_id']})" title="{pigcms{:L('_BACK_SWITCH_COM_')}">
+                                                    </if>
 
                                                     <if condition="$vo.link_type eq 1">
                                                         <img src="{pigcms{$static_path}images/deliverect.png" width="20"/>
@@ -350,6 +381,12 @@
     </script>
 
     <script>
+        $('#order_select').children('button').each(function () {
+            $(this).click(function () {
+                location.href = "{pigcms{:U('Shop/order', $_GET)}" + "&type=" + $(this).data('type');
+                $(this).addClass('active').siblings().removeClass('active');
+            });
+        });
 
         var city_id = $('#city_select').val();
         $('#city_select').change(function () {
@@ -394,6 +431,27 @@
             });
         });
 
+        function set_done(sid){
+            var order_id = sid;
+            window.top.art.dialog({
+                lock: true,
+                title: 'Reminder',
+                content: "{pigcms{:L('_BACK_SURE_CHANGE_')}",
+                okVal: 'Yes',
+                ok: function () {
+                    $.get("{pigcms{:U('Shop/pickup_complete')}", {order_id: order_id}, function (response) {
+                        if (response.error_code) {
+                            window.top.msg(0, response.msg);
+                        } else {
+                            window.top.msg(1, response.msg, true);
+                            obj.remove();
+                        }
+                    }, 'json');
+                },
+                cancelVal: 'Cancel',
+                cancel: true
+            });
+        }
     </script>
 
     <!----------------------------------------    以下不要写代码     ------------------------------------------------>

@@ -1686,7 +1686,7 @@ class StorestaffAction extends BaseAction
         $shop['busy_mode'] = $area['busy_mode'];
         $shop['min_time'] = $area['min_time'];
 
-        if($shop['busy_mode'] == 1 && $_POST['dining_time'] < $shop['min_time']){
+        if($order['order_type'] == 0 && $shop['busy_mode'] == 1 && $_POST['dining_time'] < $shop['min_time']){
             $this->error_tips(replace_lang_str(L('D_F_TIP_3'),$shop['min_time']));
         }
 
@@ -1698,14 +1698,16 @@ class StorestaffAction extends BaseAction
             $this->error('Failed! Order canceled by the customer');
             exit;
         }
-        if ($order['status'] > 0) {
+        if (($order['order_type']==0 && $order['status'] > 0) || ($order['order_type']==1 && $order['order_status'] > 3)) {
             $this->error('该单已接，不要重复接单');
             exit;
         }
+        /**
         if ($order['is_refund']) {
             $this->error('用户正在退款中~！');
             exit;
         }
+         */
         if ($order['paid'] == 0) {
             $this->error('订单未支付，不能接单！');
             exit;
@@ -1713,12 +1715,34 @@ class StorestaffAction extends BaseAction
 
         $data['status'] = 1;
         $data['order_status'] = 1;
+        $condition['status'] = 0;
+        if($order['order_type'] == 1 && $order['order_status'] == 0){
+            $data['dining_time'] = $_POST['dining_time'] ? $_POST['dining_time'] : 20;
+        }
+
+        if($order['order_type'] == 1 && $order['order_status'] == 1){//自提订单准备完成
+            $data['order_status'] = 3;
+            $condition['status'] = 1;
+        }
+
+        if($order['order_type'] == 1 && $order['order_status'] == 3){//自提订单整体完成完成
+            $data['status'] = 2;
+            $data['order_status'] = 5;
+            $condition['status'] = 1;
+            $data['use_time'] = time();
+        }
+
         $data['last_staff'] = $this->staff_session['name'];
         $data['last_time'] = time();
-        $condition['status'] = 0;
+
         if ($database->where($condition)->save($data)) {
             if ($order['is_pick_in_store'] != 2 && $order['is_pick_in_store'] != 3) {
-                $result = D('Deliver_supply')->saveOrder($order_id, $this->store);
+                if($order['order_type'] == 0) {
+                    $result = D('Deliver_supply')->saveOrder($order_id, $this->store);
+                }else{
+                    $result['error_code'] = false;
+                }
+
                 if ($result['error_code']) {
                     D('Shop_order')->where(array('order_id' => $order_id))->save(array('status' => 0, 'order_status' => 0, 'last_time' => time()));
                     $this->error_tips($result['msg']);
@@ -1771,57 +1795,70 @@ class StorestaffAction extends BaseAction
                 //                 }
             }
             $phones = explode(' ', $this->store['phone']);
-            D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 2, 'name' => $this->staff_session['name'], 'phone' => $phones[0]));
-
-            //add garfunkel
-            $userInfo = D('User')->field(true)->where(array('uid'=>$order['uid']))->find();
-            if($userInfo['device_id'] != ""){
-                $message = 'Your order has been accepted by the store, they are preparing it now. Our Courier is on the way, thank you for your patience!';
-                Sms::sendMessageToGoogle($userInfo['device_id'],$message);
-            }else{
-                $sms_data['uid'] = $order['uid'];
-                $sms_data['mobile'] = $order['userphone'];
-                $sms_data['sendto'] = 'user';
-                $sms_data['tplid'] = 172700;
-                $sms_data['params'] = [];
-                //Sms::sendSms2($sms_data);
-                $sms_txt = "Your order has been accepted by the store, they are preparing your order now. Our Courier is on the way, thank you for your patience.";
-                //Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
-                Sms::sendTwilioSms($order['userphone'],$sms_txt);
+            $new_status = 2;
+            if($order['order_type'] == 1 && $order['order_status'] == 1){
+                $new_status = 5;
             }
+            if($order['order_type'] == 1 && $order['order_status'] == 3){
+                $new_status = 6;
+                //更新用户订单数量信息
+                //$user = D('User')->where(array('uid'=>$order['uid']))->find();
+                //$userData = array('order_num'=>($user['order_num']+1),'last_order_time'=>$data['use_time']);
+                //D('User')->where(array('uid'=>$order['uid']))->save($userData);
+            }
+            D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => $new_status, 'name' => $this->staff_session['name'], 'phone' => $phones[0]));
 
-            if(isset($_POST['dining_time']) && $_POST['dining_time'] >= 40){
-                $store = D('Merchant_store')->where(array('store_id'=>$order['store_id']))->find();
+            if($new_status == 2) {
+                //add garfunkel
+                $userInfo = D('User')->field(true)->where(array('uid' => $order['uid']))->find();
+                if ($userInfo['device_id'] != "") {
+                    $title = "Order Confirmed";
+                    if($order['order_type'] == 0)
+                        $message = 'Your order has been accepted by the store, they are preparing it now. Our Courier is on the way, thank you for your patience!';
+                    else
+                        $message = 'Your order has been accepted by the store, and they are preparing it now!';
+                    Sms::sendMessageToGoogle($userInfo['device_id'], $message,1,$title);
+                } else {
+                    if($order['order_type'] == 0)
+                        $sms_txt = "Your order has been accepted by the store, they are preparing your order now. Our Courier is on the way, thank you for your patience.";
+                    else
+                        $sms_txt = 'Your order has been accepted by the store, and they are preparing it now!';
+                    Sms::sendTwilioSms($order['userphone'], $sms_txt);
+                }
+
+                if (isset($_POST['dining_time']) && $_POST['dining_time'] >= 40) {
+                    $store = D('Merchant_store')->where(array('store_id' => $order['store_id']))->find();
+                    $store['name'] = lang_substr($store['name'], 'en-us');
+                    $sms_data['uid'] = $order['uid'];
+                    $sms_data['mobile'] = $order['userphone'];
+                    $sms_data['sendto'] = 'user';
+                    $sms_data['tplid'] = 585843;
+                    $sms_data['params'] = [
+                        $store['name'],
+                        $_POST['dining_time']
+                    ];
+                    //Sms::sendSms2($sms_data);
+                    $sms_txt = "We’d like to inform you that " . $store['name'] . " needs " . $_POST['dining_time'] . " minutes to finish preparing your order. Estimated delivery time may be longer than expected. Thank you for your patience!";
+                    //Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
+                    Sms::sendTwilioSms($order['userphone'], $sms_txt);
+                }
+
+                $this->success('已接单');
+            }elseif ($new_status == 5){
+                $userInfo = D('User')->field(true)->where(array('uid' => $order['uid']))->find();
+                $store = D('Merchant_store')->where(array('store_id' => $order['store_id']))->find();
                 $store['name'] = lang_substr($store['name'], 'en-us');
-                $sms_data['uid'] = $order['uid'];
-                $sms_data['mobile'] = $order['userphone'];
-                $sms_data['sendto'] = 'user';
-                $sms_data['tplid'] = 585843;
-                $sms_data['params'] = [
-                    $store['name'],
-                    $_POST['dining_time']
-                ];
-                //Sms::sendSms2($sms_data);
-                $sms_txt = "We’d like to inform you that ".$store['name']." needs ".$_POST['dining_time']." minutes to finish preparing your order. Estimated delivery time may be longer than expected. Thank you for your patience!";
-                //Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
-                Sms::sendTwilioSms($order['userphone'],$sms_txt);
+                if ($userInfo['device_id'] != "") {
+                    $title = "Your order is ready for pickup!";
+                    $message = 'Please pick up your order from ' . $store['name'] . ' before they close.';
+                    Sms::sendMessageToGoogle($userInfo['device_id'], $message,1,$title);
+                } else {
+                    $sms_txt = "Your order is ready! Please pick it up before the store closes.";
+                    Sms::sendTwilioSms($order['userphone'], $sms_txt);
+                }
+            }else{
+                $this->success('Success');
             }
-
-            //发送信息
-            //获取所有的配送员
-//            $rs = D('Deliver_user')->field(true)->where(array('status' => 1, 'work_status' => 0))->select();
-//            foreach($rs as $r){
-//                $sms_data = [
-//                    'mobile' => $r['phone'],
-////		            'tplid' => 86914,
-//                    'tplid' =>247173,
-//                    'params' => [],
-//                    'content' => '有一个新的订单可以配送，请前往个人中心抢单。'
-//                ];
-//                Sms::sendSms2($sms_data);
-//            }
-
-            $this->success('已接单');
         } else {
             $this->error('接单失败');
         }
@@ -2617,7 +2654,9 @@ class StorestaffAction extends BaseAction
 
     public function manage_holiday(){
         $store = D('Merchant_store')->field(true)->where(array('store_id' => $this->store['store_id']))->find();
+
         $data['status'] = $store['status'] == 1 ? 0 : 1;
+        if($store['have_shop'] == 0 && $store['is_pickup'] == 0) $data['have_shop'] = 1;
         D('Merchant_store')->where(array('store_id' => $this->store['store_id']))->save($data);
 
         if($data['status'] == 0){
@@ -3244,7 +3283,7 @@ class StorestaffAction extends BaseAction
         $where['status'] = array('lt',2);
         $where['is_del'] = 0;
 
-        $order = D('Shop_order')->field(array('order_id','create_time','username'))->where($where)->order('create_time desc')->find();
+        $order = D('Shop_order')->field(array('order_id','create_time','username','order_status','order_type'))->where($where)->order('create_time desc')->find();
         if($order){
             if($last_time == 0) {
                 $data['is_new'] = 0;
@@ -3263,7 +3302,7 @@ class StorestaffAction extends BaseAction
         }
 
 //        if($last_time == 0)
-            $list = D('Shop_order')->field(array('order_id','status','username'))->where($where)->order('status asc,create_time desc')->select();
+            $list = D('Shop_order')->field(array('order_id','status','username','order_status','order_type'))->where($where)->order('status asc,create_time desc')->select();
 //        else {
 //            $where['create_time'] = array('gt',$last_time);
 //            $list = D('Shop_order')->field(array('order_id','status'))->where($where)->order('status asc,create_time desc')->select();
@@ -3427,7 +3466,10 @@ class StorestaffAction extends BaseAction
         $tax_price = $tax_price + ($order['packing_charge'])*$store['tax_num']/100;
         $order['tax_price'] = $tax_price;
         $order['deposit_price'] = $deposit_price;
-        $order['tutti_comm'] = round(($order['goods_price'] - $order['merchant_reduce'] + $tax_price)*$store['proportion']/100,2);
+        if($order['order_type'] == 0)
+            $order['tutti_comm'] = round(($order['goods_price'] - $order['merchant_reduce'] + $tax_price)*$store['proportion']/100,2);
+        else
+            $order['tutti_comm'] = round(($order['goods_price'] - $order['merchant_reduce'] + $tax_price)*$store['pickup_proprotion']/100,2);
         $order['merchant_refund'] = round(($order['goods_price'] + $order['deposit_price'] + $order['packing_charge'] - $order['merchant_reduce'] + $tax_price) - $order['tutti_comm'],2);
         //代客下单
         if($order['num'] == 0){
@@ -3491,8 +3533,14 @@ class StorestaffAction extends BaseAction
             $order_data['expect_use_time'] = "ASAP";
         }
 
-        $order_data['dining_time'] = $supply['dining_time'] ? $supply['dining_time'] : '0';
-        $order_data['rece_time'] = $supply['create_time'] ? $supply['create_time'] : '0';
+        $order_data['dining_time'] = $order['dining_time'] ? $order['dining_time'] : '0';
+        if($order['order_type'] == 0)
+            $order_data['rece_time'] = $supply['create_time'] ? $supply['create_time'] : '0';
+        else {
+            $order_log = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'], 'status' => 2))->order('id DESC')->find();
+            $order_data['rece_time'] = $order_log['dateline'] ? $order_log['dateline'] : $order['create_time'];
+        }
+
         $order_data['now_time'] = time();
 
         $cha_time = time() - $order_data['create_time'];
@@ -3952,14 +4000,13 @@ class StorestaffAction extends BaseAction
             $order_id = $_POST['order_id'];
             $add_time = $_POST['dining_time'];
 
-            $supply = D('Deliver_supply')->where(array('order_id'=>$order_id))->find();
-            $data['dining_time'] = $supply['dining_time'] + $add_time;
+            $order = D('Shop_order')->where(array('order_id'=>$order_id))->find();
+            $data['dining_time'] = $order['dining_time'] + $add_time;
             D('Deliver_supply')->where(array('order_id'=>$order_id))->save($data);
             D('Shop_order')->where(array('order_id'=>$order_id))->save($data);
 
             D('Shop_order_log')->add_log(array('order_id' => $order_id, 'status' => 33, 'note' => $add_time));
 
-            $order = D('Shop_order')->where(array('order_id'=>$order_id))->find();
             $store = D('Merchant_store')->where(array('store_id'=>$order['store_id']))->find();
             $store['name'] = lang_substr($store['name'], 'en-us');
             //发送给用户
@@ -3972,7 +4019,10 @@ class StorestaffAction extends BaseAction
                 $add_time
             ];
             //Sms::sendSms2($sms_data);
-            $sms_txt = $store['name']." has informed us that they need another ".$add_time." min to finish preparing your food. We apologize for any inconvenience. Your driver will pick up your meal according to this new preparation time. Thank you for your patience!";
+            if($order['order_type'] == 0)
+                $sms_txt = $store['name']." has informed us that they need another ".$add_time." min to finish preparing your food. We apologize for any inconvenience. Your driver will pick up your meal according to this new preparation time. Thank you for your patience!";
+            else
+                $sms_txt = $store['name']." has informed us that they need another ".$add_time." min to finish preparing your order. Thank you for your patience!";
             //Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
             Sms::sendTwilioSms($order['userphone'],$sms_txt);
 

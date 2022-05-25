@@ -133,10 +133,20 @@
                                         <td colspan="5">{pigcms{$order['pay_time']|date="Y-m-d H:i:s",###}</td>
                                     </tr>
                                 </if>
-                                <if condition="$order['expect_use_time']">
+                                <if condition="$order['expect_use_time'] and $order['order_type'] eq 0">
                                     <tr>
                                         <th class="text-nowrap" scope="row">{pigcms{:L('_EXPECTED_TIME_')}</th>
                                         <td colspan="5">{pigcms{$order['expect_use_time']|date="Y-m-d H:i:s",###}</td>
+                                    </tr>
+                                </if>
+                                <if condition="$order['order_type'] eq 1">
+                                    <tr>
+                                        <th class="text-nowrap" scope="row">Merchant Confirmation</th>
+                                        <td colspan="5">{pigcms{$order['confirm_time']|date="Y-m-d H:i:s",###}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-nowrap" scope="row">Ready for Pickup</th>
+                                        <td colspan="5">{pigcms{$order['pickup_time']|date="Y-m-d H:i:s",###}</td>
                                     </tr>
                                 </if>
                                 <if condition="$order['use_time']">

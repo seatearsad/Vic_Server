@@ -67,6 +67,8 @@
         var  card_discount = Number("<?php if($card_info['discount']){ ?>{pigcms{$card_info.discount}<?php }else{?>10<?php }?>");
         var  delivery_discount = Number("{pigcms{$order_info.delivery_discount}");
         var  service_fee = Number("{pigcms{$order_info.service_fee}");
+        var  orderType = "{pigcms{$order_info.orderType}";
+
         <?php if($order_info['delivery_discount_type'] == 0 && $system_coupon['discount']>0){ ?>
             delivery_discount = 0;
         <?php } ?>
@@ -1109,7 +1111,7 @@
         /*background-repeat: no-repeat;*/
         /*background-size: auto 40px;*/
         /*background-position: 10px center;*/
-        padding: 12px 10px 10px 0px;
+        padding: 12px 0px 10px 0px;
     }
     .user_address .div_content{
         line-height: 25px;
@@ -1153,6 +1155,21 @@
     .pay-wrapper img{
         margin-right:5px;
     }
+    #pickup_map{
+        width: 100%;
+        background-color: #999999;
+        height: 150px;
+        margin-top: 10px;
+    }
+    .pickup_tip{
+        width: 100%;
+        border-radius: 5px;
+        background-color: #FFF1DE;
+        text-align: center;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 35px;
+    }
 </style>
 <include file="Public:header"/>
 <div class="wrapper-list">
@@ -1184,29 +1201,39 @@
         <input type="hidden" name="delivery_discount" value="{pigcms{$order_info.delivery_discount}">
         <input type="hidden" name="merchant_reduce" value="{pigcms{$order_info.merchant_reduce}">
         <input type="hidden" name="service_fee" value="{pigcms{$order_info.service_fee}">
-        <if condition="$order_info['order_type'] != 'recharge'">
 
+    <if condition="$order_info['order_type'] != 'recharge'">
     <div class="user_address">
-        <div class="div_title">{pigcms{:L('_C_DELIVERY_ADDRESS_')}</div>
-<!--        <a href="{pigcms{:U('My/adress',array('buy_type' => 'check', 'store_id'=>$order_info['store_id'], 'village_id'=>$village_id, 'mer_id' => $store['mer_id'], 'frm' => $_GET['frm'], 'current_id'=>$user_adress['adress_id'], 'order_id' => $order_id))}">-->
+        <div class="div_title">
+            <if condition="$order_info['orderType'] eq 0">
+                {pigcms{:L('_DIST_INFO_')}
+                <else />
+                {pigcms{:L('_PICKUP_INFO_')}
+            </if>
+        </div>
+        <if condition="$order_info['orderType'] eq 0">
             <div class="div_content">{pigcms{$order_info['username']}&nbsp;({pigcms{$order_info['phone']})<br/>{pigcms{$order_info['address']}</div>
-<!--        </a>-->
-        <if condition="$not_touch['status'] eq 1">
-            <div class="touch_tip">
-                <div style="font-weight: bold;"><input type="hidden" name="est_time" id="est_time_input">
-                    <input type="checkbox" class="mt" value="1" name="not_touch"  style="border-radius: 0;width: .40rem;height: .40rem;line-height: .40rem;"  {pigcms{$order_info['not_touch_checked']}>
-                    {pigcms{$not_touch.title}
+            <if condition="$not_touch['status'] eq 1">
+                <div class="touch_tip">
+                    <div style="font-weight: bold;"><input type="hidden" name="est_time" id="est_time_input">
+                        <input type="checkbox" class="mt" value="1" name="not_touch"  style="border-radius: 0;width: .40rem;height: .40rem;line-height: .40rem;"  {pigcms{$order_info['not_touch_checked']}>
+                        {pigcms{$not_touch.title}
+                    </div>
+    <!--                <div style="margin-top: 8px;color: #999999">{pigcms{$not_touch.content}</div>-->
                 </div>
-<!--                <div style="margin-top: 8px;color: #999999">{pigcms{$not_touch.content}</div>-->
-            </div>
-            <div class="note_div">
-                <textarea type="text" name="address_detail" class="note_input" placeholder="{pigcms{:L('V3_DELIVER_NOTES')}">{pigcms{$order_info['address_detail']}</textarea>
+                <div class="note_div">
+                    <textarea type="text" name="address_detail" class="note_input" placeholder="{pigcms{:L('V3_DELIVER_NOTES')}">{pigcms{$order_info['address_detail']}</textarea>
+                </div>
+            </if>
+        </if>
+        <if condition="$order_info['orderType'] eq 1">
+            <div class="div_store_address" style="margin:10px auto;">
+                <div style="padding-left: 10px;">
+                    {pigcms{$order_info.store_address}
+                </div>
+                <div id="pickup_map"></div>
             </div>
         </if>
-<!--        <div class="note_title">{pigcms{:L('V3_DELIVER_NOTES_TITLE')}</div>-->
-<!--        <div class="note_div">-->
-<!--            <textarea type="text" name="deliver_note" class="note_input" placeholder="{pigcms{:L('V3_DELIVER_NOTES')}"></textarea>-->
-<!--        </div>-->
     </div>
     </if>
     <dl class="all_list">
@@ -1268,6 +1295,7 @@
                         </dd>
                     <?php } ?>
                     <volist name="pay_method" id="vo">
+                        <php>if(!($key == 'offline' && $order_info['orderType'] == 1)){</php>
                         <php>if($pay_offline || $key != 'offline'){</php>
                         <php>if(($key == 'weixin' && $is_wexin_browser) || ($key == 'alipay' && !$is_wexin_browser) || ($key != 'weixin' && $key!= 'alipay')){</php>
                         <php>if(($order_info['order_type'] == recharge && $key != 'weixin' && $key!= 'alipay') || $order_info['order_type'] != recharge){</php>
@@ -1338,6 +1366,7 @@
                         <php>}</php>
                         <php>}</php>
                         <php>}</php>
+                        <php>}</php>
                     </volist>
                 </dl>
             </div>
@@ -1394,7 +1423,7 @@
                 <div <if condition="$order_info['order_type'] == 'recharge'"> style="display: none" </if>>
                     Subtotal <span>${pigcms{$order_info['goods_price']}</span>
                 </div>
-                <div <if condition="$order_info['order_type'] == 'recharge'"> style="display: none" </if>>
+                <div <if condition="$order_info['order_type'] == 'recharge' or $order_info['orderType'] eq 1"> style="display: none" </if>>
                     {pigcms{:L('_DELI_PRICE_')} <span>${pigcms{$order_info['freight_charge']}</span>
                 </div>
                 <div <if condition="$order_info['order_type'] == 'recharge'"> style="display: none" </if>>
@@ -1402,7 +1431,7 @@
                     <span>${pigcms{:number_format($order_info['packing_charge'] + $order_info['deposit_price'] + $order_info['tax_price'] + $order_info['service_fee'],2)}</span>
                 </div>
 
-                <div <if condition="$order_info['order_type'] == 'recharge'"> style="display: none" </if>>
+                <div <if condition="$order_info['order_type'] == 'recharge'  or $order_info['orderType'] eq 1"> style="display: none" </if>>
                     {pigcms{:L('_TIP_TXT_')} <span class="tip_show"></span>
                 </div>
                 <?php if($system_coupon){ ?>
@@ -1423,6 +1452,11 @@
                 </div>
             </div>
         </div>
+    <if condition="$order_info['orderType'] eq 1">
+        <div class="pickup_tip">
+            This is a Pickup order.
+        </div>
+    </if>
         <div id="agree_div">
             <input type="checkbox" name="is_agree" class="form-field" id="is_agree" value="1" checked="checked"/>
             By clicking this checkbox, you agree to our
@@ -1466,7 +1500,7 @@
 <!-- 加 -->
 <script src="{pigcms{$static_path}js/common_wap.js"></script>
 <script src="{pigcms{$static_path}js/bioauth_.js"></script>
-
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKlguA2QFIUVwWTo3danbOqSKv3nYbBCg&callback=initMap" async defer></script>
 <script>
     $('.tip_more').click(function () {
         if($('#tip_list').is(':hidden')){
@@ -1607,18 +1641,20 @@
    //计算小费
    function CalTip(){
        var tipNum = 0;
-       var num = $('#tip_fee').val();
-       if(/^\d+(\.\d{1,2})?$/.test(num) && num != ""){
-           tipNum = parseFloat(num);
-       }else{
-           $('#tip_list').children('span').each(function(){
-               if($(this).hasClass('tip_on')){
-                   if(isb)
-                       tipNum = parseFloat($(this).text().replace('$', ""));
-                   else
-                       tipNum = $('input[name="total_before_discount"]').val() *  ($(this).text().replace(/%/, "")/100);
-               }
-           });
+       if(orderType == 0) {
+           var num = $('#tip_fee').val();
+           if (/^\d+(\.\d{1,2})?$/.test(num) && num != "") {
+               tipNum = parseFloat(num);
+           } else {
+               $('#tip_list').children('span').each(function () {
+                   if ($(this).hasClass('tip_on')) {
+                       if (isb)
+                           tipNum = parseFloat($(this).text().replace('$', ""));
+                       else
+                           tipNum = $('input[name="total_before_discount"]').val() * ($(this).text().replace(/%/, "") / 100);
+                   }
+               });
+           }
        }
        //console.log("=======================CalTip"+tipNum);
        var totalNum = parseFloat($('input[name="charge_total"]').val()) + parseFloat(tipNum.toFixed(2));
@@ -1711,32 +1747,38 @@
        return rt;
    }
    function isShowCredit(){
-       if($("#use_balance").is(':checked')==true){
+       if ($("#use_balance").is(':checked') == true) {
            $('input[name="pay_type"]').removeAttr('checked');
            $('#tip_label').show();
            $('#credit').hide();
-           CalTip();
-       }else{
+       } else {
            var pay_type = $('input[name="pay_type"]:checked').val();
-           if(pay_type == 'moneris'){
+           if (pay_type == 'moneris') {
                $('#credit').show();
                $('#tip_label').show();
                $('.tip_show').text($('#tip_num').text());
                $('.price_total').find('span').text($('#add_tip').text());
-           }else if(pay_type == 'weixin' || pay_type == 'alipay'){
+           } else if (pay_type == 'weixin' || pay_type == 'alipay') {
                $('#tip_label').show();
                $('#credit').hide();
                $('.tip_show').text($('#tip_num').text());
                $('.price_total').find('span').text($('#add_tip').text());
-           }else{
+           } else {
                $('#credit').hide();
                $('#tip_label').hide();
                $('.tip_show').text('$0.00');
                $('.price_total').find('span').text('$' + $('input[name="charge_total"]').val());
            }
-           check_money(total_money,sysc_price,merchant_money);
-           CalTip();
+           check_money(total_money, sysc_price, merchant_money);
        }
+
+       if(orderType == 1){//Pickup
+           $('#tip_label').hide();
+           $('.tip_show').text('$0.00');
+           $('.price_total').find('span').text('$' + $('input[name="charge_total"]').val());
+       }
+
+       CalTip();
    }
 
    $('#tip_fee').live('focusin focusout',function(event){
@@ -1854,6 +1896,49 @@
            style: 'border:none; background-color:#fff; color:#999;'
        });
    });
+
+       var store_icon = "{pigcms{$static_public}images/deliver/icon_map_store.png";
+       var user_icon = "{pigcms{$static_public}images/deliver/icon_blue_point.png";
+       var store_lat = "{pigcms{$order_info['store_lat']}";
+       var store_lng = "{pigcms{$order_info['store_lng']}";
+       var user_lat = $.cookie("userLocationLat");
+       var user_lng = $.cookie("userLocationLong");
+
+       var store_pos = {lat:parseFloat(store_lat), lng:parseFloat(store_lng)};
+       var user_pos = {lat:parseFloat(user_lat), lng:parseFloat(user_lng)};
+
+       var map,store,user,marker_store,marker_user,bounds;
+
+       function initMap() {
+           if($('#pickup_map').length > 0) {
+               map = new google.maps.Map(
+                   document.getElementById('pickup_map'), {zoom: 18, center: store_pos});
+
+               bounds = new google.maps.LatLngBounds();
+
+               store = {
+                   url: store_icon,
+                   scaledSize: new google.maps.Size(35, 35),
+                   size: new google.maps.Size(35, 35)
+               };
+
+               user = {
+                   url: user_icon,
+                   scaledSize: new google.maps.Size(35, 35),
+                   size: new google.maps.Size(35, 35)
+               };
+
+               marker_store = new google.maps.Marker({position: store_pos, map: map, icon: store});
+               marker_user = new google.maps.Marker({position: user_pos, map: map, icon: user});
+
+               bounds.extend(new google.maps.LatLng(marker_store.getPosition().lat()
+                   , marker_store.getPosition().lng()));
+               bounds.extend(new google.maps.LatLng(marker_user.getPosition().lat()
+                   , marker_user.getPosition().lng()));
+
+               map.fitBounds(bounds);
+           }
+       }
 </script>
 <style>
    .form-field--error{

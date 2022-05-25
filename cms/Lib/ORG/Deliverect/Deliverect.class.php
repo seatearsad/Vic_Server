@@ -28,7 +28,7 @@ class Deliverect
         'cash' => 1
     );
 
-    private $url = "https://api.deliverect.com/";//"https://api.staging.deliverect.com/";
+    protected $url; //"https://api.deliverect.com/";"https://api.staging.deliverect.com/";
 
     //获取token
     private $getTokenUrl = "oauth/token";
@@ -50,6 +50,8 @@ class Deliverect
                 $this->expiry = $v['value'];
             elseif ($v['name'] == 'deliverect_token_type')
                 $this->token_type = $v['value'];
+            elseif ($v['name'] == 'deliverect_url')
+                $this->url = $v['value'];
         }
 
         if($this->token == "" || $this->expiry < time()){
@@ -109,7 +111,10 @@ class Deliverect
         $data['channelOrderDisplayId'] = "Tutti-".$order['order_id'];
         $data['channelLinkId'] = $order['link_id'];
         $data['by'] = "Tutti";
-        $data['orderType'] = $this->orderType['delivery'];
+        if($order['order_type'] == 0)
+            $data['orderType'] = $this->orderType['delivery'];
+        else
+            $data['orderType'] = $this->orderType['pickup'];
         $data['channel'] = 0;
         $data['pickupTime'] = gmdate("Y-m-d\TH:i:s\Z");//date("Y-m-d H:i:s");//date("Y-m-d")."T".date("H:i:s")."Z";
         $data['estimatedPickupTime'] = date("Y-m-d");//date("Y-m-d")."T".date("H:i:s")."Z";
@@ -117,8 +122,14 @@ class Deliverect
         $data['deliveryIsAsap'] = true;
         $data['courier'] = "Tutti";
 
-        $customer = D("User_adress")->where(array('adress_id'=>$order['address_id']))->find();
-        $data['customer']['name'] = $customer['name'];
+        if($order['order_type'] == 0) {
+            $customer = D("User_adress")->where(array('adress_id' => $order['address_id']))->find();
+            $data['customer']['name'] = $customer['name'];
+        }else {
+            $customer = D("User")->where(array('uid' => $order['uid']))->find();
+            $data['customer']['name'] = $customer['nickname'];
+        }
+
         $data['customer']['companyName'] = "";
         $data['customer']['phoneNumber'] = $customer['phone'];
         $data['customer']['email'] = "";
