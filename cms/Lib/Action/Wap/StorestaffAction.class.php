@@ -1856,6 +1856,7 @@ class StorestaffAction extends BaseAction
                     $sms_txt = "Your order is ready! Please pick it up before the store closes.";
                     Sms::sendTwilioSms($order['userphone'], $sms_txt);
                 }
+                $this->success('Success');
             }else{
                 $this->success('Success');
             }
