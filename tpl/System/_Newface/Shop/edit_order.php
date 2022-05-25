@@ -380,7 +380,7 @@
             }
 
             function getOtherTax() {
-                var tax = packing_charge + parseFloat($('#freight_charge').val()) * $('#store_tax').val() / 100;
+                var tax = (packing_charge + parseFloat($('#freight_charge').val())) * $('#store_tax').val() / 100;
                 return tax;
             }
 
