@@ -254,7 +254,7 @@ class DeliverectAction
 
         if($status >= 120 && $status < 130){
             $order = D("Shop_order")->where(array('order_id'=>$orderId))->find();
-            D("StoreMenuV2")->saveIntegration($order['store_id'],"Order","Failed ".$status." - ".$this->data['reason'],1);
+            D("StoreMenuV2")->saveIntegration($order['store_id'],"Order",$orderId." Failed ".$status." - ".$this->data['reason'],1);
         }
 
         echo "statusUpdate";
