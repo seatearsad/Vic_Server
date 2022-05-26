@@ -17,10 +17,22 @@
         <script type="text/javascript" src="{pigcms{$static_public}js/lang/{pigcms{:C('DEFAULT_LANG')}.js" charset="utf-8"></script>
 		<script src="{pigcms{$static_path}js/common.js"></script>
 		<style type="text/css">
+            @font-face {
+                font-family: 'Montserrat';
+                src: url('/static/font/Montserrat-Regular.ttf');
+            }
+            @font-face {
+                font-family: 'Montserrat-bold';
+                src: url('/static/font/Montserrat-Bold.otf');
+            }
+            @font-face {
+                font-family: 'Montserrat-light';
+                src: url('/static/font/Montserrat-Light.otf');
+            }
                 *{
                     margin: 0px;
                     box-sizing: border-box;
-                    font-family: Helvetica;
+                    font-family: Montserrat;
                     -moz-osx-font-smoothing: grayscale;
                 }
                 body{

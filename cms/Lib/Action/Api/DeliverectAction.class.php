@@ -102,11 +102,11 @@ class DeliverectAction
 
         if($action == "snooze"){
             $updateData['status'] = 0;
-            $log_type = "Snnoze";
+            $log_type = "Snooze";
         }
         else{
             $updateData['status'] = 1;
-            $log_type = "Unsnnoze";
+            $log_type = "Unsnooze";
         }
 
         $where['storeId'] = $store['store_id'];
@@ -250,6 +250,11 @@ class DeliverectAction
             $this->updatePrepTimeURL(true);
             $order = D("Shop_order")->where(array('order_id'=>$orderId))->find();
             D("StoreMenuV2")->saveIntegration($order['store_id'],"Order",$orderId." - Accepted ".$status,1);
+        }
+
+        if($status >= 120 && $status < 130){
+            $order = D("Shop_order")->where(array('order_id'=>$orderId))->find();
+            D("StoreMenuV2")->saveIntegration($order['store_id'],"Order","Failed ".$status." - ".$this->data['reason'],1);
         }
 
         echo "statusUpdate";

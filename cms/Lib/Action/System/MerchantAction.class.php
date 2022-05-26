@@ -1260,7 +1260,7 @@ class MerchantAction extends BaseAction{
 		import('@.ORG.system_page');
 		$p = new Page($count, 50);
 
-		$sql = "SELECT r.*,u.*,m.*,r.add_time AS r_add_time,a.area_name AS area_name,s.city_id AS mcity_id,m.name AS m_name, s.name AS s_name,u.uid as userid,u.nickname, u.phone FROM " . C('DB_PREFIX') . "merchant AS m INNER JOIN " . C('DB_PREFIX') . "reply AS r ON r.mer_id = m.mer_id INNER JOIN " . C('DB_PREFIX') . "user AS u ON r.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=r.store_id  LEFT JOIN " . C('DB_PREFIX') . "area AS a ON s.city_id=a.area_id {$where} ORDER BY r.pigcms_id DESC LIMIT {$p->firstRow},{$p->listRows}";
+		$sql = "SELECT r.*,u.*,m.*,r.add_time AS r_add_time,a.area_name AS area_name,s.city_id AS mcity_id,m.name AS m_name, s.name AS s_name,u.uid as userid,u.nickname, u.phone,o.order_type as orderType FROM " . C('DB_PREFIX') . "merchant AS m INNER JOIN " . C('DB_PREFIX') . "reply AS r ON r.mer_id = m.mer_id INNER JOIN " . C('DB_PREFIX') . "user AS u ON r.uid=u.uid LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=r.store_id  LEFT JOIN " . C('DB_PREFIX') . "area AS a ON s.city_id=a.area_id LEFT JOIN " . C('DB_PREFIX') . "shop_order AS o ON o.order_id=r.order_id {$where} ORDER BY r.pigcms_id DESC LIMIT {$p->firstRow},{$p->listRows}";
 		$reply_list = D()->query($sql);
 		//die($sql);
 //		var_dump($reply_list);die();
@@ -1608,6 +1608,40 @@ class MerchantAction extends BaseAction{
         $database_integration = D('Integration_log');
 
         $condition = array();
+
+        if($_GET['keyword'] != '')$condition['storeId'] = $_GET['keyword'];
+        if($_GET['searchstatus'] && $_GET['searchstatus'] != 0){
+            switch ($_GET['searchstatus']){
+                case 1:
+                    $condition['type'] = 'Order';
+                    break;
+                case 2:
+                    $condition['type'] = 'Busy Mode';
+                    break;
+                case 3:
+                    $condition['type'] = array('in',array('Snooze','Unsnooze'));
+                    break;
+                case 4:
+                    $condition['type'] = 'Menu Push';
+                    break;
+                case 5:
+                    $condition['type'] = array('in',array('Activate','Disable'));
+                    break;
+                case 6:
+                    $condition['type'] = 'Registration';
+                    break;
+            }
+        }
+
+        if (!empty($_GET['begin_time']) && !empty($_GET['end_time'])) {
+            if ($_GET['begin_time'] > $_GET['end_time']) {
+                $this->error("Please enter the date ranges correctly");
+            } else {
+                $period = array(strtotime($_GET['begin_time'] . " 00:00:00"), strtotime($_GET['end_time'] . " 23:59:59"));
+                $condition['time'] = array("between",$period);
+            }
+        }
+
         $count_merchant = $database_integration->where($condition)->count();
         import('@.ORG.system_page');
         $p = new Page($count_merchant, 15);

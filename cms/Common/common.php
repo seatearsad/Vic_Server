@@ -995,6 +995,7 @@ function getClose($store){
 function getAboutDesc(){
     $intro = D('Appintro')->where('id=1')->find();
     $about = explode("<br />",$intro['content'])[0];
+    $about = preg_replace('/<[^>]*>/', "", $about);
 
     return $about;
 }
