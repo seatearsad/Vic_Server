@@ -760,6 +760,9 @@ class ShopAction extends BaseAction
         $order_log = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'], 'status' => 2))->order('id DESC')->find();
         $order['confirm_time'] = $order_log['dateline'] ? $order_log['dateline'] : null;
         $order['pickup_time'] = $order['confirm_time'] + ($order['dining_time']*60);
+        $order_log = D('Shop_order_log')->field(true)->where(array('order_id' => $order['order_id'], 'status' => 5))->order('id DESC')->find();
+        $order['ready_time'] = $order_log['dateline'] ? $order_log['dateline'] : null;
+        $order['store_address'] = $store['adress'];
 
         if (empty($order)) {
             $this->frame_error_tips('没有找到该订单的信息！');

@@ -85,15 +85,19 @@
                                         <td colspan="5">{pigcms{$order['register_phone']}</td>
                                     </tr>
                                 </if>
-                                <if condition="$order['is_pick_in_store'] eq 2">
+                                <if condition="$order['is_pick_in_store'] eq 2 or $order['order_type'] eq 1">
                                     <tr>
                                         <th class="text-nowrap" scope="row">{pigcms{:L('_SELF_LIFT_ADDRESS_')}</th>
-                                        <td colspan="5">{pigcms{$order['address']}<if condition="$order['address_detail'] neq ''">&nbsp;- {pigcms{$order['address_detail']}</if></td>
+                                        <td colspan="5">
+                                            {pigcms{$order['store_address']}
+                                        </td>
                                     </tr>
                                     <else/>
                                     <tr>
                                         <th class="text-nowrap" scope="row">{pigcms{:L('_BACK_CUSTOM_ADD_')}</th>
-                                        <td colspan="5">{pigcms{$order['address']}<if condition="$order['address_detail'] neq ''">&nbsp;- {pigcms{$order['address_detail']}</if></td>
+                                        <td colspan="5">
+                                            {pigcms{$order['address']}<if condition="$order['address_detail'] neq ''">&nbsp;- {pigcms{$order['address_detail']}</if>
+                                        </td>
                                     </tr>
                                 </if>
                                 <!--tr>
@@ -101,7 +105,13 @@
                                 </tr-->
                                 <tr>
                                     <th class="text-nowrap" scope="row">{pigcms{:L('_BACK_DELIVERY_STATUS_')}</th>
-                                    <td colspan="5">{pigcms{$order['deliver_status_str']}</td>
+                                    <td colspan="5">
+                                        <if condition="$order['order_type'] eq 0">
+                                            {pigcms{$order['deliver_status_str']}
+                                            <else />
+                                            -
+                                        </if>
+                                    </td>
                                 </tr>
                                 <if condition="$order['is_pick_in_store'] eq 3 AND $order['express_id']">
                                     <tr>
@@ -142,11 +152,21 @@
                                 <if condition="$order['order_type'] eq 1">
                                     <tr>
                                         <th class="text-nowrap" scope="row">Merchant Confirmation</th>
-                                        <td colspan="5">{pigcms{$order['confirm_time']|date="Y-m-d H:i:s",###}</td>
+                                        <td colspan="5">
+                                            <if condition="$order['confirm_time']">{pigcms{$order['confirm_time']|date="Y-m-d H:i:s",###}</if>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <th class="text-nowrap" scope="row">Ready for Pickup</th>
-                                        <td colspan="5">{pigcms{$order['pickup_time']|date="Y-m-d H:i:s",###}</td>
+                                        <th class="text-nowrap" scope="row">Expected Ready Time</th>
+                                        <td colspan="5">
+                                            <if condition="$order['pickup_time']">{pigcms{$order['pickup_time']|date="Y-m-d H:i:s",###}</if>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-nowrap" scope="row">Pickup Confirmation</th>
+                                        <td colspan="5">
+                                            <if condition="$order['ready_time']">{pigcms{$order['ready_time']|date="Y-m-d H:i:s",###}</if>
+                                        </td>
                                     </tr>
                                 </if>
                                 <if condition="$order['use_time']">
