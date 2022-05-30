@@ -1838,7 +1838,10 @@ class StorestaffAction extends BaseAction
                         $_POST['dining_time']
                     ];
                     //Sms::sendSms2($sms_data);
-                    $sms_txt = "We’d like to inform you that " . $store['name'] . " needs " . $_POST['dining_time'] . " minutes to finish preparing your order. Estimated delivery time may be longer than expected. Thank you for your patience!";
+                    if($order['order_type'] == 0)
+                        $sms_txt = "We’d like to inform you that " . $store['name'] . " needs " . $_POST['dining_time'] . " minutes to finish preparing your order. Estimated delivery time may be longer than expected. Thank you for your patience!";
+                    else
+                        $sms_txt = "We'd like to inform you that " . $store['name'] . " needs " . $_POST['dining_time'] . " minutes to finish preparing your order. Thank you for your patience!";
                     //Sms::telesign_send_sms($order['userphone'],$sms_txt,0);
                     Sms::sendTwilioSms($order['userphone'], $sms_txt);
                 }

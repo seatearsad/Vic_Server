@@ -380,6 +380,8 @@ class ConfigAction extends BaseAction{
 // 				array_push($office_time,array('open'=>$_POST['office_start_time3'],'close'=>$_POST['office_stop_time3']));
 // 			}
 			$_POST['office_time'] = '';
+            $_POST['name'] = fulltext_filter($_POST['name']);
+            $_POST['txt_info'] = fulltext_filter($_POST['txt_info']);
 			$_POST['sort'] = intval($_POST['sort']);
 			$long_lat = explode(',',$_POST['long_lat']);
 			$_POST['long'] = $long_lat[0];
