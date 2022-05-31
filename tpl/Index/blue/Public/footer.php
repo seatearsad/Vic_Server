@@ -41,9 +41,9 @@
     <div class="link_icon">
         <ul>
             <li><a href="https://www.facebook.com/tuttidelivery" target="_blank"></a></li>
-            <li><a href="https://www.instagram.com/tuttidelivery/" target="_blank"></a></li>
+            <li><a href="https://www.instagram.com/tuttivancouver/" target="_blank"></a></li>
             <li><a href="https://twitter.com/tuttidelivery" target="_blank"></a></li>
-            <li><a href="https://www.instagram.com/tuttivancouver/?hl=en" target="_blank"></a></li>
+            <li><a href="https://www.linkedin.com/company/tuttilifestyle" target="_blank"></a></li>
             <li><a href="https://www.youtube.com/channel/UCdXYWCKbNRPysK9dZ9rtC2A" target="_blank"></a></li>
         </ul>
     </div>
@@ -177,15 +177,15 @@
     }
     .copy_div{
         font-size: 18px;
-        text-align: left;
+        text-align: right;
         color: lightgray;
-        margin-left: 10.5%;
+        margin-right: 10.5%;
         line-height: 50px;
     }
     .link_icon ul{
-        margin: -45px 10.5% 0 0;
+        margin: -45px 0 0 10.5%;
         padding: 0;
-        float: right;
+        float: left;
     }
     .link_icon ul li{
         width: 35px;
