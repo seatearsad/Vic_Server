@@ -29,7 +29,7 @@
         <div class="link_icon" style="width: 100%">
             <ul>
                 <li><a href="https://www.facebook.com/tuttidelivery" target="_blank"></a></li>
-                <li><a href="https://www.instagram.com/tuttidelivery/" target="_blank"></a></li>
+                <li><a href="https://www.instagram.com/tuttivancouver/" target="_blank"></a></li>
                 <li><a href="https://twitter.com/tuttidelivery" target="_blank"></a></li>
                 <li><a href="https://www.youtube.com/channel/UCdXYWCKbNRPysK9dZ9rtC2A" target="_blank"></a></li>
                 <li><a href="https://www.linkedin.com/company/tuttilifestyle" target="_blank"></a></li>
