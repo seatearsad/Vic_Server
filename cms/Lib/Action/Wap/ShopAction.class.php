@@ -2656,6 +2656,15 @@ class ShopAction extends BaseAction{
 // 			$return = $this->check_cart();
 // 		}
 // 		if ($return['error_code']) $this->error_tips($return['msg']);
+        if(empty($this->user_session)){
+            if($this->is_app_browser){
+                $location_param['referer'] = urlencode($_SERVER['REQUEST_URI']);
+                $this->error_tips(L('_HFDASJ_'),U('Login/index',$location_param));
+            }else{
+                $location_param['referer'] = urlencode($_SERVER['REQUEST_URI']);
+                redirect(U('Login/index',$location_param));
+            }
+        }
 
         //delivery_type 0:平台配送，1：商家配送，2：自提，3:平台配送或自提，4：商家配送或自提
         $store_id = isset($_GET['store_id']) ? intval($_GET['store_id']) : 0;
