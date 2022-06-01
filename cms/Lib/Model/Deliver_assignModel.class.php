@@ -11,7 +11,7 @@ class Deliver_assignModel extends Model
     //派单逻辑记录表
     protected $record_table;
     //更换配送员时间
-    const CHANGE_TIME = 30;
+    const CHANGE_TIME = 45;
     //更换配送员中间的缓冲时间
     const CHANGE_BUFFER_TIME = 3;
     //总共可更换配送员的次数
