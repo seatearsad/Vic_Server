@@ -16,6 +16,12 @@
 </head>
 <style>
     body{background-color: #F8F8F8;position: unset}
+    input[type="file"] {
+        display: block;
+        position: absolute;
+        opacity: 0;
+        -ms-filter: 'alpha(opacity=0)';
+    }
     .list_head{
         width: 90%;
         margin: 5px auto;
@@ -116,7 +122,7 @@
         color: white;
         display: block;
     }
-    #pay_online{
+    #pay_online,#photo_btn{
         float: right;
         padding: 5px 10px;
         background-color: white;
@@ -128,10 +134,46 @@
     }
     .order_all{
         position: absolute;
-        bottom: 80px;
+        bottom: 100px;
         overflow: auto;
         top: 0;
         width: 100%;
+        padding-bottom: 20px;
+    }
+    .touch_detail{
+        color: #294068;
+        font-size: 16px;
+        padding-bottom: 0px;
+    }
+    .photo_tip{
+        position: absolute;
+        bottom: 75px;
+        width: 100%;
+        text-align: center;
+        color: #909090;
+        font-size: 14px;
+    }
+
+    #system_message{
+        position: absolute;
+        top:0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: black;
+        opacity: 50%;
+        z-index: 1000;
+        display: none;
+    }
+    #message_content{
+        position: absolute;
+        width: 90%;
+        top: 0;
+        max-width: 480px;
+        min-width: 240px;
+        margin-left: auto;
+        margin-right: auto;
+        z-index: 1001;
     }
 </style>
 <body>
@@ -232,7 +274,7 @@
         </div>
         <if condition="$order['not_touch'] eq 1 and $supply['status'] eq 4 and $order['address_detail'] neq ''">
         <div class="amount_div">
-            <div class="order_time" style="color: #294068;font-size: 16px;">
+            <div class="order_time touch_detail">
                 <span class="material-icons" style="vertical-align: middle">assignment</span>
                 <span style="margin-left: -10px;font-weight: bold;">
                         No Contact Delivery
@@ -240,13 +282,21 @@
                 <div style="margin-left: 30px;font-size: 14px;color: #333333">
                     {pigcms{$order['address_detail']}
                 </div>
+                <div style="min-height:20px;padding-top: 10px;position: relative; display: block;">
+                    <input type="hidden" name="photo" id="upload_img" />
+                    <span class="img_0">
+                    </span>
+                    <span id="photo_btn">
+                        <span class="material-icons" style="vertical-align: middle;width: 30px;">camera_alt</span>Delivery Photo
+                    </span>
+                </div>
             </div>
         </div>
         </if>
 
         <if condition="$order['not_touch'] eq 1 and $supply['status'] eq 4 and $order['address_detail'] eq ''">
             <div class="amount_div">
-                <div class="order_time" style="color: #294068;font-size: 16px;">
+                <div class="order_time touch_detail">
                     <span class="material-icons" style="vertical-align: middle">assignment</span>
                     <span style="margin-left: -10px;font-weight: bold;">
                         No Contact Delivery
@@ -254,19 +304,57 @@
                     <div style="margin-left: 30px;font-size: 14px;color: #333333">
                         The customer didn't leave any instruction.
                     </div>
+                    <div style="min-height:20px;padding-top: 10px;position: relative; display: block;">
+                        <input type="hidden" name="photo" id="upload_img" />
+                        <span class="img_0">
+                        </span>
+                            <span id="photo_btn">
+                            <span class="material-icons" style="vertical-align: middle;width: 30px;">camera_alt</span>Delivery Photo
+                        </span>
+                    </div>
                 </div>
             </div>
         </if>
 
         <if condition="$order['not_touch'] neq 1 and $order['address_detail'] neq '' and $supply['status'] eq 4">
             <div class="amount_div">
-                <div class="order_time" style="color: #294068;font-size: 16px;">
+                <div class="order_time touch_detail">
                     <span class="material-icons" style="vertical-align: middle">assignment</span>
                     <span style="margin-left: -10px;font-weight: bold;">
                         Delivery Instruction
                     </span>
                     <div style="margin-left: 30px;font-size: 14px;color: #333333">
                         {pigcms{$order['address_detail']}
+                    </div>
+                    <div style="min-height:20px;padding-top: 10px;position: relative; display: block;">
+                        <input type="hidden" name="photo" id="upload_img" />
+                        <span class="img_0">
+                        </span>
+                            <span id="photo_btn">
+                            <span class="material-icons" style="vertical-align: middle;width: 30px;">camera_alt</span>Delivery Photo
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </if>
+
+        <if condition="$order['not_touch'] neq 1 and $order['address_detail'] eq '' and $supply['status'] eq 4">
+            <div class="amount_div">
+                <div class="order_time touch_detail">
+                    <span class="material-icons" style="vertical-align: middle">assignment</span>
+                    <span style="margin-left: -10px;font-weight: bold;">
+                        Delivery Instruction
+                    </span>
+                    <div style="margin-left: 30px;font-size: 14px;color: #333333">
+                        N/A
+                    </div>
+                    <div style="min-height:20px;padding-top: 10px;position: relative; display: block;">
+                        <input type="hidden" name="photo" id="upload_img" />
+                        <span class="img_0">
+                        </span>
+                            <span id="photo_btn">
+                            <span class="material-icons" style="vertical-align: middle;width: 30px;">camera_alt</span>Delivery Photo
+                        </span>
                     </div>
                 </div>
             </div>
@@ -413,6 +501,11 @@
     </div>
     </div>
     <if condition="$supply['status'] neq 5">
+        <if condition="$order['not_touch'] eq 1">
+            <div class="photo_tip">
+                <span class="material-icons" style="vertical-align: middle;width: 30px;">camera_alt</span>Take a photo before completion
+            </div>
+        </if>
     <div id="sub_btn">
         <if condition="$supply['status'] eq 2">
             <a href="javascript:void(0);" data-id="{pigcms{$supply['supply_id']}" data-status="{pigcms{$supply['status']}" data-url="{pigcms{:U('Deliver/pick')}">
@@ -429,7 +522,50 @@
         </if>
     </div>
     </if>
+    <div id="system_message"></div>
+    <div id="message_content"></div>
+<script type="text/javascript" src="{pigcms{$static_public}js/webuploader.min.js"></script>
 <script>
+var  uploader = WebUploader.create({
+    auto: true,
+    swf: '{pigcms{$static_public}js/Uploader.swf',
+    server: "{pigcms{:U('Deliver/ajax_upload_photo')}",
+    accept: {
+        title: 'Images',
+        extensions: 'gif,jpg,jpeg,png',
+        mimeTypes: 'image/gif,image/jpeg,image/jpg,image/png'
+    }
+});
+uploader.addButton({
+    id:'#photo_btn',
+    name:'image_0',
+    multiple:false
+});
+
+uploader.on('fileQueued',function(file){
+    if($('.upload_pic_li').size() >= 5){
+        uploader.cancelFile(file);
+        alert('最多上传5个图片！');
+        return false;
+    }
+});
+uploader.on('uploadSuccess',function(file,response){
+    if(response.error == 0){
+        $('.img_0').html('<img src="'+response.url+'"/>');
+        $('.img_0 img').css("width","150px");
+        $('#upload_img').val(response.file);
+        $('.img_0 img').unbind('click');
+        $('.img_0 img').click(openPhoto);
+    }else{
+        layer.open({title:"{pigcms{:L('_B_D_LOGIN_TIP2_')}",content:"Oops! Something went wrong. Photos no larger than 5MB is recommended! Please try again.", btn:["{pigcms{:L('_B_D_LOGIN_CONIERM_')}"]});
+    }
+});
+
+uploader.on('uploadError', function(file,reason){
+    $('.loading'+file.id).remove();
+    alert('上传失败！请重试。');
+});
+
 var ua = navigator.userAgent;
 if(!ua.match(/TuttiDeliver/i)) {
     navigator.geolocation.getCurrentPosition(function (position) {
@@ -485,13 +621,39 @@ $('#pay_online').click(function () {
     location.href = "{pigcms{:U('Wap/Deliver/online', array('supply_id'=>$supply['supply_id'],'lang'=>'en'))}";
 });
 
+function openPhoto(){
+    var url = $("#upload_img").val();
+    $('#system_message').show();
+    $('#system_message').bind("click",function () {
+        $(this).hide();
+        $('#message_content').html("");
+    });
+
+    $('#message_content').bind("click",function () {
+        $("#system_message").hide();
+        $(this).html("");
+    });
+
+    var img_width = $('#message_content').width();
+    var img = "<img src='"+url+"' width='"+img_width+"' id='message_img'/>";
+    $('#message_content').html(img);
+
+
+    $('#message_content').css('left',($(window).width() - img_width)/2);
+    $('#message_content').css('top',($(window).height() - img_width*1.25)/2);
+}
+
 $(document).ready(function(){
+    $("#upload_img").val("");
     var mark = 0;
     $(document).on('click', '#sub_btn a', function(e){
         e.stopPropagation();
         if (mark == 1) return false;
         mark = 1;
         var supply_id = $(this).attr("data-id"), post_url = $(this).data('url'), status = $(this).data('status');
+
+        var post_data = {supply_id:supply_id};
+        if(status == 4) post_data['photo'] = $('#upload_img').val();
 
         if (status == 5) {
             layer.open({
@@ -513,7 +675,7 @@ $(document).ready(function(){
                 }
             });
         } else {
-            $.post(post_url, {'supply_id':supply_id}, function(json){
+            $.post(post_url, post_data, function(json){
                 mark = 0;
                 if (json.status) {
                     if(status == 4) {

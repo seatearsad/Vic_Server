@@ -73,7 +73,7 @@ class DeliverAction extends BaseAction
             }
         }
 
-        $save_address = array('login','reg','ajax_city_name',"ajax_save_city_id_for_deliver_user",'ajax_upload','forgetpwd','account','change_pwd','bank_info','step_1','step_2','step_3','step_4','step_5','support','ver_info','activate_deliver');
+        $save_address = array('login','reg','ajax_city_name',"ajax_save_city_id_for_deliver_user",'ajax_upload','ajax_upload_photo','forgetpwd','account','change_pwd','bank_info','step_1','step_2','step_3','step_4','step_5','support','ver_info','activate_deliver');
         if(!in_array(ACTION_NAME,$save_address)) {
             $deliver = D('Deliver_user')->field('reg_status')->where(['uid' => $this->deliver_session['uid']])->find();
 
@@ -1281,6 +1281,8 @@ class DeliverAction extends BaseAction
 			$columns['status'] = 5;
 			$columns['paid'] = 1;
 			$columns['end_time'] = time();
+
+			if($_POST['photo'] && $_POST['photo'] != '') $columns['photo'] = $_POST['photo'];
 
 			if ($supply['type'] == 0 && $supply['pay_type'] == 'offline') {
 				$columns['pay_type'] = 'Cash';
@@ -3348,6 +3350,42 @@ class DeliverAction extends BaseAction
             exit(json_encode(array('error' => 1,'message' =>'没有选择图片')));
         }
     }
+
+    public function ajax_upload_photo()
+    {
+        if ($_FILES['file']['error'] != 4) {
+            //$store_id = isset($_GET['store_id']) ? intval($_GET['store_id']) : 0;
+            //$shop = D('Merchant_store_shop')->field('store_theme')->where(array('store_id' => $store_id))->find();
+            //$store_theme = isset($shop['store_theme']) ? intval($shop['store_theme']) : 0;
+            //if ($store_theme) {
+            //$width = '900,450';
+            //$height = '900,450';
+            //} else {
+            $width = '900,450';
+            $height = '500,250';
+            //}
+            $param = array('size' => $this->config['group_pic_size']);
+            $param['thumb'] = true;
+            $param['imageClassPath'] = 'ORG.Util.Image';
+            $param['thumbPrefix'] = 'm_,s_';
+            $param['thumbMaxWidth'] = $width;
+            $param['thumbMaxHeight'] = $height;
+            $param['thumbRemoveOrigin'] = false;
+            $image = D('Image')->handle($this->deliver_session['uid'], 'delivery_photo', 1, $param,false);
+            if ($image['error']) {
+                exit(json_encode(array('error' => 1,'message' =>$image['msg'])));
+            } else {
+                $title = $image['title']['file'];
+                $goods_image_class = new goods_image();
+                $url = $goods_image_class->get_delivery_photo_by_path($title, 's');
+                $file = $image['url']['file'];
+                exit(json_encode(array('error' => 0, 'url' => $url, 'title' => $title,'file'=>$file)));
+            }
+        } else {
+            exit(json_encode(array('error' => 1,'message' =>'没有选择图片')));
+        }
+    }
+
     public function ajax_save_city_id_for_deliver_user(){
 
         $uid = $this->deliver_session['uid'];
