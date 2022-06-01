@@ -505,8 +505,8 @@ class CartModel extends Model
         $result['total_market_price'] = $total_market_price;
         $result['food_total_price'] = $total_price;
         //garfunkel 计算服务费
-        $result['service_fee'] = number_format($total_price * $store['service_fee']/100,2);
-        $result['pickup_service_fee'] = number_format($total_price * $store['pickup_service_fee']/100,2);
+        $result['service_fee'] = number_format($total_price * $store['service_fee']/100,2,'.','');
+        $result['pickup_service_fee'] = number_format($total_price * $store['pickup_service_fee']/100,2,'.','');
 
         $result['store_service_fee'] = $store['service_fee'];
         $result['store_service_fee_pickup'] = $store['pickup_service_fee'];
@@ -514,13 +514,13 @@ class CartModel extends Model
         $total_pay_price = $total_pay_price + $result['service_fee'];
         $total_pickup_pay_total = $total_pickup_pay_total + $result['pickup_service_fee'];
 
-        $result['total_pay_price'] = number_format($total_pay_price,2);
-        $result['total_pickup_pay_price'] = number_format($total_pickup_pay_total,2);
+        $result['total_pay_price'] = number_format($total_pay_price,2,'.','');
+        $result['total_pickup_pay_price'] = number_format($total_pickup_pay_total,2,'.','');
 
-        $result['tax_price'] = number_format($tax_price,2);
-        $result['pickup_tax_price'] = number_format($pickup_tax_price,2);
+        $result['tax_price'] = number_format($tax_price,2,'.','');
+        $result['pickup_tax_price'] = number_format($pickup_tax_price,2,'.','');
 
-        $result['deposit_price'] = number_format($deposit_price,2);
+        $result['deposit_price'] = number_format($deposit_price,2,'.','');
         $result['pay_method'] = explode('|',$store['pay_method']);
         $result['have_shop'] = $store['have_shop'];
         $result['is_pickup'] = $store['is_pickup'];
