@@ -149,6 +149,16 @@
             float: right;
             margin-top: -50px;
         }
+        #distance_div{
+            margin-top: -55px;
+            float: left;
+            background: #5C96E9;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+        }
         #top_label{
             width: auto;
             background-color: #ffa52d;
@@ -176,7 +186,7 @@
             line-height: 50px;
         }
         .order_detail span{
-            flex: 1 1 30%;
+            flex: 1 1 35%;
             word-break: normal;
         }
         .order_detail .amount{
@@ -428,6 +438,7 @@
 </if>
 <script id="replyListBoxTpl" type="text/html">
     {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <div id="distance_div">{{ d.list[i].user_distance }}</div>
     <a href="javascript:void(0);" class="rej" data-spid="{{ d.list[i].supply_id }}">
         <div id="reject_div">Reject</div>
     </a>
@@ -586,7 +597,8 @@
         if(curr_hash == "1"){
             $('#deliver_count').trigger('click');
         }else{
-            grab_timer = setInterval(getList, 2000);
+            //grab_timer = setInterval(getList, 2000);
+            getList();
         }
     }
 

@@ -384,70 +384,84 @@
         </div>
     </if>
     <if condition="$supply['status'] eq 5">
-    <div class="order_time">
-        <div class="time_sub">
-            <span>{pigcms{:L('_ND_ORDERTYPE_')}</span>
-            <span class="span_right">
-                <if condition="$supply['get_type'] eq 1">
-                    Assigned
-                </if>
-                <if condition="$supply['get_type'] eq 2">
-                    Assigned
-                </if>
-                <if condition="$supply['get_type'] eq 0">
-                    Accepted
-                </if>
-            </span>
+        <div class="order_time">
+            <div class="time_sub">
+                <span>{pigcms{:L('_ND_ORDERTYPE_')}</span>
+                <span class="span_right">
+                    <if condition="$supply['get_type'] eq 1">
+                        Assigned
+                    </if>
+                    <if condition="$supply['get_type'] eq 2">
+                        Assigned
+                    </if>
+                    <if condition="$supply['get_type'] eq 0">
+                        Accepted
+                    </if>
+                </span>
+            </div>
+            <div class="time_sub">
+                <span>Order Placed</span>
+                <span class="span_right">
+                    {pigcms{$order['create_time']|date="Y-m-d H:i",###}
+                </span>
+            </div>
+            <div class="time_sub">
+                <span>{pigcms{:L('_ND_FOODPREPTIME_')}</span>
+                <span class="span_right">
+                    {pigcms{$supply['meal_time']}
+                </span>
+            </div>
+            <div class="time_sub">
+                <span>{pigcms{:L('_ND_COMPLETIONTIME_')}</span>
+                <span class="span_right">
+                    {pigcms{$supply['end_time']}
+                </span>
+            </div>
         </div>
-        <div class="time_sub">
-            <span>Order Placed</span>
-            <span class="span_right">
-                {pigcms{$order['create_time']|date="Y-m-d H:i",###}
-            </span>
+        <div class="amount_div">
+            <if condition="$supply['uid'] eq 0 or $order['pay_method'] neq 1">
+            <div class="amount_sub" style="font-weight: bold;">
+                <span>
+                    Collect From Customer:
+                </span>
+                <span class="span_right">
+                    ${pigcms{$supply['deliver_cash']|floatval}
+                </span>
+            </div>
+            </if>
+            <div class="amount_sub">
+                <span>{pigcms{:L('_ND_DELIVERYFEE_')}</span>
+                <span class="span_right">
+                    ${pigcms{$order['freight_charge']+$order['tip_charge']|floatval}
+                </span>
+            </div>
+            <div class="amount_sub">
+                <span>Bonus</span>
+                <span class="span_right">
+                    ${pigcms{$supply['bonus']}
+                </span>
+            </div>
+            <div class="amount_sub" style="font-weight: bold;">
+                <span>Total</span>
+                <span class="span_right">
+                    ${pigcms{$order['freight_charge']+$order['tip_charge']+$supply['bonus']|floatval}
+                </span>
+            </div>
         </div>
-        <div class="time_sub">
-            <span>{pigcms{:L('_ND_FOODPREPTIME_')}</span>
-            <span class="span_right">
-                {pigcms{$supply['meal_time']}
-            </span>
-        </div>
-        <div class="time_sub">
-            <span>{pigcms{:L('_ND_COMPLETIONTIME_')}</span>
-            <span class="span_right">
-                {pigcms{$supply['end_time']}
-            </span>
-        </div>
-    </div>
-    <div class="amount_div">
-        <if condition="$supply['uid'] eq 0 or $order['pay_method'] neq 1">
-        <div class="amount_sub" style="font-weight: bold;">
-            <span>
-                Collect From Customer:
-            </span>
-            <span class="span_right">
-                ${pigcms{$supply['deliver_cash']|floatval}
-            </span>
+        <if condition="$supply['photo'] neq ''">
+        <div class="amount_div" style="margin-top: 10px;">
+            <div class="order_time touch_detail">
+                <span class="material-icons" style="vertical-align: middle">assignment</span>
+                <span style="margin-left: -10px;font-weight: bold;">Delivery Photo</span>
+                <div style="min-height:20px;padding-top: 10px;position: relative; display: block;">
+                    <input type="hidden" name="photo" id="upload_img" value="{pigcms{$supply['photo']}" />
+                    <span class="img_0">
+                        <img src="{pigcms{$supply['photo']}" style="width: 150px" />
+                    </span>
+                </div>
+            </div>
         </div>
         </if>
-        <div class="amount_sub">
-            <span>{pigcms{:L('_ND_DELIVERYFEE_')}</span>
-            <span class="span_right">
-                ${pigcms{$order['freight_charge']+$order['tip_charge']|floatval}
-            </span>
-        </div>
-        <div class="amount_sub">
-            <span>Bonus</span>
-            <span class="span_right">
-                ${pigcms{$supply['bonus']}
-            </span>
-        </div>
-        <div class="amount_sub" style="font-weight: bold;">
-            <span>Total</span>
-            <span class="span_right">
-                ${pigcms{$order['freight_charge']+$order['tip_charge']+$supply['bonus']|floatval}
-            </span>
-        </div>
-    </div>
     </if>
     <div class="order_num">
         <if condition="$supply['status'] eq 5">
@@ -644,8 +658,8 @@ function openPhoto(){
 }
 
 $(document).ready(function(){
-    $("#upload_img").val("");
     var mark = 0;
+    $('.img_0 img').click(openPhoto);
     $(document).on('click', '#sub_btn a', function(e){
         e.stopPropagation();
         if (mark == 1) return false;

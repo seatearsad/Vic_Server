@@ -5,6 +5,9 @@
  */
 class DeliverAction extends BaseAction 
 {
+    //更换配送员时间
+    const CHANGE_TIME = 45;
+
 	protected $deliver_session;
 	protected $item = array(0 => "老的餐饮外送", 1 => "外卖", 2 => "新快店");
 	protected $deliver_supply;
@@ -704,7 +707,7 @@ class DeliverAction extends BaseAction
                         //派单列表中不存在 || 派单列表中开放 && 未拒单 || 指定派单 && 不在转接等候期
                         if($deliver_assign['deliver_id'] == $this->deliver_session['uid']){
                             $v['just'] = 1;
-                            $v['diff_time'] = 30 - (time() - $deliver_assign['assign_time']);
+                            $v['diff_time'] = self::CHANGE_TIME - (time() - $deliver_assign['assign_time']);
                             $v['diff_time'] = $v['diff_time'] > 0 ? $v['diff_time'] : 0;
                             $first_list[] = $v;
                         }
@@ -779,6 +782,7 @@ class DeliverAction extends BaseAction
 				$val['order_time'] = $val['order_time'] ? date('Y-m-d H:i', $val['order_time']) : '--';
 				$val['real_orderid'] = $val['real_orderid'] ? $val['real_orderid'] : $val['order_id'];
 				$val['store_distance'] = getRange(getDistance($val['from_lat'], $val['from_lnt'], $lat, $lng));
+                $val['user_distance'] = getRange(getDistance($val['from_lat'], $val['from_lnt'], $val['aim_lat'], $val['aim_lnt']));
 				$val['map_url'] = U('Deliver/map', array('supply_id' => $val['supply_id']));
 
 				$order = D('Shop_order')->get_order_by_orderid($val['order_id']);

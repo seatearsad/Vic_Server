@@ -1716,7 +1716,7 @@ class Shop_orderModel extends Model
 				$order['pay_type_str'] .= '(商家：'.$now_merchant['name'].')';
 			}
 		}
-		$sql = "SELECT u.name, u.phone FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "deliver_user AS u ON u.uid=s.uid WHERE s.order_id={$order['order_id']} AND s.item=2";
+		$sql = "SELECT u.name, u.phone,s.photo FROM " . C('DB_PREFIX') . "deliver_supply AS s INNER JOIN " . C('DB_PREFIX') . "deliver_user AS u ON u.uid=s.uid WHERE s.order_id={$order['order_id']} AND s.item=2";
 		$res = $this->query($sql);
 		$res = isset($res[0]) && $res[0] ? $res[0] : '';
 		$order['deliver_user_info'] = $res;
