@@ -748,18 +748,6 @@ function getOrderNum() {
         }
     }, 'json');
 }
-
-if(navigator.userAgent.match(/TuttiDeliver/i))
-    window.webkit.messageHandlers.newOrderSound.postMessage([0]);
-else if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())) {
-    if (typeof (window.linkJs.newOrderSound) != 'undefined') {
-        window.linkJs.newOrderSound();
-    }
-}else {
-    var audio = new Audio();
-    audio.src = deliver_sound_url;
-    audio.play();
-}
 </script>
 </body>
 </html>
