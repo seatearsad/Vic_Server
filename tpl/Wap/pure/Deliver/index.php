@@ -13,6 +13,7 @@
     <script>
         var location_url = "{pigcms{:U('Deliver/grab')}",lat = "{pigcms{$deliver_session['lat']}", lng = "{pigcms{$deliver_session['lng']}", reject_url = "{pigcms{:U('Deliver/reject')}",update_url = "{pigcms{:U('Deliver/index_count')}";
         var static_path = "{pigcms{$static_path}";
+        var deliver_sound_url = "{pigcms{$static_public}sound/driver_new_order.mp3";
         $(function(){
             $(".startOrder,.stopOrder").click(function(){
                 $.get("/wap.php?g=Wap&c=Deliver&a=index&action=changeWorkstatus&type="+$(this).attr('ref'), function(data){
@@ -347,6 +348,19 @@
                             window.location.reload();
                         }
                     }
+                    if(response.just_new == 1){
+                        if(navigator.userAgent.match(/TuttiDeliver/i))
+                            window.webkit.messageHandlers.newOrderSound.postMessage([0]);
+                        else if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())) {
+                            if (typeof (window.linkJs.newOrderSound) != 'undefined') {
+                                window.linkJs.newOrderSound();
+                            }
+                        }else {
+                            var audio = new Audio();
+                            audio.src = deliver_sound_url;
+                            audio.play();
+                        }
+                    }
 
                     if(response.deliver_count == 0) loadPosition();
                 }
@@ -597,8 +611,8 @@
         if(curr_hash == "1"){
             $('#deliver_count').trigger('click');
         }else{
-            //grab_timer = setInterval(getList, 2000);
-            getList();
+            grab_timer = setInterval(getList, 2000);
+            //getList();
         }
     }
 

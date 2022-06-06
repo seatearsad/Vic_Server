@@ -395,6 +395,8 @@ class DeliverAction extends BaseAction
 
         $current_order_num = D('Deliver_supply')->where(array('uid'=>$this->deliver_session['uid'],'status'=>array('lt',5)))->count();
 
+        //是否有新单提醒
+        $just_new = 0;
         if($this->deliver_session['work_status'] == 0 || $city['urgent_time'] != 0) {
             $my_distance = $this->deliver_session['range'] * 1000;
             $time = time();
@@ -407,14 +409,20 @@ class DeliverAction extends BaseAction
 
             //$gray_count = D("Deliver_supply")->where($where)->count();
             //garfunkel 添加派单逻辑
-            $gray_list = D("Deliver_supply")->where($where)->select();
+            $gray_list = D('Deliver_supply')->field(true)->where($where)->order("`create_time` DESC")->select();
             $gray_count = 0;
+
             foreach ($gray_list as $k => $v) {
                 $store = D('Merchant_store')->field(true)->where(array('store_id' => $v['store_id']))->find();
                 if ($store['city_id'] == $city_id) {
                     $supply_id = $v['supply_id'];
                     $deliver_assign = D('Deliver_assign')->field(true)->where(array('supply_id' => $supply_id))->find();
                     $record_array = explode(',', $deliver_assign['record']);
+                    //派单列表中不存在 || 派单列表中开放 && 未拒单 || 指定派单 && 不在转接等候期
+                    if($deliver_assign['deliver_id'] == $this->deliver_session['uid']){
+                        $cha_time = time() - $deliver_assign['assign_time'];
+                        if($cha_time == 0 || $cha_time == 1) $just_new = 1;
+                    }
                     //派单列表中不存在 || 派单列表中开放 || 指定派单 && 不在转接等候期
                     if ((!$deliver_assign && $current_order_num < $max_order) || ($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'], $record_array) && $current_order_num < $max_order) || $deliver_assign['deliver_id'] == $this->deliver_session['uid']) {
                         $gray_count += 1;
@@ -429,9 +437,9 @@ class DeliverAction extends BaseAction
 		$finish_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => 5))->count();
 
 		if($from == 0)
-		    exit(json_encode(array('err_code' => false, 'gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'work_status'=>$this->deliver_session['work_status'])));
+		    exit(json_encode(array('err_code' => false, 'gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'work_status'=>$this->deliver_session['work_status'],'just_new'=>$just_new)));
 		else
-		    return array('gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'work_status'=>$this->deliver_session['work_status']);
+		    return array('gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'work_status'=>$this->deliver_session['work_status'],'just_new'=>$just_new);
 	}
 	
 	private function rollback($supply_id, $status)
@@ -741,7 +749,7 @@ class DeliverAction extends BaseAction
             $num_arr = $this->index_count(1);
 
 			if (empty($list)) {
-				exit(json_encode(array('err_code' => true,'gray_count' => $num_arr['gray_count'], 'deliver_count' => $num_arr['deliver_count'], 'finish_count' => $num_arr['finish_count'],'work_status'=>$num_arr['work_status'])));
+				exit(json_encode(array('err_code' => true,'gray_count' => $num_arr['gray_count'], 'deliver_count' => $num_arr['deliver_count'], 'finish_count' => $num_arr['finish_count'],'work_status'=>$num_arr['work_status'],'just_new'=>$num_arr['just_new'])));
 			}
 			
 			foreach ($list as &$val) {
@@ -807,7 +815,7 @@ class DeliverAction extends BaseAction
                 $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
 			}
 			//array('gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'work_status'=>$this->deliver_session['work_status']);
-			exit(json_encode(array('err_code' => false, 'list' => $list,'gray_count' => $num_arr['gray_count'], 'deliver_count' => $num_arr['deliver_count'], 'finish_count' => $num_arr['finish_count'],'work_status'=>$num_arr['work_status'])));
+			exit(json_encode(array('err_code' => false, 'list' => $list,'gray_count' => $num_arr['gray_count'], 'deliver_count' => $num_arr['deliver_count'], 'finish_count' => $num_arr['finish_count'],'work_status'=>$num_arr['work_status'],'just_new'=>$num_arr['just_new'])));
 		}
 		
 		//$this->display();
