@@ -100,7 +100,7 @@
         }
     });
     $("#feed").click(function () {
-        //window.location.href = "https://docs.google.com/forms/d/157g85sssBk37d8_zKdpDN8Qivwnlc0DrLoNNi2EZSg0/edit";
+        window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSe789nYlGuuLvIeRR60hnoHvhEsKFi-l_sVg94L4Uwrk8Ygtg/viewform?usp=sf_link";
     });
 </script>
 </body>

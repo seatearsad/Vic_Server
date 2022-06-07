@@ -274,8 +274,12 @@
             {pigcms{$deliver_session.site}
         </div>
     </div>
-
-    <div style="margin: 150px auto 0 auto;width: 85%;color: #555555;">
+    <div class="div_line_profile">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLScCCgLURKBGwAQ1uO6XIZjjPn8DJVG3r4W6ytrT03iVLMKCdA/viewform?usp=sf_link" style="color: black;text-decoration: underline;font-size: 16px;">
+        Request Account Deletion
+        </a>
+    </div>
+    <div style="margin: 100px auto 0 auto;width: 85%;color: #555555;">
         Please contact support if you would like to change the above information
     </div>
 </div>

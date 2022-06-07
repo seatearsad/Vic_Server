@@ -1861,6 +1861,7 @@ class IndexAction extends BaseAction
         $result['order']['tax_price'] = number_format($tax_price,2);
         $result['order']['deposit_price'] = $deposit_price;
         $result['order']['subtotal'] = $order['price'];
+        $result['order']['photo'] = '';
 
         $delivery = D('Deliver_supply')->field(true)->where(array('order_id'=>$order['order_id']))->find();
         if($delivery) {
@@ -1876,6 +1877,10 @@ class IndexAction extends BaseAction
             if($delivery['status'] > 1 && $delivery['status'] <= 5){
                 $result['order']['deliver_lng'] = $deliver['lng'];
                 $result['order']['deliver_lat'] = $deliver['lat'];
+            }
+
+            if($delivery['photo'] != ''){
+                $result['order']['photo'] = C('config.site_url').$delivery['photo'];
             }
         }
 
