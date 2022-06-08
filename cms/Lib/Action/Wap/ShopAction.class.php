@@ -1386,7 +1386,7 @@ class ShopAction extends BaseAction{
 
         //modify garfunkel
         if($user_long_lat && $user_long_lat['lat'] != 0){
-            //$store['distance'] = getDistance($store['lat'],$store['long'],$user_long_lat['lat'],$user_long_lat['long']);
+            $store['check_distance'] = getDistance($store['lat'],$store['long'],$user_long_lat['lat'],$user_long_lat['long'])/1000;
             $from = $store['lat'].','.$store['long'];
             $aim = $user_long_lat['lat'].','.$user_long_lat['long'];
             $store['distance'] = getDistanceByGoogle($from,$aim);
@@ -1409,7 +1409,7 @@ class ShopAction extends BaseAction{
                 //$temp['delivery_money'] =  $temp['delivery_money'] - $delivery_coupon['discount'];
             }
 
-            if ($store['distance'] <= $store['delivery_radius']) {
+            if ($store['check_distance'] <= $store['delivery_radius']) {
                 if($_COOKIE['userLocationCity']){
                     $city_id = $_COOKIE['userLocationCity'];
                 }else{
