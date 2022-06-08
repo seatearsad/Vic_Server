@@ -340,6 +340,7 @@ class StoreModel extends Model
                 $from = $row['lat'] . ',' . $row['long'];
                 $aim = $lat . ',' . $lng;
                 $distance = getDistanceByGoogle($from, $aim);
+                $check_distance = getDistance($row['lat'],$row['long'],$lat,$lng)/1000;
                 $store['shipfee'] = calculateDeliveryFee($distance, $store['city_id']);
 
                 //$store['shipfee'] = getDeliveryFee($row['lat'], $row['long'], $lat, $lng,$row['city_id']);
@@ -364,7 +365,7 @@ class StoreModel extends Model
                 if($store['city_id'] != $city_id){
                     $store['is_delivery'] = "0";
                 }else {
-                    if ($distance <= $row['delivery_radius']) {
+                    if ($check_distance <= $row['delivery_radius']) {
                         //获取特殊城市属性
                         $city = D('Area')->where(array('area_id' => $city_id))->find();
                         if ($city['range_type'] != 0) {
