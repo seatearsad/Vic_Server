@@ -658,6 +658,28 @@ function openPhoto(){
 }
 
 $(document).ready(function(){
+    var deliver_sound_url = "{pigcms{$static_public}sound/driver_new_order.mp3";
+    setInterval(getOrderNum, 2000);
+    function getOrderNum() {
+        $.get("{pigcms{:U('Deliver/index_count')}", function (response) {
+            if (response.err_code == false) {
+                if(response.just_new == 1){
+                    if(navigator.userAgent.match(/TuttiDeliver/i))
+                        window.webkit.messageHandlers.newOrderSound.postMessage([0]);
+                    else if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())) {
+                        if (typeof (window.linkJs.newOrderSound) != 'undefined') {
+                            window.linkJs.newOrderSound();
+                        }
+                    }else {
+                        var audio = new Audio();
+                        audio.src = deliver_sound_url;
+                        audio.play();
+                    }
+                }
+            }
+        }, 'json');
+    }
+
     var mark = 0;
     $('.img_0 img').click(openPhoto);
     $(document).on('click', '#sub_btn a', function(e){
@@ -725,29 +747,6 @@ $(document).ready(function(){
         }
     });
 });
-
-
-var deliver_sound_url = "{pigcms{$static_public}sound/driver_new_order.mp3";
-setInterval(getOrderNum, 2000);
-function getOrderNum() {
-    $.get("{pigcms{:U('Deliver/index_count')}", function (response) {
-        if (response.err_code == false) {
-            if(response.just_new == 1){
-                if(navigator.userAgent.match(/TuttiDeliver/i))
-                    window.webkit.messageHandlers.newOrderSound.postMessage([0]);
-                else if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())) {
-                    if (typeof (window.linkJs.newOrderSound) != 'undefined') {
-                        window.linkJs.newOrderSound();
-                    }
-                }else {
-                    var audio = new Audio();
-                    audio.src = deliver_sound_url;
-                    audio.play();
-                }
-            }
-        }
-    }, 'json');
-}
 </script>
 </body>
 </html>
