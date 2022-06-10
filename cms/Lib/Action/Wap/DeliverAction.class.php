@@ -1768,6 +1768,7 @@ class DeliverAction extends BaseAction
 					$store['tools_money'] += $v['tools_price'] * $v['num'];
 				}
 			}
+
 			$this->assign('store', $store);
 			
 			//红包信息
@@ -1956,6 +1957,15 @@ class DeliverAction extends BaseAction
 					$store['tools_money'] += $v['tools_price'] * $v['num'];
 				}
 			}
+
+            //烟酒店铺提示
+            $store_tag = explode(',',$store['store_tag']);
+            if(in_array(1,$store_tag) || in_array(2,$store_tag)){
+                $store['tag_tip'] = 1;
+            }else{
+                $store['tag_tip'] = 0;
+            }
+
 			$this->assign('store', $store);
 		}
 		$this->display();

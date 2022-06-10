@@ -244,6 +244,9 @@
         height: 40px;
         display: block ruby;
         flex: 0 0 auto;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: auto 100%;
     }
     .photo_desc{
         flex: 1 1 100%;
@@ -308,8 +311,8 @@
     <div class="infor_head"></div>
     <if condition="$order.statusLog egt 6 and $order.photo neq ''">
         <div class="photo_show">
-            <span class="photo_img">
-                <img src="{pigcms{$order['photo']}" width="40" />
+            <span class="photo_img" style="background-image:url('{pigcms{$order.photo}')">
+
             </span>
             <span class="photo_desc">Your courier uploaded a photo</span>
             <span class="photo_view">VIEW</span>
@@ -695,8 +698,7 @@
         var img = "<img src='"+url+"' width='"+img_width+"' id='message_img'/>";
         $('#message_content').html(img);
 
-
-        $('#message_content').css('left',($(window).width() - img_width)/2);
+        $('#message_content').css('left',($('#system_message').width() - img_width)/2);
         $('#message_content').css('top',($(window).height() - img_width*1.25)/2);
     });
 

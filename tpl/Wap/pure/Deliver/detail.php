@@ -383,6 +383,17 @@
             </div>
         </div>
     </if>
+    <if condition="$supply['status'] eq 4 and $store['tag_tip'] eq 1">
+        <div class="amount_div" style="margin-top: 10px;background-color: #E3EAFD">
+            <div class="touch_detail" style="margin: 0 auto;width: 90%;">
+                <span class="material-icons" style="vertical-align: middle">account_box</span>
+                <span style="margin-left: -10px;font-weight: bold;">
+                        ID Check Required
+                    </span>
+                <span class="material-icons" id="id_check" style="vertical-align: middle;float: right;cursor: pointer">info_outlined</span>
+            </div>
+        </div>
+    </if>
     <if condition="$supply['status'] eq 5">
         <div class="order_time">
             <div class="time_sub">
@@ -659,7 +670,7 @@ function openPhoto(){
 
 $(document).ready(function(){
     var deliver_sound_url = "{pigcms{$static_public}sound/driver_new_order.mp3";
-    setInterval(getOrderNum, 2000);
+    //setInterval(getOrderNum, 2000);
     function getOrderNum() {
         $.get("{pigcms{:U('Deliver/index_count')}", function (response) {
             if (response.err_code == false) {
@@ -745,6 +756,14 @@ $(document).ready(function(){
                 $(".supply_"+supply_id).remove();
             });
         }
+    });
+
+    $("#id_check").click(function () {
+        layer.open({
+            title: ['<span class="material-icons" style="vertical-align: middle">account_box</span>ID Check', 'background-color:#ffffff;color:#294068;font-weight:bold;'],
+            content: "This order contains age sensitive products. By law, you are responsible for checking <b>government issued photo ID</b> from the customer and ensuring he/she is <b>at least 19 years</b> of age before handing over the order. <br/><br/>" +
+            "If the customer fails to do so, please contact the Tutti support team for instructions about returning the order back to the merchant. You will be compensated with a return delivery fee. <br/>"
+        });
     });
 });
 </script>

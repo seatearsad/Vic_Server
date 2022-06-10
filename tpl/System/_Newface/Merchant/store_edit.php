@@ -125,6 +125,19 @@
                                     <span class="input-group-addon bootstrap-touchspin-postfix input-group-append"><span class="input-group-text">%</span></span>
                                 </div>
                             </div>
+                            <div class="form-group  row">
+                                <label class="col-sm-4 col-form-label">Store Tag</label>
+                                <div class="col-sm-8 input-group bootstrap-touchspin bootstrap-touchspin-injected" id="tag_label">
+                                    <input type="hidden" id="store_tag" name="store_tag" value="{pigcms{$store['store_tag']}" />
+                                    <volist name="store_tag_list" id="vo">
+                                        <if condition="$vo['check'] eq 1">
+                                            <button type="button" class="btn btn-primary" data-key="{pigcms{$key}" style="margin: 5px 2px">{pigcms{$vo['name']}</button>
+                                            <else />
+                                            <button type="button" class="btn btn-default" data-key="{pigcms{$key}" style="margin: 5px 2px">{pigcms{$vo['name']}</button>
+                                        </if>
+                                    </volist>
+                                </div>
+                            </div>
                             <div class="btn tutti_hidden_obj">
                                 <input type="submit" name="dosubmit" id="dosubmit" value="提交" class="button" />
                                 <input type="reset" value="取消" class="button" />
@@ -134,4 +147,34 @@
                 </div>
             </div>
         </div>
+        <script>
+            $("#tag_label").children('button').each(function () {
+                $(this).click(function () {
+                    if($(this).hasClass("btn-primary")){
+                        if($(this).data('key').toString() == $("#store_tag").val()){
+                            alert("至少需要一个标签");
+                        }else{
+                            $(this).removeClass("btn-primary");
+                            $(this).addClass("btn-default");
+                        }
+                    }else if($(this).hasClass("btn-default")){
+                        $(this).removeClass("btn-default");
+                        $(this).addClass("btn-primary");
+                    }
+
+                    handleTag();
+                });
+            });
+
+            function handleTag() {
+                var tag_val = "";
+                $("#tag_label").children('button').each(function () {
+                    if($(this).hasClass("btn-primary")){
+                        tag_val = tag_val == "" ? $(this).data("key").toString() : tag_val+","+ $(this).data("key").toString();
+                    }
+                });
+
+                $("#store_tag").val(tag_val);
+            }
+        </script>
 <include file="Public:footer_inc"/>
