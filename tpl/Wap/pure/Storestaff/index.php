@@ -298,8 +298,13 @@
                         getOrderDetail(click_id);
                     },1000);
                 }else{
-                    alert(result.info);
-                    window.location.reload();
+                    layer.open({
+                        content:result.info,
+                        btn: ['OK'],
+                        end:function(){
+                            window.location.reload();
+                        }
+                    });
                 }
             },'json');
         });

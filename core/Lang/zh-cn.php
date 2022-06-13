@@ -1447,7 +1447,7 @@ return array(
     "QW_PASSWORD"=>"密码",
     "QW_MERCHANTLOGIN"=>"商家登录",
     "QW_STORESTATUSACTIVE"=>"正常",
-    "QW_STORESTATUSPAUSED"=>"已暂停",
+    "QW_STORESTATUSPAUSED"=>"暂停",
     "QW_STORESTATUSCLOSED"=>"休息中",
     "QW_HOME"=>"首页",
     "QW_DELIVERYDASHBOARD"=>"订单管理",

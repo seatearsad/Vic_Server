@@ -4005,6 +4005,9 @@ class StorestaffAction extends BaseAction
             $add_time = $_POST['dining_time'];
 
             $order = D('Shop_order')->where(array('order_id'=>$order_id))->find();
+            if($order['status'] > 1){
+                exit(json_encode(array('error'=>1,'info'=>'This order has already been completed.')));
+            }
             $data['dining_time'] = $order['dining_time'] + $add_time;
             D('Deliver_supply')->where(array('order_id'=>$order_id))->save($data);
             D('Shop_order')->where(array('order_id'=>$order_id))->save($data);
