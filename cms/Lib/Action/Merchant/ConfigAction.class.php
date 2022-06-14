@@ -432,6 +432,7 @@ class ConfigAction extends BaseAction{
 			   $database_merchant_store->where(array('mer_id'=>$_POST['mer_id']))->save(array('ismain'=>0));
 			}
 			$_POST['store_type'] = isset($_POST['store_type']) ? intval($_POST['store_type']) : 1;
+			$_POST['pay_secret'] = 1;
 			if($merchant_store_id = $database_merchant_store->data($_POST)->add()){
 				M('Merchant_score')->add(array('parent_id'=>$insert_id,'type'=>2));
 				//判断关键词

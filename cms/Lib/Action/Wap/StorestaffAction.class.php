@@ -1698,6 +1698,10 @@ class StorestaffAction extends BaseAction
             $this->error('Failed! Order canceled by the customer');
             exit;
         }
+        if ($order['status'] > 1) {
+            $this->error('This order has already been completed.');
+            exit;
+        }
         if (($order['order_type']==0 && $order['status'] > 0) || ($order['order_type']==1 && $order['order_status'] > 3)) {
             $this->error('该单已接，不要重复接单');
             exit;

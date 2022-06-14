@@ -3094,6 +3094,15 @@ class IndexAction extends BaseAction
         $this->returnCode(0,'info',$transaction,'success');
     }
 
+    public function get_privacy(){
+        $privacy_list = array();
+        $privacy_list[] = array("name"=>"Privacy Policy","url"=>"https://tutti.app/intro/2.html?app=1");
+        $privacy_list[] = array("name"=>"Terms and Conditions","url"=>"https://tutti.app/intro/5.html?app=1");
+        //$privacy_list[] = array("name"=>"Delete Account","url"=>"https://tutti.app/intro/5.html");
+
+        $this->returnCode(0,'info',$privacy_list,'success');
+    }
+
     public function testDistance(){
 //        die('henhao');
         $from = $_GET['from'];

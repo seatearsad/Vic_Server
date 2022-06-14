@@ -702,11 +702,11 @@ class DeliverectAction
 
             if($checkCity){
                 $city_time_begin = str_replace(':','',$area['begin_time']);
-                $city_time_end = str_replace(':','',$area['begin_time']);
+                $city_time_end = str_replace(':','',$area['end_time']);
                 $t_begin = str_replace(':','',$t['startTime']);
                 $t_end = str_replace(':','',$t['endTime']);
 
-                if(!($city_time_begin > $t_begin && $city_time_begin >= $t_end) && !($city_time_end <= $t_begin && $city_time_end < $t_end)) {
+                if(!($city_time_begin > $t_end || $city_time_end < $t_begin)) {
                     if (str_replace(':', '', $area['begin_time']) > str_replace(':', '', $t['startTime'])) {
                         $all_list[$openName] = $area['begin_time'];
                     } else {
@@ -737,7 +737,7 @@ class DeliverectAction
                 $all_list['close_'.$i] = $all_list['close_'.$i].":00";
             }
         }
-        //var_dump($all_list);die();
+
         D('Merchant_store')->where(array('store_id'=>$store['store_id']))->save($all_list);
     }
 }
