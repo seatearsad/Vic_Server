@@ -419,9 +419,9 @@ class DeliverAction extends BaseAction
                     $deliver_assign = D('Deliver_assign')->field(true)->where(array('supply_id' => $supply_id))->find();
                     $record_array = explode(',', $deliver_assign['record']);
                     //派单列表中不存在 || 派单列表中开放 && 未拒单 || 指定派单 && 不在转接等候期
-                    if($deliver_assign['deliver_id'] == $this->deliver_session['uid']){
-                        $cha_time = time() - $deliver_assign['assign_time'];
-                        if($cha_time == 0 || $cha_time == 1) $just_new = 1;
+                    if($deliver_assign['deliver_id'] == $this->deliver_session['uid'] && $deliver_assign['send_sound'] == 0){
+                        $just_new = 1;
+                        D('Deliver_assign')->field(true)->where(array('supply_id' => $supply_id))->save(array("send_sound"=>1));
                     }
                     //派单列表中不存在 || 派单列表中开放 || 指定派单 && 不在转接等候期
                     if ((!$deliver_assign && $current_order_num < $max_order) || ($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'], $record_array) && $current_order_num < $max_order) || $deliver_assign['deliver_id'] == $this->deliver_session['uid']) {

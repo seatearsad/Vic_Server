@@ -706,7 +706,7 @@ class DeliverectAction
                 $t_begin = str_replace(':','',$t['startTime']);
                 $t_end = str_replace(':','',$t['endTime']);
 
-                if(!($city_time_begin > $t_end || $city_time_end < $t_begin)) {
+                if(!($city_time_begin >= $t_end || $city_time_end <= $t_begin)) {
                     if (str_replace(':', '', $area['begin_time']) > str_replace(':', '', $t['startTime'])) {
                         $all_list[$openName] = $area['begin_time'];
                     } else {

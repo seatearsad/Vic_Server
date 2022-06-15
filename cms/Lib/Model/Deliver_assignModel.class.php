@@ -154,9 +154,11 @@ class Deliver_assignModel extends Model
                 //if ($data['deliver_id'] == 0)
                 //    $data['record'] = $v['record'];//'';
                 //else
-                    $data['record'] = $v['record'] . ',' . $data['deliver_id'];
+                $data['record'] = $v['record'] . ',' . $data['deliver_id'];
+                $data['send_sound'] = 0;
 
                 $this->field(true)->where($where)->save($data);
+
                 if ($data['deliver_id'] != 0)
                     $this->sendMsg($data['deliver_id'],1);
             }
