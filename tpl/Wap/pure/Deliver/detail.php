@@ -670,7 +670,7 @@ function openPhoto(){
 
 $(document).ready(function(){
     var deliver_sound_url = "{pigcms{$static_public}sound/driver_new_order.mp3";
-    //setInterval(getOrderNum, 2000);
+    setInterval(getOrderNum, 2000);
     function getOrderNum() {
         $.get("{pigcms{:U('Deliver/index_count')}", function (response) {
             if (response.err_code == false) {

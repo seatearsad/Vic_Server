@@ -2551,4 +2551,5 @@ return array(
     "ALLERGENS"=>"过敏原",
     "SYSTEM_MESSAGE"=>"系统消息",
     "EVENT_NOTIFICATIONS"=>"推送",
+    "Recharge_New_Desc" => "充值 $%s0 返 $%s1",
 );
