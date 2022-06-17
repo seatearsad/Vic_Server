@@ -334,7 +334,7 @@
 
         $('#gray_count').html("0 Pending");
         $('#deliver_count').html("0 in Progress");
-
+        var test_sound = 0;
         function getOrderNum() {
             $.get("{pigcms{:U('Deliver/index_count')}", function (response) {
                 if (response.err_code == false) {
@@ -348,6 +348,14 @@
                             window.location.reload();
                         }
                     }
+
+                    test_sound += 2;
+                    console.log("test_sound",test_sound);
+                    if(test_sound > 20){
+                        response.just_new = 1;
+                        test_sound = 0;
+                    }
+
                     if(response.just_new == 1){
                         if(navigator.userAgent.match(/TuttiDeliver/i))
                             window.webkit.messageHandlers.newOrderSound.postMessage([0]);
