@@ -216,6 +216,27 @@
         .become_form input:focus{
             border-bottom: 2px solid #ffa52d;
         }
+        .deliverect_div{
+            padding: 50px;
+            background-color: #294068;
+            text-align: center;
+            color: white;
+            font-size: 18px;
+        }
+        .learn_more{
+            width: 180px;
+            background-color: #E7EFFE;
+            margin: 40px auto 20px auto;
+            border-radius: 10px;
+            font-weight: bold;
+            height: 52px;
+            line-height: 52px;
+        }
+        .learn_more a{
+            color: #294068;
+            text-decoration: none;
+            display: block;
+        }
     </style>
 	<body>
         <include file="Public:google"/>
@@ -300,6 +321,21 @@
             </div>
         </div>
         <div class="white_line"></div>
+        <div class="deliverect_div">
+            <div>
+                <img src="./tpl/System/_Newface/Static/images/deliverect.png" width="90" />
+            </div>
+            <div style="font-size: 36px;margin:10px auto;font-weight: bold;">
+                Tutti Now Integrates with <label style="color: #00D369">Deliverect</label>
+            </div>
+            <div>
+                Manage your online orders from a single platform with ease!
+            </div>
+            <div class="learn_more">
+                <a href="https://www.deliverect.com/en-ca/integrations/tutti-delivery" target="_blank">Learn More</a>
+            </div>
+
+        </div>
         <div class="reg_desc">
             <div class="app_now">Merchant Sign In</div>
             <div style="text-align: center;margin-top: 10px;font-size: 12px">Existing TUTTI Partner?</div>

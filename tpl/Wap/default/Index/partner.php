@@ -59,10 +59,23 @@
     <include file="Public:facebook"/>
 </head>
 <style>
+    @font-face {
+        font-family: 'Montserrat';
+        src: url('/static/font/Montserrat-Regular.ttf');
+    }
+    @font-face {
+        font-family: 'Montserrat-bold';
+        src: url('/static/font/Montserrat-Bold.otf');
+    }
+    @font-face {
+        font-family: 'Montserrat-light';
+        src: url('/static/font/Montserrat-Light.otf');
+    }
     *{
         margin: 0px;
         box-sizing: border-box;
-        font-family: Helvetica;
+        /*font-family: Helvetica;*/
+        font-family: Montserrat;
         -moz-osx-font-smoothing: grayscale;
     }
     body{
@@ -239,6 +252,27 @@
         width: 100%;
         height: 30px;
     }
+    .deliverect_div{
+        padding: 30px 0px;
+        background-color: #294068;
+        text-align: center;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+    }
+    .learn_more{
+        width: 150px;
+        background-color: #E7EFFE;
+        margin: 40px auto 20px auto;
+        border-radius: 10px;
+        height: 42px;
+        line-height: 42px;
+    }
+    .learn_more a{
+        color: #294068;
+        text-decoration: none;
+        display: block;
+    }
 </style>
 <body>
 <include file="Public:google"/>
@@ -328,6 +362,21 @@
     </div>
 </div>
 <div class="white_line"></div>
+<div class="deliverect_div">
+    <div>
+        <img src="./tpl/System/_Newface/Static/images/deliverect.png" width="90" />
+    </div>
+    <div style="font-size: 24px;margin:20px auto;font-weight: bold;">
+        POS Integration
+    </div>
+    <div>
+        Tutti now integrates with <label style="color: #00D369">Deliverect</label>! Manage your online orders from a single platform with ease!
+    </div>
+    <div class="learn_more">
+        <a href="https://www.deliverect.com/en-ca/integrations/tutti-delivery" target="_blank">Learn More</a>
+    </div>
+
+</div>
 <div class="reg_desc">
     <div class="app_now">Merchant Sign In</div>
     <div style="text-align: center;margin-top: 10px;font-size: 12px">Existing TUTTI Partner?</div>
