@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 		<title>{pigcms{$now_link.name}</title>
@@ -41,23 +42,23 @@
 	<body>
 		<div style="100%">
 			<div class="w main">
-				<div id="Position" class="margin_b6" style="font-size: 30px;line-height: 30px;">
+				<div id="Position" class="margin_b6" style="font-size: 18px;line-height: 20px;">
 					<!--a href="{pigcms{$config.site_url}">首页</a><span>&gt;</span>&nbsp;关于我们<span>&gt;</span>&nbsp;{pigcms{$now_link.name}</div-->
-					<div class="right" style="line-height: 40px;">
+					<div class="right" style="line-height: 25px;">
 						<div class="corner_t">
 							<div class="corner_tl"></div>
 							<div class="corner_tr"></div>
 						</div>
 						<div class="corner_c"></div>
-						<div class="content" style="width: 90%;padding: 20px 30px;">
-							<h1 class="tit" style="font-size: 50px;">{pigcms{$now_link.title}</h1>
+						<div class="content" style="width: 90%;padding: 20px 30px;font-size: 18px;">
+							<h1 class="tit" style="font-size: 30px;">{pigcms{$now_link.title}</h1>
 							{pigcms{$now_link.content}
 
-                            <h1 class="tit" style="font-size: 50px;">
+                            <h1 class="tit" style="font-size: 30px;">
                                 <if condition="$now_link['id'] eq 5">
-                                    <a href="./2.html?app=1" style="font-size: 50px;color: #0c68cf">Privacy Policy</a>
+                                    <a href="./2.html?app=1" style="color: #0c68cf">Privacy Policy</a>
                                 <else />
-                                    <a href="./5.html?app=1" style="font-size: 50px;color: #0c68cf">Terms of Use</a>
+                                    <a href="./5.html?app=1" style="color: #0c68cf">Terms of Use</a>
                                 </if>
                             </h1>
 						</div>
