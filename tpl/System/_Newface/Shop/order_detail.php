@@ -319,7 +319,14 @@
                                     <th class="text-nowrap" scope="row">{pigcms{:L('_BACK_RECEIPT_')}</th>
                                     <td colspan="5"> <if condition="$order['invoice_head']">{pigcms{$order['invoice_head']}<else/>N/A</if></td>
                                 </tr>
-
+                                <if condition="$order['deliver_user_info']['photo'] neq ''">
+                                    <tr>
+                                        <th class="text-nowrap" scope="row">Delivery Photo</th>
+                                        <td colspan="5">
+                                            <a href="{pigcms{$order['deliver_user_info']['photo']}" target="_blank" style="color: black;text-decoration: underline;font-weight: bold;">VIEW</a>
+                                        </td>
+                                    </tr>
+                                </if>
                                 <if condition="$order['cue_field']">
                                     <tr>
                                         <th colspan="6">&nbsp;</th>

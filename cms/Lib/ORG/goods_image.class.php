@@ -39,6 +39,24 @@ class goods_image
             return false;
         }
     }
+
+    public function get_delivery_photo_by_path($path, $image_type='-1')
+    {
+        if (!empty($path)) {
+            $image_tmp = explode(',', $path);
+            if ($image_type == '-1') {
+                $return['image'] = C('config.site_url') . '/upload/delivery_photo/' . $image_tmp[0] . '/' . $image_tmp['1'];
+                $return['m_image'] = C('config.site_url') . '/upload/delivery_photo/' . $image_tmp[0] . '/m_' . $image_tmp['1'];
+                $return['s_image'] = C('config.site_url') . '/upload/delivery_photo/' . $image_tmp[0] . '/s_' . $image_tmp['1'];
+            } else {
+                $return = C('config.site_url') . '/upload/delivery_photo/' . $image_tmp[0] . '/' . $image_type . '_' . $image_tmp['1'];
+            }
+            return $return;
+        } else {
+            return false;
+        }
+    }
+
 	/*根据商品数据表的图片字段来得到图片*/
 	public function get_allImage_by_path($path, $image_type='-1')
 	{

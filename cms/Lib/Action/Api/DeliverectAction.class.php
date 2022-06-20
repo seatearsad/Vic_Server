@@ -701,16 +701,23 @@ class DeliverectAction
             }
 
             if($checkCity){
-                if(str_replace(':','',$area['begin_time']) > str_replace(':','',$t['startTime'])){
-                    $all_list[$openName] = $area['begin_time'];
-                }else{
-                    $all_list[$openName] = $t['startTime'];
-                }
+                $city_time_begin = str_replace(':','',$area['begin_time']);
+                $city_time_end = str_replace(':','',$area['end_time']);
+                $t_begin = str_replace(':','',$t['startTime']);
+                $t_end = str_replace(':','',$t['endTime']);
 
-                if(str_replace(':','',$area['end_time']) < str_replace(':','',$t['endTime'])){
-                    $all_list[$closeName] = $area['end_time'];
-                }else{
-                    $all_list[$closeName] = $t['endTime'];
+                if(!($city_time_begin >= $t_end || $city_time_end <= $t_begin)) {
+                    if (str_replace(':', '', $area['begin_time']) > str_replace(':', '', $t['startTime'])) {
+                        $all_list[$openName] = $area['begin_time'];
+                    } else {
+                        $all_list[$openName] = $t['startTime'];
+                    }
+
+                    if (str_replace(':', '', $area['end_time']) < str_replace(':', '', $t['endTime'])) {
+                        $all_list[$closeName] = $area['end_time'];
+                    } else {
+                        $all_list[$closeName] = $t['endTime'];
+                    }
                 }
             }else {
                 $all_list[$openName] = $t['startTime'];
@@ -730,7 +737,7 @@ class DeliverectAction
                 $all_list['close_'.$i] = $all_list['close_'.$i].":00";
             }
         }
-        //var_dump($all_list);die();
+
         D('Merchant_store')->where(array('store_id'=>$store['store_id']))->save($all_list);
     }
 }

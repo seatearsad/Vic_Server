@@ -158,7 +158,8 @@
                 </php>
                 <div class="blance_line">
                     <php>
-                        echo L('Deposit_txt')." $".$k.' '.L('Earn_txt')." $".$v;
+                        $thisVal = array($k,$v);
+                        echo replace_lang_strlist(L('Recharge_New_Desc'),$thisVal);
                     </php>
                 </div>
                 <php>

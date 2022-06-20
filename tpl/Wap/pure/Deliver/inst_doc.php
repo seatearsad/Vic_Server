@@ -8,6 +8,8 @@
     <meta charset="utf-8">
     <title>Instructions & Announcement</title>
     <meta name="description" content="{pigcms{$config.seo_description}"/>
+    <link href="{pigcms{$static_path}css/deliver.css?v=1.0.4" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/index.css"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/mobiscroll.2.13.2.css"/>
     <script src="{pigcms{:C('JQUERY_FILE')}"></script>
     <!-- <script type="text/javascript" src="{pigcms{$static_path}js/swiper.min.js"></script> -->
@@ -23,7 +25,6 @@
     }
     #list_title{
         text-align: center;
-        margin-top: 20px;
         margin-bottom: 5px;
     }
     #list_time{
@@ -33,7 +34,8 @@
     }
 </style>
 <body>
-<div id="all_list">
+<include file="header" />
+<div id="all_list" class="page_title">
     <div id="list_title">
         {pigcms{$doc.title}
     </div>

@@ -443,6 +443,22 @@ class MerchantAction extends BaseAction{
 
 		$this->assign('bg_color','#F3F3F3');
 
+        $config = D('Config')->get_config();
+        $store_tag_list = explode(',',$config['store_tag']);
+
+        $store_new_tag = array();
+        $curr_store_tag = explode(',',$store['store_tag']);
+        foreach ($store_tag_list as $k=>$v){
+            $store_new_tag[$k]['name'] = $v;
+            if(in_array($k,$curr_store_tag)){
+                $store_new_tag[$k]['check'] = 1;
+            }else{
+                $store_new_tag[$k]['check'] = 0;
+            }
+        }
+
+        $this->assign('store_tag_list',$store_new_tag);
+
 		$this->display();
 	}
 

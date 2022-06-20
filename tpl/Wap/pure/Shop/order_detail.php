@@ -231,6 +231,56 @@
     .pickup_btn span a{
         display: block;
     }
+    .photo_show{
+        background-color: #EEEEEE;
+        padding: 10px;
+        display: flex;
+        font-size: 14px;
+        margin: 10px auto;
+        cursor: pointer;
+    }
+    .photo_img{
+        width: 40px;
+        height: 40px;
+        display: block ruby;
+        flex: 0 0 auto;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: auto 100%;
+    }
+    .photo_desc{
+        flex: 1 1 100%;
+        line-height: 40px;
+        padding-left: 10px;
+        color: #303030;
+    }
+    .photo_view{
+        color: #ffa52d;
+        font-weight: bold;
+        flex: 0 0 auto;
+        line-height: 40px;
+    }
+    #system_message{
+        position: absolute;
+        top:0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: black;
+        opacity: 50%;
+        z-index: 1000;
+        display: none;
+    }
+    #message_content{
+        position: absolute;
+        width: 90%;
+        top: 0;
+        max-width: 480px;
+        min-width: 240px;
+        margin-left: auto;
+        margin-right: auto;
+        z-index: 1001;
+    }
 </style>
 <body style="max-width: 640px;background-color: white;">
 <include file="Public:header"/>
@@ -259,7 +309,15 @@
 <!--    STORE-->
 
     <div class="infor_head"></div>
+    <if condition="$order.statusLog egt 6 and $order.photo neq ''">
+        <div class="photo_show">
+            <span class="photo_img" style="background-image:url('{pigcms{$order.photo}')">
 
+            </span>
+            <span class="photo_desc">Your courier uploaded a photo</span>
+            <span class="photo_view">VIEW</span>
+        </div>
+    </if>
     <if condition="$order_details['paid'] eq 0 AND $order.statusLog eq 0">
         <div id="payment_box" class="infor">
 <!--            data-time="'+order_list[i]['create_time']+'" data-id="'+order_list[i]['order_id']+'"data-jet="'+order_list[i]['jetlag']+'"-->
@@ -511,6 +569,8 @@
 
 </section>
 </div>
+<div id="system_message"></div>
+<div id="message_content"></div>
 </body>
 </html>
 <script src="{pigcms{$static_public}js/laytpl.js"></script>
@@ -620,6 +680,27 @@
 
     var num = 0;
     var curr_time = parseInt("{pigcms{:time()}");
+
+    $('.photo_show').click(function () {
+        var url = "{pigcms{$order['photo']}";
+        $('#system_message').show();
+        $('#system_message').bind("click",function () {
+            $(this).hide();
+            $('#message_content').html("");
+        });
+
+        $('#message_content').bind("click",function () {
+            $("#system_message").hide();
+            $(this).html("");
+        });
+
+        var img_width = $('#message_content').width();
+        var img = "<img src='"+url+"' width='"+img_width+"' id='message_img'/>";
+        $('#message_content').html(img);
+
+        $('#message_content').css('left',($('#system_message').width() - img_width)/2);
+        $('#message_content').css('top',($(window).height() - img_width*1.25)/2);
+    });
 
     $(document).ready(function(){
         update_pay_time();

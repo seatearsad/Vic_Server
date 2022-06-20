@@ -869,7 +869,10 @@ class ShopAction extends BaseAction
         $this->assign('category_list', json_encode($category_list));
 
         $sort_list = D('Shop_goods_sort')->lists($now_store['store_id'], false);
-        $this->assign('sort_list', json_encode($sort_list));
+        $sort_list = str_replace("'","\'",json_encode($sort_list));
+        $sort_list = str_replace('"','\"',$sort_list);
+        $this->assign('sort_list', $sort_list);
+
         $ids = D('Shop_goods_sort')->getIds($now_sort['sort_id'], $now_store['store_id']);
         $this->assign('select_ids', json_encode($ids));
 
@@ -1018,6 +1021,7 @@ class ShopAction extends BaseAction
 
         $sort_list = D('Shop_goods_sort')->lists($now_store['store_id'], false);
         $sort_list = str_replace("'","\'",json_encode($sort_list));
+        $sort_list = str_replace('"','\"',$sort_list);
         $this->assign('sort_list', $sort_list);
         $ids = D('Shop_goods_sort')->getIds($now_sort['sort_id'], $now_store['store_id']);
         $this->assign('select_ids', json_encode($ids));

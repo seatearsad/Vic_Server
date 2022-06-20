@@ -30,7 +30,7 @@
     body{
         background-color: #F8F8F8;
     }
-    #phone,#mail{
+    #phone,#mail,#feed{
         width: 85%;
         margin: 20px auto;
         border-radius: 10px;
@@ -76,6 +76,15 @@
             For inquiries about your account info, payment status, and other questions, please email our human resource department at driver@tutti.app.
         </div>
     </div>
+    <div id="feed">
+        <div class="div_title">
+            <span class="material-icons title_icon">feedback</span>
+            App Feedback
+        </div>
+        <div style="margin-top: 2px;">
+            Tell us how we did, report an issue, request a feature, ask technical questions, etc
+        </div>
+    </div>
 <script>
     var ua = navigator.userAgent;
     $('#mail').click(function () {
@@ -90,7 +99,9 @@
             //alert("Please send email to henry@tutti.app");
         }
     });
-
+    $("#feed").click(function () {
+        window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSe789nYlGuuLvIeRR60hnoHvhEsKFi-l_sVg94L4Uwrk8Ygtg/viewform?usp=sf_link";
+    });
 </script>
 </body>
 </html>

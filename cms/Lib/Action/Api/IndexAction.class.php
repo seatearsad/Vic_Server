@@ -1861,6 +1861,7 @@ class IndexAction extends BaseAction
         $result['order']['tax_price'] = number_format($tax_price,2);
         $result['order']['deposit_price'] = $deposit_price;
         $result['order']['subtotal'] = $order['price'];
+        $result['order']['photo'] = '';
 
         $delivery = D('Deliver_supply')->field(true)->where(array('order_id'=>$order['order_id']))->find();
         if($delivery) {
@@ -1876,6 +1877,10 @@ class IndexAction extends BaseAction
             if($delivery['status'] > 1 && $delivery['status'] <= 5){
                 $result['order']['deliver_lng'] = $deliver['lng'];
                 $result['order']['deliver_lat'] = $deliver['lat'];
+            }
+
+            if($delivery['photo'] != ''){
+                $result['order']['photo'] = C('config.site_url').$delivery['photo'];
             }
         }
 
@@ -3089,6 +3094,15 @@ class IndexAction extends BaseAction
         $this->returnCode(0,'info',$transaction,'success');
     }
 
+    public function get_privacy(){
+        $privacy_list = array();
+        $privacy_list[] = array("name"=>"Privacy Policy","url"=>"https://tutti.app/intro/2.html?app=1");
+        $privacy_list[] = array("name"=>"Terms and Conditions","url"=>"https://tutti.app/intro/5.html?app=1");
+        //$privacy_list[] = array("name"=>"Delete Account","url"=>"https://tutti.app/intro/5.html");
+
+        $this->returnCode(0,'info',$privacy_list,'success');
+    }
+
     public function testDistance(){
 //        die('henhao');
         $from = $_GET['from'];
@@ -3721,6 +3735,10 @@ class IndexAction extends BaseAction
         //$result = $http->curlGet($url);
         //$result = httpRequest($url);
         //var_dump($result);die();
+
+        //
+        $exif = exif_read_data('./upload/delivery_photo/000/000/083/62a1d876a79f9164.jpg');
+        var_dump($exif);die();
 
         $pass = md5($_GET['pass']);
         if($pass == '19363ffad1f549bdef293f5eea1a2fe4'){

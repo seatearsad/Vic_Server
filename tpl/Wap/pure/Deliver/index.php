@@ -13,6 +13,7 @@
     <script>
         var location_url = "{pigcms{:U('Deliver/grab')}",lat = "{pigcms{$deliver_session['lat']}", lng = "{pigcms{$deliver_session['lng']}", reject_url = "{pigcms{:U('Deliver/reject')}",update_url = "{pigcms{:U('Deliver/index_count')}";
         var static_path = "{pigcms{$static_path}";
+        var deliver_sound_url = "{pigcms{$static_public}sound/driver_new_order.mp3";
         $(function(){
             $(".startOrder,.stopOrder").click(function(){
                 $.get("/wap.php?g=Wap&c=Deliver&a=index&action=changeWorkstatus&type="+$(this).attr('ref'), function(data){
@@ -149,6 +150,16 @@
             float: right;
             margin-top: -50px;
         }
+        #distance_div{
+            margin-top: -55px;
+            float: left;
+            background: #5C96E9;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+        }
         #top_label{
             width: auto;
             background-color: #ffa52d;
@@ -176,7 +187,7 @@
             line-height: 50px;
         }
         .order_detail span{
-            flex: 1 1 30%;
+            flex: 1 1 35%;
             word-break: normal;
         }
         .order_detail .amount{
@@ -323,7 +334,7 @@
 
         $('#gray_count').html("0 Pending");
         $('#deliver_count').html("0 in Progress");
-
+        //var test_sound = 0;
         function getOrderNum() {
             $.get("{pigcms{:U('Deliver/index_count')}", function (response) {
                 if (response.err_code == false) {
@@ -335,6 +346,28 @@
                             window.linkJs.reloadWebView();
                         }else {
                             window.location.reload();
+                        }
+                    }
+                    /**
+                    test_sound += 2;
+                    console.log("test_sound",test_sound);
+                    if(test_sound > 20){
+                        response.just_new = 1;
+                        test_sound = 0;
+                    }
+                     */
+
+                    if(response.just_new == 1){
+                        if(navigator.userAgent.match(/TuttiDeliver/i))
+                            window.webkit.messageHandlers.newOrderSound.postMessage([0]);
+                        else if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())) {
+                            if (typeof (window.linkJs.newOrderSound) != 'undefined') {
+                                window.linkJs.newOrderSound();
+                            }
+                        }else {
+                            var audio = new Audio();
+                            audio.src = deliver_sound_url;
+                            audio.play();
                         }
                     }
 
@@ -428,6 +461,7 @@
 </if>
 <script id="replyListBoxTpl" type="text/html">
     {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <div id="distance_div">{{ d.list[i].user_distance }}</div>
     <a href="javascript:void(0);" class="rej" data-spid="{{ d.list[i].supply_id }}">
         <div id="reject_div">Reject</div>
     </a>
@@ -587,6 +621,7 @@
             $('#deliver_count').trigger('click');
         }else{
             grab_timer = setInterval(getList, 2000);
+            //getList();
         }
     }
 

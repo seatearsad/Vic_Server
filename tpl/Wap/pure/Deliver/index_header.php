@@ -206,11 +206,26 @@
         top:0;
         z-index: 999;
     }
+    .to_pending{
+        position: absolute;
+        margin-left: 80px;
+        text-align: center;
+        line-height: 50px;
+        color: #294068;
+        font-weight: bold;
+        top: 8px;
+        cursor: pointer;
+    }
 </style>
 <if condition="ACTION_NAME eq 'detail' or ACTION_NAME eq 'online'">
 <div id="offsetTop"></div>
 </if>
 <div id="tutti_header" <if condition="ACTION_NAME eq 'detail' or ACTION_NAME eq 'online'">style="background-color:white;"</if>>
+<if condition="ACTION_NAME eq 'detail'">
+    <div class="to_pending">
+        <span class="material-icons title_icon" style="color: #294068;font-size: 30px;vertical-align: middle;">double_arrow</span>PENDING ORDER
+    </div>
+</if>
     <div id="header_menu">
         <if condition="ACTION_NAME eq 'detail' or ACTION_NAME eq 'online'">
             <div class="refresh" id="back_btn">
@@ -428,5 +443,8 @@
             location.href = "{pigcms{:U('Deliver/index')}#1";
         else
             window.history.go(-1);
+    });
+    $('.to_pending').click(function () {
+        location.href = "{pigcms{:U('Deliver/index')}#0";
     });
 </script>

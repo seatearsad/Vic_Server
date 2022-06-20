@@ -3988,6 +3988,7 @@ class ShopAction extends BaseAction{
             //-------------------------------  获取地图位置 --------------------------------------peter
 
             $supply = D('Deliver_supply')->where(array('order_id'=>$order_id))->find();
+            $order['photo'] = '';
             if($supply){
                 $deliver_id = $supply['uid'];
                 $deliver = D('Deliver_user')->where(array('uid'=>$deliver_id))->find();
@@ -3997,6 +3998,7 @@ class ShopAction extends BaseAction{
                 $order['user_lng'] = $supply['aim_lnt'];
                 $order['deliver_lat'] = $deliver['lat'];
                 $order['deliver_lng'] = $deliver['lng'];
+                $order['photo'] = $supply['photo'];
             }else{
                 $order['store_lat'] = $store['lat'];
                 $order['store_lng'] = $store['long'];
@@ -4141,7 +4143,8 @@ class ShopAction extends BaseAction{
                 'delivery_discount'=>$order['delivery_discount'],
                 'service_fee'=>$order['service_fee'],
                 'orderType'=>$order['order_type'],
-                'store_service_fee'=>$store['service_fee']
+                'store_service_fee'=>$store['service_fee'],
+                'photo'=>$order['photo']
             );
             //自提订单 取自提的服务费比例
             if($order['order_type'] == 1) $arr['order_details']['store_service_fee'] = $store['pickup_service_fee'];

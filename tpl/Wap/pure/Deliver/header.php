@@ -192,7 +192,7 @@
 <div id="offsetTop"></div>
 <div id="tutti_header">
     <div id="header_menu">
-        <if condition="ACTION_NAME neq 'schedule' and ACTION_NAME neq 'statistics' and ACTION_NAME neq 'orders' and ACTION_NAME neq 'inst' and ACTION_NAME neq 'account' and ACTION_NAME neq 'support' and ACTION_NAME neq 'index'">
+        <if condition="$_GET['did'] or (ACTION_NAME neq 'schedule' and ACTION_NAME neq 'statistics' and ACTION_NAME neq 'orders' and ACTION_NAME neq 'account' and ACTION_NAME neq 'support' and ACTION_NAME neq 'index' and ACTION_NAME neq 'inst')">
             <div class="refresh" id="back_btn">
                 <span class="material-icons" style="color: #294068;font-size: 30px;">keyboard_arrow_left</span>
             </div>

@@ -11,7 +11,7 @@ class Deliver_assignModel extends Model
     //派单逻辑记录表
     protected $record_table;
     //更换配送员时间
-    const CHANGE_TIME = 30;
+    const CHANGE_TIME = 45;
     //更换配送员中间的缓冲时间
     const CHANGE_BUFFER_TIME = 3;
     //总共可更换配送员的次数
@@ -154,9 +154,11 @@ class Deliver_assignModel extends Model
                 //if ($data['deliver_id'] == 0)
                 //    $data['record'] = $v['record'];//'';
                 //else
-                    $data['record'] = $v['record'] . ',' . $data['deliver_id'];
+                $data['record'] = $v['record'] . ',' . $data['deliver_id'];
+                $data['send_sound'] = 0;
 
                 $this->field(true)->where($where)->save($data);
+
                 if ($data['deliver_id'] != 0)
                     $this->sendMsg($data['deliver_id'],1);
             }

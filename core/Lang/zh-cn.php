@@ -1447,7 +1447,7 @@ return array(
     "QW_PASSWORD"=>"密码",
     "QW_MERCHANTLOGIN"=>"商家登录",
     "QW_STORESTATUSACTIVE"=>"正常",
-    "QW_STORESTATUSPAUSED"=>"已暂停",
+    "QW_STORESTATUSPAUSED"=>"暂停",
     "QW_STORESTATUSCLOSED"=>"休息中",
     "QW_HOME"=>"首页",
     "QW_DELIVERYDASHBOARD"=>"订单管理",
@@ -2551,4 +2551,5 @@ return array(
     "ALLERGENS"=>"过敏原",
     "SYSTEM_MESSAGE"=>"系统消息",
     "EVENT_NOTIFICATIONS"=>"推送",
+    "Recharge_New_Desc" => "充值 $%s0 返 $%s1",
 );

@@ -5,6 +5,9 @@
  */
 class DeliverAction extends BaseAction 
 {
+    //更换配送员时间
+    const CHANGE_TIME = 45;
+
 	protected $deliver_session;
 	protected $item = array(0 => "老的餐饮外送", 1 => "外卖", 2 => "新快店");
 	protected $deliver_supply;
@@ -73,7 +76,7 @@ class DeliverAction extends BaseAction
             }
         }
 
-        $save_address = array('login','reg','ajax_city_name',"ajax_save_city_id_for_deliver_user",'ajax_upload','forgetpwd','account','change_pwd','bank_info','step_1','step_2','step_3','step_4','step_5','support','ver_info','activate_deliver');
+        $save_address = array('login','reg','ajax_city_name',"ajax_save_city_id_for_deliver_user",'ajax_upload','ajax_upload_photo','forgetpwd','account','change_pwd','bank_info','step_1','step_2','step_3','step_4','step_5','support','ver_info','activate_deliver');
         if(!in_array(ACTION_NAME,$save_address)) {
             $deliver = D('Deliver_user')->field('reg_status')->where(['uid' => $this->deliver_session['uid']])->find();
 
@@ -392,6 +395,8 @@ class DeliverAction extends BaseAction
 
         $current_order_num = D('Deliver_supply')->where(array('uid'=>$this->deliver_session['uid'],'status'=>array('lt',5)))->count();
 
+        //是否有新单提醒
+        $just_new = 0;
         if($this->deliver_session['work_status'] == 0 || $city['urgent_time'] != 0) {
             $my_distance = $this->deliver_session['range'] * 1000;
             $time = time();
@@ -404,14 +409,20 @@ class DeliverAction extends BaseAction
 
             //$gray_count = D("Deliver_supply")->where($where)->count();
             //garfunkel 添加派单逻辑
-            $gray_list = D("Deliver_supply")->where($where)->select();
+            $gray_list = D('Deliver_supply')->field(true)->where($where)->order("`create_time` DESC")->select();
             $gray_count = 0;
+
             foreach ($gray_list as $k => $v) {
                 $store = D('Merchant_store')->field(true)->where(array('store_id' => $v['store_id']))->find();
                 if ($store['city_id'] == $city_id) {
                     $supply_id = $v['supply_id'];
                     $deliver_assign = D('Deliver_assign')->field(true)->where(array('supply_id' => $supply_id))->find();
                     $record_array = explode(',', $deliver_assign['record']);
+                    //派单列表中不存在 || 派单列表中开放 && 未拒单 || 指定派单 && 不在转接等候期
+                    if($deliver_assign['deliver_id'] == $this->deliver_session['uid'] && $deliver_assign['send_sound'] == 0){
+                        $just_new = 1;
+                        D('Deliver_assign')->field(true)->where(array('supply_id' => $supply_id))->save(array("send_sound"=>1));
+                    }
                     //派单列表中不存在 || 派单列表中开放 || 指定派单 && 不在转接等候期
                     if ((!$deliver_assign && $current_order_num < $max_order) || ($deliver_assign['deliver_id'] == 0 && !in_array($this->deliver_session['uid'], $record_array) && $current_order_num < $max_order) || $deliver_assign['deliver_id'] == $this->deliver_session['uid']) {
                         $gray_count += 1;
@@ -426,9 +437,9 @@ class DeliverAction extends BaseAction
 		$finish_count = D('Deliver_supply')->where(array('uid' => $this->deliver_session['uid'], 'status' => 5))->count();
 
 		if($from == 0)
-		    exit(json_encode(array('err_code' => false, 'gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'work_status'=>$this->deliver_session['work_status'])));
+		    exit(json_encode(array('err_code' => false, 'gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'work_status'=>$this->deliver_session['work_status'],'just_new'=>$just_new)));
 		else
-		    return array('gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'work_status'=>$this->deliver_session['work_status']);
+		    return array('gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'work_status'=>$this->deliver_session['work_status'],'just_new'=>$just_new);
 	}
 	
 	private function rollback($supply_id, $status)
@@ -704,7 +715,7 @@ class DeliverAction extends BaseAction
                         //派单列表中不存在 || 派单列表中开放 && 未拒单 || 指定派单 && 不在转接等候期
                         if($deliver_assign['deliver_id'] == $this->deliver_session['uid']){
                             $v['just'] = 1;
-                            $v['diff_time'] = 30 - (time() - $deliver_assign['assign_time']);
+                            $v['diff_time'] = self::CHANGE_TIME - (time() - $deliver_assign['assign_time']);
                             $v['diff_time'] = $v['diff_time'] > 0 ? $v['diff_time'] : 0;
                             $first_list[] = $v;
                         }
@@ -738,7 +749,7 @@ class DeliverAction extends BaseAction
             $num_arr = $this->index_count(1);
 
 			if (empty($list)) {
-				exit(json_encode(array('err_code' => true,'gray_count' => $num_arr['gray_count'], 'deliver_count' => $num_arr['deliver_count'], 'finish_count' => $num_arr['finish_count'],'work_status'=>$num_arr['work_status'])));
+				exit(json_encode(array('err_code' => true,'gray_count' => $num_arr['gray_count'], 'deliver_count' => $num_arr['deliver_count'], 'finish_count' => $num_arr['finish_count'],'work_status'=>$num_arr['work_status'],'just_new'=>$num_arr['just_new'])));
 			}
 			
 			foreach ($list as &$val) {
@@ -779,6 +790,7 @@ class DeliverAction extends BaseAction
 				$val['order_time'] = $val['order_time'] ? date('Y-m-d H:i', $val['order_time']) : '--';
 				$val['real_orderid'] = $val['real_orderid'] ? $val['real_orderid'] : $val['order_id'];
 				$val['store_distance'] = getRange(getDistance($val['from_lat'], $val['from_lnt'], $lat, $lng));
+                $val['user_distance'] = getRange(getDistance($val['from_lat'], $val['from_lnt'], $val['aim_lat'], $val['aim_lnt']));
 				$val['map_url'] = U('Deliver/map', array('supply_id' => $val['supply_id']));
 
 				$order = D('Shop_order')->get_order_by_orderid($val['order_id']);
@@ -803,7 +815,7 @@ class DeliverAction extends BaseAction
                 $val['store_name'] = lang_substr($store['name'],C('DEFAULT_LANG'));
 			}
 			//array('gray_count' => $gray_count, 'deliver_count' => $deliver_count, 'finish_count' => $finish_count,'work_status'=>$this->deliver_session['work_status']);
-			exit(json_encode(array('err_code' => false, 'list' => $list,'gray_count' => $num_arr['gray_count'], 'deliver_count' => $num_arr['deliver_count'], 'finish_count' => $num_arr['finish_count'],'work_status'=>$num_arr['work_status'])));
+			exit(json_encode(array('err_code' => false, 'list' => $list,'gray_count' => $num_arr['gray_count'], 'deliver_count' => $num_arr['deliver_count'], 'finish_count' => $num_arr['finish_count'],'work_status'=>$num_arr['work_status'],'just_new'=>$num_arr['just_new'])));
 		}
 		
 		//$this->display();
@@ -1282,6 +1294,8 @@ class DeliverAction extends BaseAction
 			$columns['paid'] = 1;
 			$columns['end_time'] = time();
 
+			if($_POST['photo'] && $_POST['photo'] != '') $columns['photo'] = $_POST['photo'];
+
 			if ($supply['type'] == 0 && $supply['pay_type'] == 'offline') {
 				$columns['pay_type'] = 'Cash';
 			}
@@ -1754,6 +1768,7 @@ class DeliverAction extends BaseAction
 					$store['tools_money'] += $v['tools_price'] * $v['num'];
 				}
 			}
+
 			$this->assign('store', $store);
 			
 			//红包信息
@@ -1942,6 +1957,15 @@ class DeliverAction extends BaseAction
 					$store['tools_money'] += $v['tools_price'] * $v['num'];
 				}
 			}
+
+            //烟酒店铺提示
+            $store_tag = explode(',',$store['store_tag']);
+            if(in_array(1,$store_tag) || in_array(2,$store_tag)){
+                $store['tag_tip'] = 1;
+            }else{
+                $store['tag_tip'] = 0;
+            }
+
 			$this->assign('store', $store);
 		}
 		$this->display();
@@ -3348,6 +3372,42 @@ class DeliverAction extends BaseAction
             exit(json_encode(array('error' => 1,'message' =>'没有选择图片')));
         }
     }
+
+    public function ajax_upload_photo()
+    {
+        if ($_FILES['file']['error'] != 4) {
+            //$store_id = isset($_GET['store_id']) ? intval($_GET['store_id']) : 0;
+            //$shop = D('Merchant_store_shop')->field('store_theme')->where(array('store_id' => $store_id))->find();
+            //$store_theme = isset($shop['store_theme']) ? intval($shop['store_theme']) : 0;
+            //if ($store_theme) {
+            //$width = '900,450';
+            //$height = '900,450';
+            //} else {
+            $width = '900,450';
+            $height = '500,250';
+            //}
+            $param = array('size' => $this->config['group_pic_size']);
+            $param['thumb'] = true;
+            $param['imageClassPath'] = 'ORG.Util.Image';
+            $param['thumbPrefix'] = 'm_,s_';
+            $param['thumbMaxWidth'] = $width;
+            $param['thumbMaxHeight'] = $height;
+            $param['thumbRemoveOrigin'] = false;
+            $image = D('Image')->handle($this->deliver_session['uid'], 'delivery_photo', 1, $param,false);
+            if ($image['error']) {
+                exit(json_encode(array('error' => 1,'message' =>$image['msg'])));
+            } else {
+                $title = $image['title']['file'];
+                $goods_image_class = new goods_image();
+                $url = $goods_image_class->get_delivery_photo_by_path($title, 's');
+                $file = $image['url']['file'];
+                exit(json_encode(array('error' => 0, 'url' => $url, 'title' => $title,'file'=>$file)));
+            }
+        } else {
+            exit(json_encode(array('error' => 1,'message' =>'没有选择图片')));
+        }
+    }
+
     public function ajax_save_city_id_for_deliver_user(){
 
         $uid = $this->deliver_session['uid'];
