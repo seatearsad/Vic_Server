@@ -317,7 +317,7 @@
 
 <script src="{pigcms{$static_public}js/laytpl.js"></script>
 <if condition="$deliver_session['reg_status'] eq 0 and $deliver_session['group'] eq 1">
-    <script type="text/javascript" src="{pigcms{$static_path}js/grab.js?202" charset="utf-8"></script>
+    <script type="text/javascript" src="{pigcms{$static_path}js/grab.js?212" charset="utf-8"></script>
     <script>
         window.onpageshow = function(event) {
             if (event.persisted) {
