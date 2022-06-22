@@ -3493,7 +3493,7 @@ class DeliverAction extends BaseAction
                 $cates[] = intval($v['id']);
             }
 
-            $news = D('System_news')->where(array('category_id' => array('in', $cates)))->select();
+            $news = D('System_news')->where(array('category_id' => array('in', $cates),'status'=>1))->order('sort desc')->select();
 
             $this->assign('list', $news);
             $this->display();
