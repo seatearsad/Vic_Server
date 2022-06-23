@@ -37,7 +37,7 @@ class UserModel extends Model
 				return array('error_code' => true, 'msg' => L('_B_LOGIN_ENTERKEY_'));
 			}
 		}
-		$now_user = $this->field(true)->where(array('phone' => $phone))->find();
+		$now_user = $this->field(true)->where(array('phone' => $phone,'is_logoff'=>array('lt',2)))->find();
 		if ($now_user){
 			if($now_user['pwd'] != md5($pwd)){
 				if($type){
@@ -94,6 +94,11 @@ class UserModel extends Model
 				  }
 			   }
 			}
+
+			if($now_user['is_logoff'] == 1){
+                $data_save_user['is_logoff'] = 0;
+                $data_save_user['logoff_time'] = 0;
+            }
 
 			if($this->where($condition_save_user)->data($data_save_user)->save()){
 			    if(!empty($user_import)){
@@ -693,6 +698,22 @@ class UserModel extends Model
             $str .= $chars[mt_rand(0, $charsLen)];//随机取出一位
         }
         return $str;
+    }
+
+    function handleLogOffUser(){
+	    $offList = $this->where(array('is_logoff'=>1))->select();
+	    $time = time();
+	    $check_time = 1*3600*24;
+
+	    $handleList = array();
+	    foreach ($offList as $user){
+            $cha_time = $time - $user['logoff_time'];
+            if($cha_time >= $check_time){
+                $handleList[] = $user['uid'];
+            }
+        }
+
+        if(count($handleList) > 0) $this->where(array('uid'=>array('in',$handleList)))->save(array('is_logoff'=>2,'logoff_time'=>0));
     }
 }
 ?>

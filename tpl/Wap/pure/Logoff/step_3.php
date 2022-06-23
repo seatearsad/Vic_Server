@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache">
     <meta http-equiv="Pragma" content="no-cache">
     <meta charset="utf-8">
-    <title>Manage Your Schedule</title>
+    <title>Account Deletion</title>
     <meta name="description" content="{pigcms{$config.seo_description}"/>
     <link href="{pigcms{$static_path}css/deliver.css?v=1.0.4" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/style.css" />
@@ -37,7 +37,9 @@
 <script src="{pigcms{$static_public}layer/layer.m.js"></script>
 
 <script type="text/javascript">
-
+    $('.bottom_btn').click(function () {
+        window.location.href = "{pigcms{:U('Wap/Logoff/step_4')}";
+    });
 </script>
 </body>
 </html>

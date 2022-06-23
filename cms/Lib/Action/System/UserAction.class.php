@@ -13,7 +13,7 @@ class UserAction extends BaseAction {
                 $sql_count = "SELECT count(*) FROM ". C('DB_PREFIX') . "user as u ";
                 $sql = "SELECT u.* FROM ". C('DB_PREFIX') . "user as u ";
 
-                $where = "WHERE u.openid not like '%no_use'";
+                $where = "WHERE u.openid not like '%no_use' and u.is_logoff <> 2";
 
                 if($this->system_session['level'] == 3 && $this->system_session['area_id'] != 0){
                     $sql_count .= " LEFT JOIN ". C('DB_PREFIX') . "user_adress as a on a.uid = u.uid ";

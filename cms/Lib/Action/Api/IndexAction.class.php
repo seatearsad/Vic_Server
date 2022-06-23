@@ -3431,6 +3431,8 @@ class IndexAction extends BaseAction
         }
 
         //var_dump($work_delver_list);
+        //处理注销用户
+        D('User')->handleLogOffUser();
     }
 
     public function sendUpdateMail($list,$day_num,$file_name){

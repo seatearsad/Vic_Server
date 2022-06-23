@@ -651,6 +651,10 @@ class ShopAction extends BaseAction
             }
 
             $userinfo = D('user')->field(true)->where(array('uid' => $li['uid']))->find();
+            if($userinfo['is_logoff'] == 2){
+                $li['username'] = "Deleted ".$userinfo['uid'];
+                $li['userphone'] = "-";
+            }
             $li['reg_user_name'] = $userinfo['nickname'];
             $li['reg_user_phone'] = $userinfo['phone'];
             $li['duty_price'] = $tax_price + ($li['packing_charge'] + $li['freight_charge']) * $temp[$li['store_id']]['tax_num'] / 100; //税费

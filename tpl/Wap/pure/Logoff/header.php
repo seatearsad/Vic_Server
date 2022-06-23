@@ -104,4 +104,20 @@
     $('#back_btn').click(function () {
         window.history.go(-1);
     });
+
+    function loading() {
+        layer.open({
+            type:2,
+            content:'Loading...'
+        });
+    }
+    function showMessage(message) {
+        layer.open({
+            content:message,
+            btn: ['Confirm'],
+        });
+    }
+    function closeMessage() {
+        layer.closeAll();
+    }
 </script>

@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache">
     <meta http-equiv="Pragma" content="no-cache">
     <meta charset="utf-8">
-    <title>Manage Your Schedule</title>
+    <title>Account Deletion</title>
     <meta name="description" content="{pigcms{$config.seo_description}"/>
     <link href="{pigcms{$static_path}css/deliver.css?v=1.0.4" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/style.css" />
@@ -22,7 +22,7 @@
         2-Step Verification
     </div>
     <div class="content_desc">
-        Enter the code sent to (***) *** **
+        Enter the code sent to (***) *** **{pigcms{$last_two}
     </div>
 
     <div class="input_div" style="margin-top: 20px;">
@@ -36,7 +36,22 @@
 
 <script type="text/javascript">
     $('.bottom_btn').click(function () {
-        window.location.href = "{pigcms{:U('Wap/Logoff/step_3')}";
+        var code = $("input[name='code']").val();
+
+        if(code == ''){
+            showMessage("Please enter valid verification code");
+        }else{
+            loading();
+            var data = {"code":code};
+            $.post("/wap.php?g=Wap&c=Logoff&a=step_2",data,function(result){
+                closeMessage();
+                if(result.error){
+                    showMessage("Please enter valid verification code");
+                }else{
+                    window.location.href = "{pigcms{:U('Wap/Logoff/step_3')}";
+                }
+            },'JSON');
+        }
     });
 </script>
 </body>

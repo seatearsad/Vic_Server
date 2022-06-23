@@ -1722,7 +1722,14 @@ class Shop_orderModel extends Model
 		$order['deliver_user_info'] = $res;
 		$order['register_phone'] = '';
 		if ($user = D('User')->field(true)->where(array('uid' => $order['uid']))->find()) {
-			$order['register_phone'] = $user['phone'];
+            if($user['is_logoff'] == 2){
+                $order['username'] = "Deleted ".$user['uid'];
+                $order['userphone'] = "-";
+                $order['register_phone'] = "-";
+                $order['address'] = "-";
+            }else {
+                $order['register_phone'] = $user['phone'];
+            }
 		}
 		return $order;
 	}
