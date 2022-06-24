@@ -23,7 +23,7 @@ class LogoffAction extends BaseAction
                     $vcode = createRandomStr(6,true,true);
 
                     $sms_txt = "This is your verification code for log off. Your code is: ".$vcode;
-                    //Sms::sendTwilioSms($data['phone'],$sms_txt);
+                    Sms::sendTwilioSms($data['phone'],$sms_txt);
 
                     $user_modifypwdDb = M('User_modifypwd');
                     $addtime = time();
@@ -52,7 +52,7 @@ class LogoffAction extends BaseAction
             if($code != ""){
                 $check = M('User_modifypwd')->where(array('telphone'=>$user['phone'],'vfcode'=>$code))->find();
                 if($check){
-                    //M('User_modifypwd')->where(array('telphone'=>$user['phone'],'vfcode'=>$code))->delete();
+                    M('User_modifypwd')->where(array('telphone'=>$user['phone'],'vfcode'=>$code))->delete();
                     session("logoff_check",1);
                     exit(json_encode(array('error' => 0)));
                 }else{
@@ -101,7 +101,7 @@ class LogoffAction extends BaseAction
 
                 session("logoff_user_id",null);
                 session("logoff_check",null);
-                //M('User_modifypwd')->where(array('telphone'=>$user['phone']))->delete();
+                M('User_modifypwd')->where(array('telphone'=>$user['phone']))->delete();
                 exit(json_encode(array('error' => 0)));
             }else {
                 $page_title = "Account Deletion";
