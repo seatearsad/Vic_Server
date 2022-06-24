@@ -875,7 +875,7 @@ class UserAction extends BaseAction {
         $order_count = D('')->where($condition_where)->table($condition_table)->count();
         import('@.ORG.system_page');
         $p = new Page($order_count,30);
-        $order_list = D('')->field('`o`.*,`u`.`uid`,`u`.`nickname`,`u`.`phone`')->where($condition_where)->table($condition_table)->order($order_sort)->limit($p->firstRow.','.$p->listRows)->select();
+        $order_list = D('')->field('`o`.*,`u`.`uid`,`u`.`nickname`,`u`.`phone`,`u`.`is_logoff`')->where($condition_where)->table($condition_table)->order($order_sort)->limit($p->firstRow.','.$p->listRows)->select();
         $this->assign('order_list',$order_list);
         $pagebar = $p->show2();
         $this->assign('pagebar',$pagebar);

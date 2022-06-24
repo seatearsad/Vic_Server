@@ -98,6 +98,7 @@ class UserModel extends Model
 			if($now_user['is_logoff'] == 1){
                 $data_save_user['is_logoff'] = 0;
                 $data_save_user['logoff_time'] = 0;
+                $data_save_user['device_id'] = "";
             }
 
 			if($this->where($condition_save_user)->data($data_save_user)->save()){

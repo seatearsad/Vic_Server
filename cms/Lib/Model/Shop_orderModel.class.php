@@ -1209,6 +1209,11 @@ class Shop_orderModel extends Model
 		foreach ($list as &$order) {
 			$order['offline_price'] = round($order['price'] +$order['extra_price'] + $order['tip_charge'] - round($order['card_price'] + $order['merchant_balance'] + $order['card_give_money'] +$order['balance_pay'] + $order['payment_money'] + $order['score_deducte'] + $order['coupon_price'] + $order['delivery_discount'] + $order['merchant_reduce'], 2), 2);
 			$order['deliver_info'] = $order['deliver_info'] ? unserialize($order['deliver_info']) : '';
+            $userinfo = D('user')->field(true)->where(array('uid' => $order['uid']))->find();
+            if($userinfo['is_logoff'] == 2){
+                $order['username'] = "Deleted ".$userinfo['uid'];
+                $order['userphone'] = "-";
+            }
 			switch ($order['status']) {
 				case 0:
 // 					$order['css'] = 'inhand';

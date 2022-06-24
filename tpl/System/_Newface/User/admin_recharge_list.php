@@ -83,7 +83,7 @@
                                         <td>{pigcms{$vo.pigcms_id}</td>
                                         <td><if condition="$vo.type eq 1">{pigcms{:L('F_ADD')}: <else />{pigcms{:L('F_LESS')}: </if>${pigcms{$vo.money}</td>
 
-                                        <td><if condition="$vo.nickname">{pigcms{$vo.nickname}<else />{pigcms{$vo.phone}</if></td>
+                                        <td><if condition="$vo.is_logoff eq 2">Deleted {pigcms{$vo.uid}<else />{pigcms{$vo.nickname}</if></td>
                                         <td>{pigcms{$vo.realname}</td>
                                         <td>
                                             <a href="javascript:void(0);" onclick="window.top.artiframe('{pigcms{:U('User/edit',array('uid'=>$vo['uid']))}','{pigcms{:L(\'F_EDIT_INFO\')}',680,560,true,false,false,editbtn,'edit',true);">{pigcms{:L('F_USER_INFO')}</a>
