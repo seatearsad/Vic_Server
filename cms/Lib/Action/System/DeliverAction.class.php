@@ -887,7 +887,7 @@ class DeliverAction extends BaseAction {
             $user = D("User")->where(array('uid'=>$value['user_id']))->find();
             if($user['is_logoff'] == 2){
                 $value['username'] = "Deleted ".$user['uid'];
-                $value['userphone'] = "";
+                $value['userphone'] = "-";
                 $value['aim_site'] = "-";
                 $value['address_detail'] = "";
             }

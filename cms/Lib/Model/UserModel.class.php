@@ -344,6 +344,7 @@ class UserModel extends Model
 
 	public function check_phone($phone){
 		$condition_user['phone'] = $phone;
+        $condition_user['is_logoff'] = array('lt',2);
 		if($this->field('`uid`')->where($condition_user)->find()){
 			return array('error_code' => true, 'msg' => L('_B_LOGIN_PHONENOHAVE_'));
 		}
@@ -714,7 +715,7 @@ class UserModel extends Model
             }
         }
 
-        if(count($handleList) > 0) $this->where(array('uid'=>array('in',$handleList)))->save(array('is_logoff'=>2,'logoff_time'=>0));
+        if(count($handleList) > 0) $this->where(array('uid'=>array('in',$handleList)))->save(array('is_logoff'=>2,'logoff_time'=>$time));
     }
 }
 ?>
