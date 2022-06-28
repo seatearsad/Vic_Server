@@ -16,9 +16,14 @@ class LogoffAction extends BaseAction
             if($data['phone'] != ''){
                 $data['status'] = 1;
                 $data['login_type'] = 0;//平台用户
-                $data['is_logoff'] = 0;//未注销
+                //$data['is_logoff'] = 0;//未注销
                 $user = D("User")->where($data)->find();
-                if($user){
+
+                if($user && $user['is_logoff'] == 1){
+                    exit(json_encode(array('error' => 2)));
+                }
+
+                if($user && $user['is_logoff'] == 0){
                     session("logoff_user_id",$user['uid']);
                     $vcode = createRandomStr(6,true,true);
 
@@ -69,6 +74,10 @@ class LogoffAction extends BaseAction
                 $phone = $user['phone'];
                 $last_two = substr($phone, -2, 2);
                 $this->assign('last_two', $last_two);
+
+                $code = M('User_modifypwd')->where(array('telphone'=>$phone))->order('id desc')->find();
+                $cha_time = 60 - (time() - $code['addtime']);
+                $this->assign('cha_time', $cha_time);
             } else {
                 redirect(U('Logoff/index'));
             }
@@ -99,10 +108,10 @@ class LogoffAction extends BaseAction
                     D("User")->where(array('uid' => $logoff_user_id))->save(array('is_logoff' => 1, 'logoff_time' => $time));
 
                     $email = array(array("address" => $user['email'], "userName" => $user['nickname']));
-                    $title = "";
+                    $title = "We Received Your Account Deletion Request";
                     $body = $this->getMailBodySuccess($user['nickname']);
-                    //$mail = getMail($title, $body, $email);
-                    //$mail->send();
+                    $mail = getMail($title, $body, $email);
+                    $mail->send();
                 }
 
                 session("logoff_user_id",null);
@@ -119,6 +128,28 @@ class LogoffAction extends BaseAction
         }
     }
 
+    public function send_code(){
+        $logoff_user_id = session("logoff_user_id");
+        $user = D("User")->where(array('uid' => $logoff_user_id))->find();
+        if($user) {
+            $vcode = createRandomStr(6, true, true);
+
+            $sms_txt = "This is your verification code for log off. Your code is: " . $vcode . " .";
+            Sms::sendTwilioSms($user['phone'], $sms_txt);
+
+            $user_modifypwdDb = M('User_modifypwd');
+            $user_modifypwdDb->where(array('telphone' => $user['phone']))->delete();
+            $addtime = time();
+            $expiry = $addtime + 5 * 60; /*             * **五分钟有效期*** */
+            $data = array('telphone' => $user['phone'], 'vfcode' => $vcode, 'expiry' => $expiry, 'addtime' => $addtime);
+            $insert_id = $user_modifypwdDb->add($data);
+
+            exit(json_encode(array('error' => 0)));
+        }else{
+            exit(json_encode(array('error' => 1)));
+        }
+    }
+
     public function getMailBodySuccess($name){
         $body = "<p>Hi " . $name . ",</p>";
         $body .= "<p>&nbsp;</p>";
@@ -127,18 +158,6 @@ class LogoffAction extends BaseAction
         $body .= "<p><a href='https://www.tutti.app/wap.php?g=Wap&c=Login&a=index' target='_blank'>Sign In to Restore Account</a></p>";
         $body .= "<p>&nbsp;</p>";
         $body .= "<p><a href='https://forms.gle/9zRjKqc3UG2Kugea6' target='_blank'>Leave a Feedback</a></p>";
-        $body .= "<p>&nbsp;</p>";
-        $body .= "<p>We hope to see you again soon!</p>";
-        $body .= "<p>&nbsp;</p>";
-        $body .= "<p>The Tutti Team</p>";
-
-        return $body;
-    }
-
-    public function getMailBodyBeforeDelete(){
-        $body = "<p>This is a reminder that your Tutti account will be deleted after 1 day. If you change your mind, you can restore your account by signing in before we delete it.</p>";
-        $body .= "<p>&nbsp;</p>";
-        $body .= "<p><a href='https://www.tutti.app/wap.php?g=Wap&c=Login&a=index' target='_blank'>Sign In to Restore Account</a></p>";
         $body .= "<p>&nbsp;</p>";
         $body .= "<p>We hope to see you again soon!</p>";
         $body .= "<p>&nbsp;</p>";

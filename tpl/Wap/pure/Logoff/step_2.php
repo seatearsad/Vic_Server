@@ -12,7 +12,19 @@
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/style.css" />
     <script src="{pigcms{:C('JQUERY_FILE')}"></script>
     <style>
-
+        .cancel_btn{
+            width: 86%;
+            background-color: #DDDDDD;
+            font-size: 18px;
+            font-weight: bold;
+            line-height: 50px;
+            border-radius: 10px;
+            position: absolute;
+            bottom: 120px;
+            left:7%;
+            text-align: center;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -29,6 +41,9 @@
         <input type="text" placeholder="Verification code" name="code">
     </div>
 </section>
+<div class="cancel_btn">
+    Resend Code (<label id="resend_time">{pigcms{$cha_time}</label>s)
+</div>
 <div class="bottom_btn">
     Next
 </div>
@@ -53,6 +68,35 @@
             },'JSON');
         }
     });
+
+    var cha_time = parseInt("{pigcms{$cha_time}");
+    update_time(cha_time);
+
+    function update_time() {
+        if(cha_time <= 0){
+            $('.cancel_btn').html("Resend Code");
+            $('.cancel_btn').click(function () {
+                $.post("/wap.php?g=Wap&c=Logoff&a=send_code",{},function(result){
+                    if(!result.error){
+                        showMessage("Success");
+                        setTimeout(function() {
+                            window.location.reload();
+                        },2000);
+                    }else{
+                        showMessage("Error");
+                        $('.cancel_btn').unbind('click');
+                    }
+                },'JSON');
+            });
+        }else{
+            $("#resend_time").html(cha_time);
+            setTimeout(function() {
+                update_time();
+            },1000);
+
+            cha_time--;
+        }
+    }
 </script>
 </body>
 </html>

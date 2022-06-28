@@ -707,15 +707,41 @@ class UserModel extends Model
 	    $time = time();
 	    $check_time = 1*3600*24;
 
+	    $sendMailTime = 1*3600*20;
+
 	    $handleList = array();
 	    foreach ($offList as $user){
             $cha_time = $time - $user['logoff_time'];
             if($cha_time >= $check_time){
                 $handleList[] = $user['uid'];
             }
+
+            if($cha_time >= $sendMailTime){
+                $email = array(array("address" => $user['email'], "userName" => $user['nickname']));
+                $title = "Reminder: Your Tutti Account Will Be Deleted Soon";
+                $body = $this->getMailBodyBeforeDelete();
+                $mail = getMail($title, $body, $email);
+                $mail->send();
+            }
         }
 
-        if(count($handleList) > 0) $this->where(array('uid'=>array('in',$handleList)))->save(array('is_logoff'=>2,'logoff_time'=>$time));
+        if(count($handleList) > 0) {
+	        $this->where(array('uid'=>array('in',$handleList)))->save(array('is_logoff'=>2,'logoff_time'=>$time));
+	        D('User_card')->where(array('uid'=>array('in',$handleList)))->delete();
+            D('User_adress')->where(array('uid'=>array('in',$handleList)))->delete();
+        }
+    }
+
+    public function getMailBodyBeforeDelete(){
+        $body = "<p>This is a reminder that your Tutti account will be deleted after 1 day. If you change your mind, you can restore your account by signing in before we delete it.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p><a href='https://www.tutti.app/wap.php?g=Wap&c=Login&a=index' target='_blank'>Sign In to Restore Account</a></p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>We hope to see you again soon!</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>The Tutti Team</p>";
+
+        return $body;
     }
 }
 ?>
