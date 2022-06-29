@@ -68,6 +68,7 @@ class RecognitionAction extends BaseAction{
 		}
 	}
 	public function see_login_qrcode(){
+        redirect('/');
 		$qrcode_return = D('Recognition')->get_login_qrcode();
 		if($qrcode_return['error_code']){
 			echo '<html><head></head><body>'.$qrcode_return['msg'].'<br/><br/><font color="red">请关闭此窗口再打开重试。</font></body></html>';
@@ -77,6 +78,7 @@ class RecognitionAction extends BaseAction{
 		}
 	}
 	public function see_admin_qrcode(){
+        redirect('/');
 		$qrcode_return = D('Recognition')->get_admin_qrcode();
 		if($qrcode_return['error_code']){
 			echo '<html><head></head><body>'.$qrcode_return['msg'].'<br/><br/><font color="red">请关闭此窗口再打开重试。</font></body></html>';
@@ -86,6 +88,7 @@ class RecognitionAction extends BaseAction{
 		}
 	}
 	public function see_tmp_qrcode(){
+        redirect('/');
 		$qrcode_return = D('Recognition')->get_tmp_qrcode($_GET['qrcode_id']);
 		if($qrcode_return['error_code']){
 			echo '<html><head></head><body>'.$qrcode_return['msg'].'<br/><br/><font color="red">请关闭此窗口再打开重试。</font></body></html>';
@@ -96,6 +99,7 @@ class RecognitionAction extends BaseAction{
 	}
 
 	public function get_tmp_qrcode(){
+        redirect('/');
 		$qrcode_return = D('Recognition')->get_tmp_qrcode($_GET['qrcode_id']);
 		if($qrcode_return['error_code']){
 			exit($qrcode_return['msg']);
@@ -105,6 +109,7 @@ class RecognitionAction extends BaseAction{
 	}
 
 	public function get_own_qrcode(){
+        redirect('/');
 		$qrCon = $_GET['qrCon'];
 		import('@.ORG.phpqrcode');
 		$size = $_GET['size'] ? $_GET['size']: 10;
