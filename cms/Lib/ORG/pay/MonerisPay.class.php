@@ -792,7 +792,7 @@ class MonerisPay
             }
 
             //处理优惠券
-            if($orderInfo['coupon_id']){
+            if(isset($orderInfo['coupon_id']) && $orderInfo['coupon_id'] != ''){
                 //如果选择的为活动优惠券
                 if(strpos($orderInfo['coupon_id'],'event')!== false) {
                     $event = explode('_',$orderInfo['coupon_id']);
