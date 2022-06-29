@@ -9,6 +9,7 @@
 class LoginAction extends BaseAction {
 
     public function index() {
+        redirect('/');
         if (IS_POST) {
             $phone = isset($_POST['phone']) ? $_POST['phone'] : '';
             $pwd = isset($_POST['pwd']) ? $_POST['pwd'] : '';
@@ -27,6 +28,7 @@ class LoginAction extends BaseAction {
     }
 
     public function reg() {
+        redirect('/');
         if (IS_POST) {
             $phone = isset($_POST['phone']) ? $_POST['phone'] : '';
             $pwd = isset($_POST['pwd']) ? $_POST['pwd'] : '';
