@@ -2956,6 +2956,7 @@ class IndexAction extends BaseAction
         }
 
         $condition_user['phone'] = $_POST['phone'];
+        $condition_user['is_logoff'] = array('lt',2);
         if($database_user->field(true)->where($condition_user)->find()){
             $this->returnCode(1,'info',array(),L('_API_PHONE_ERROR'));
         }
@@ -3095,10 +3096,19 @@ class IndexAction extends BaseAction
     }
 
     public function get_privacy(){
+        $uid = $_POST['uid'];
+        $config = D('Config')->get_config();
+
         $privacy_list = array();
         $privacy_list[] = array("name"=>"Privacy Policy","url"=>"https://tutti.app/intro/2.html?app=1");
         $privacy_list[] = array("name"=>"Terms and Conditions","url"=>"https://tutti.app/intro/5.html?app=1");
-        //$privacy_list[] = array("name"=>"Delete Account","url"=>"https://tutti.app/intro/5.html");
+
+        $time = time();
+        $secret_key = $config['api_secret_key'];
+        $data_str = "c:Logoff,a:step_2,uid:".$uid.",t:".$time;
+        $sign = MD5($data_str.$secret_key);
+        $delete_url = C('config.site_url').'/wap.php?g=Wap&c=Logoff&a=step_2&u='.$uid.'&t='.$time.'&sign='.$sign;
+        $privacy_list[] = array("name"=>"Delete Account","url"=>$delete_url);
 
         $this->returnCode(0,'info',$privacy_list,'success');
     }

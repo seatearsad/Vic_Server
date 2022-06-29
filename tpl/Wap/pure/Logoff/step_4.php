@@ -73,7 +73,7 @@
                     content:"Request Success!",
                     btn: ['Confirm'],
                     end:function(){
-                        window.location.href = "{pigcms{:U('Wap/Logoff/index')}";
+                        window.location.href = "{pigcms{:U('Wap/Login/index')}";
                     }
                 });
             }

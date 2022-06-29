@@ -9,6 +9,7 @@
 class LogoffAction extends BaseAction
 {
     public function index(){
+        redirect(U('Logoff/step_2'));
         if($_POST){
             $data['phone'] = $_POST['phone'];
             $data['pwd'] = md5($_POST['password']);
@@ -50,8 +51,35 @@ class LogoffAction extends BaseAction
     }
 
     public function step_2(){
-        $logoff_user_id = session("logoff_user_id");
-        $user = D("User")->where(array('uid' => $logoff_user_id))->find();
+        $user = session('user');
+
+        if(!$user){
+            if($_GET['u'] && $_GET['sign'] && $_GET['t']){//从app来的
+                $config = D('Config')->get_config();
+                $secret_key = $config['api_secret_key'];
+
+                $uid = $_GET['u'];
+                $time = $_GET['t'];
+                $sign = $_GET['sign'];
+                $data_str = "c:Logoff,a:step_2,uid:".$uid.",t:".$time;
+                $check_sign = MD5($data_str.$secret_key);
+                if($check_sign == $sign){
+                    $user = D('User')->where(array('uid'=>$uid))->find();
+                    session("logoff_user_id",$user['uid']);
+                }else{
+                    redirect(U('Login/index'));
+                }
+            }else{
+                redirect(U('Login/index'));
+            }
+        }else{
+            session("logoff_user_id",$user['uid']);
+        }
+
+        if($user['is_logoff'] == 1){
+            $this->error_tips("Deletion request already exists for this account. Please do not repeat. To cancel your request, please sign in through the Tutti homepage.",U('Login/index'));
+        }
+
         if($_POST){
             $code = $_POST['code'];
             if($code != ""){
@@ -76,7 +104,11 @@ class LogoffAction extends BaseAction
                 $this->assign('last_two', $last_two);
 
                 $code = M('User_modifypwd')->where(array('telphone'=>$phone))->order('id desc')->find();
-                $cha_time = 60 - (time() - $code['addtime']);
+                if($code) {
+                    $cha_time = 60 - (time() - $code['addtime']);
+                }else{
+                    $cha_time = 0;
+                }
                 $this->assign('cha_time', $cha_time);
             } else {
                 redirect(U('Logoff/index'));
@@ -116,6 +148,7 @@ class LogoffAction extends BaseAction
 
                 session("logoff_user_id",null);
                 session("logoff_check",null);
+                session("user",null);
                 M('User_modifypwd')->where(array('telphone'=>$user['phone']))->delete();
                 exit(json_encode(array('error' => 0)));
             }else {
@@ -124,7 +157,7 @@ class LogoffAction extends BaseAction
                 $this->display();
             }
         }else{
-            redirect(U('Logoff/index'));
+            redirect(U('Login/index'));
         }
     }
 
@@ -155,11 +188,15 @@ class LogoffAction extends BaseAction
         $body .= "<p>&nbsp;</p>";
         $body .= "<p>We've received your account deletion request. Your Tutti account is scheduled to be deleted after 30 days. If you change your mind, you can restore your account by signing in within the 30-day waiting period. Please be aware that we may retain certain information after account deletion for legal and regulatory purposes.</p>";
         $body .= "<p>&nbsp;</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>If this wasn't you...</p>";
+        $body .= "<p>&nbsp;</p>";
         $body .= "<p><a href='https://www.tutti.app/wap.php?g=Wap&c=Login&a=index' target='_blank'>Sign In to Restore Account</a></p>";
         $body .= "<p>&nbsp;</p>";
         $body .= "<p><a href='https://forms.gle/9zRjKqc3UG2Kugea6' target='_blank'>Leave a Feedback</a></p>";
         $body .= "<p>&nbsp;</p>";
         $body .= "<p>We hope to see you again soon!</p>";
+        $body .= "<p>&nbsp;</p>";
         $body .= "<p>&nbsp;</p>";
         $body .= "<p>The Tutti Team</p>";
 

@@ -12,16 +12,15 @@
     <link rel="stylesheet" type="text/css" href="{pigcms{$static_path}css/style.css" />
     <script src="{pigcms{:C('JQUERY_FILE')}"></script>
     <style>
-        .cancel_btn{
-            width: 86%;
-            background-color: #DDDDDD;
+        .send_btn{
+            width: 100%;
+            margin-top: 20px;
+            background-color: #ffa52d;
+            color: white;
             font-size: 18px;
             font-weight: bold;
-            line-height: 50px;
+            line-height: 42px;
             border-radius: 10px;
-            position: absolute;
-            bottom: 120px;
-            left:7%;
             text-align: center;
             cursor: pointer;
         }
@@ -37,13 +36,14 @@
         Enter the code sent to (***) *** **{pigcms{$last_two}
     </div>
 
+    <div class="send_btn">
+        Resend Code (<label id="resend_time">{pigcms{$cha_time}</label>s)
+    </div>
+
     <div class="input_div" style="margin-top: 20px;">
         <input type="text" placeholder="Verification code" name="code">
     </div>
 </section>
-<div class="cancel_btn">
-    Resend Code (<label id="resend_time">{pigcms{$cha_time}</label>s)
-</div>
 <div class="bottom_btn">
     Next
 </div>
@@ -74,8 +74,8 @@
 
     function update_time() {
         if(cha_time <= 0){
-            $('.cancel_btn').html("Resend Code");
-            $('.cancel_btn').click(function () {
+            $('.send_btn').html("Get Code");
+            $('.send_btn').click(function () {
                 $.post("/wap.php?g=Wap&c=Logoff&a=send_code",{},function(result){
                     if(!result.error){
                         showMessage("Success");
@@ -84,7 +84,7 @@
                         },2000);
                     }else{
                         showMessage("Error");
-                        $('.cancel_btn').unbind('click');
+                        $('.send_btn').unbind('click');
                     }
                 },'JSON');
             });

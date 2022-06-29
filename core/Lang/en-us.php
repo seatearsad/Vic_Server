@@ -2552,4 +2552,6 @@ return array(
     "SYSTEM_MESSAGE"=>"System Message",
     "EVENT_NOTIFICATIONS"=>"Notifications",
     "Recharge_New_Desc" => "Add over $%s0, receive $%s1 in Tutti Credits",
+    "PRIVACY_TXT"=>"Privacy",
+    "DELETE_ACCOUNT"=>"Delete Account",
 );

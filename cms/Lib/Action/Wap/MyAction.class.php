@@ -6483,5 +6483,9 @@ class MyAction extends BaseAction{
 
     }
 
+    public function privacy(){
+        $this->display();
+    }
+
 }
 ?>
