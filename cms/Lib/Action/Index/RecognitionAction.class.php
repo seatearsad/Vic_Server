@@ -5,6 +5,7 @@
  */
 class RecognitionAction extends BaseAction{
 	public function see_qrcode($type,$id){
+        redirect('/');
 		//判断ID是否正确，如果正确且以前生成过二维码则得到ID
 		if($type == 'group'){
 			$pigcms_return = D('Group')->get_qrcode($id);
