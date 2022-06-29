@@ -811,7 +811,7 @@ class MonerisPay
                         $coupon_real_id = $coupon_data['coupon_id'];
                         $coupon = D('System_coupon')->get_coupon($coupon_real_id);
 
-                        $in_coupon = array('coupon_id' => $data['coupon_id'], 'coupon_price' => $coupon['discount']);
+                        $in_coupon = array('coupon_id' => $orderInfo['coupon_id'], 'coupon_price' => $coupon['discount']);
 
                         D('Shop_order')->field(true)->where(array('order_id' => $orderInfo['order_id']))->save($in_coupon);
                     }
