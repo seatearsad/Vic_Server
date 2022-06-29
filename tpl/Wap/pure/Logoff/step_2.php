@@ -30,7 +30,7 @@
 <include file="header" />
 <section class="content_div">
     <div class="content_title">
-        2-Step Verification
+        Phone Number Verification：
     </div>
     <div class="content_desc">
         Enter the code sent to (***) *** **{pigcms{$last_two}
