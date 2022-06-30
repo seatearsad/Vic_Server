@@ -710,18 +710,15 @@ class UserModel extends Model
 	    $sendMailTime = 1*3600*20;
 
 	    $handleList = array();
+	    $sendList = array();
 	    foreach ($offList as $user){
             $cha_time = $time - $user['logoff_time'];
             if($cha_time >= $check_time){
                 $handleList[] = $user['uid'];
-            }
-
-            if($cha_time >= $sendMailTime){
-                $email = array(array("address" => $user['email'], "userName" => $user['nickname']));
-                $title = "Reminder: Your Tutti Account Will Be Deleted Soon";
-                $body = $this->getMailBodyBeforeDelete();
-                $mail = getMail($title, $body, $email);
-                $mail->send();
+            }else if($cha_time >= $sendMailTime){
+                if($user['email'] != '') {
+                    $sendList[] = array("address" => $user['email'], "userName" => $user['nickname']);
+                }
             }
         }
 
@@ -729,6 +726,13 @@ class UserModel extends Model
 	        $this->where(array('uid'=>array('in',$handleList)))->save(array('is_logoff'=>2,'logoff_time'=>$time));
 	        D('User_card')->where(array('uid'=>array('in',$handleList)))->delete();
             D('User_adress')->where(array('uid'=>array('in',$handleList)))->delete();
+        }
+
+        if(count($sendList) > 0){
+            $title = "Reminder: Your Tutti Account Will Be Deleted Soon";
+            $body = $this->getMailBodyBeforeDelete();
+            $mail = getMail($title, $body, $sendList);
+            $mail->send();
         }
     }
 

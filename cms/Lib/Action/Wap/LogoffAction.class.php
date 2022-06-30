@@ -51,44 +51,21 @@ class LogoffAction extends BaseAction
     }
 
     public function step_2(){
-        $user = session('user');
-
-        if(!$user){
-            if($_GET['u'] && $_GET['sign'] && $_GET['t']){//从app来的
-                $config = D('Config')->get_config();
-                $secret_key = $config['api_secret_key'];
-
-                $uid = $_GET['u'];
-                $time = $_GET['t'];
-                $sign = $_GET['sign'];
-                $data_str = "c:Logoff,a:step_2,uid:".$uid.",t:".$time;
-                $check_sign = MD5($data_str.$secret_key);
-                if($check_sign == $sign){
-                    $user = D('User')->where(array('uid'=>$uid))->find();
-                    session("logoff_user_id",$user['uid']);
-                }else{
-                    redirect(U('Login/index'));
-                }
-            }else{
-                redirect(U('Login/index'));
-            }
-        }else{
-            session("logoff_user_id",$user['uid']);
-        }
-
-        if($user['is_logoff'] == 1){
-            $this->error_tips("Deletion request already exists for this account. Please do not repeat. To cancel your request, please sign in through the Tutti homepage.",U('Login/index'));
-        }
-
         if($_POST){
-            $code = $_POST['code'];
-            if($code != ""){
-                $check = M('User_modifypwd')->where(array('telphone'=>$user['phone'],'vfcode'=>$code))->find();
-                if($check){
-                    M('User_modifypwd')->where(array('telphone'=>$user['phone'],'vfcode'=>$code))->delete();
-                    session("logoff_check",1);
-                    exit(json_encode(array('error' => 0)));
-                }else{
+            $logoff_user_id = session("logoff_user_id");
+            $user = D("User")->where(array('uid' => $logoff_user_id))->find();
+            if($user) {
+                $code = $_POST['code'];
+                if ($code != "") {
+                    $check = M('User_modifypwd')->where(array('telphone' => $user['phone'], 'vfcode' => $code))->find();
+                    if ($check) {
+                        M('User_modifypwd')->where(array('telphone' => $user['phone'], 'vfcode' => $code))->delete();
+                        session("logoff_check", 1);
+                        exit(json_encode(array('error' => 0)));
+                    } else {
+                        exit(json_encode(array('error' => 1)));
+                    }
+                } else {
                     exit(json_encode(array('error' => 1)));
                 }
             }else{
@@ -97,6 +74,35 @@ class LogoffAction extends BaseAction
         }else {
             $page_title = "Account Deletion";
             $this->assign("page_title", $page_title);
+
+            $user = session('user');
+
+            if(!$user){
+                if($_GET['u'] && $_GET['sign'] && $_GET['t']){//从app来的
+                    $config = D('Config')->get_config();
+                    $secret_key = $config['api_secret_key'];
+
+                    $uid = $_GET['u'];
+                    $time = $_GET['t'];
+                    $sign = $_GET['sign'];
+                    $data_str = "c:Logoff,a:step_2,uid:".$uid.",t:".$time;
+                    $check_sign = MD5($data_str.$secret_key);
+                    if($check_sign == $sign){
+                        $user = D('User')->where(array('uid'=>$uid))->find();
+                        session("logoff_user_id",$user['uid']);
+                    }else{
+                        redirect(U('Login/index'));
+                    }
+                }else{
+                    redirect(U('Login/index'));
+                }
+            }else{
+                session("logoff_user_id",$user['uid']);
+            }
+
+            if($user['is_logoff'] == 1){
+                $this->error_tips("Deletion request already exists for this account. Please do not repeat. To cancel your request, please sign in through the Tutti homepage.",U('Login/index'));
+            }
 
             if ($user) {
                 $phone = $user['phone'];
