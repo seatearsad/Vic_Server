@@ -40,10 +40,6 @@
     $('.bottom_btn').click(function () {
         window.location.href = "{pigcms{:U('Wap/Logoff/step_4')}";
     });
-    $(function () {
-        var userAgent = navigator.userAgent;
-        showMessage(userAgent);
-    });
 </script>
 </body>
 </html>

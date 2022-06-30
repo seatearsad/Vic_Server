@@ -76,6 +76,10 @@
                         if(navigator.userAgent.match(/TuttiUser/i)){
                             var url = "tuttiapp:logout";
                             document.location = url;
+                        }else if(navigator.userAgent.match(/Android_Tutti_User/i)){
+                            if (typeof (window.linkJs.logout) != 'undefined') {
+                                window.linkJs.logout();
+                            }
                         }else {
                             window.location.href = "{pigcms{:U('Wap/Login/index')}";
                         }
@@ -93,7 +97,11 @@
                 if(navigator.userAgent.match(/TuttiUser/i)){
                     var url = "tuttiapp:back";
                     document.location = url;
-                }else {
+                }else if(navigator.userAgent.match(/Android_Tutti_User/i)){
+                    if (typeof (window.linkJs.back) != 'undefined') {
+                        window.linkJs.back();
+                    }
+                }else{
                     window.location.href = "{pigcms{:U('Wap/Logoff/index')}";
                 }
             }
