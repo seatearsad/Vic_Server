@@ -81,7 +81,7 @@
         line-height: 50px;
         border-radius: 10px;
         position: absolute;
-        bottom: 50px;
+        bottom: 30px;
         left:7%;
         text-align: center;
         cursor: pointer;

@@ -28,7 +28,7 @@
             line-height: 50px;
             border-radius: 10px;
             position: absolute;
-            bottom: 120px;
+            bottom: 100px;
             left:7%;
             text-align: center;
             cursor: pointer;
@@ -73,7 +73,12 @@
                     content:"Request Success!",
                     btn: ['Confirm'],
                     end:function(){
-                        window.location.href = "{pigcms{:U('Wap/Login/index')}";
+                        if(navigator.userAgent.match(/TuttiUser/i)){
+                            var url = "tuttiapp:logout";
+                            document.location = url;
+                        }else {
+                            window.location.href = "{pigcms{:U('Wap/Login/index')}";
+                        }
                     }
                 });
             }
@@ -85,7 +90,12 @@
             if(result.error){
                 showMessage("Fail!");
             }else{
-                window.location.href = "{pigcms{:U('Wap/Logoff/index')}";
+                if(navigator.userAgent.match(/TuttiUser/i)){
+                    var url = "tuttiapp:back";
+                    document.location = url;
+                }else {
+                    window.location.href = "{pigcms{:U('Wap/Logoff/index')}";
+                }
             }
         },'JSON');
     });

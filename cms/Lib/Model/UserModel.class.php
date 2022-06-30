@@ -106,6 +106,9 @@ class UserModel extends Model
 				   $user_importDb->where(array('id'=>$user_import['id']))->save(array('isuse'=>1));
 				}
 
+                $now_user['is_logoff'] = 0;
+                $now_user['logoff_time'] = 0;
+                $now_user['device_id'] = "";
 
 				$database_house_village_user_bind = D('House_village_user_bind');
 				$bind_where['uid'] = $now_user['uid'];
@@ -723,7 +726,7 @@ class UserModel extends Model
         }
 
         if(count($handleList) > 0) {
-	        $this->where(array('uid'=>array('in',$handleList)))->save(array('is_logoff'=>2,'logoff_time'=>$time));
+	        $this->where(array('uid'=>array('in',$handleList)))->save(array('is_logoff'=>2,'logoff_time'=>$time,'device_id'=>''));
 	        D('User_card')->where(array('uid'=>array('in',$handleList)))->delete();
             D('User_adress')->where(array('uid'=>array('in',$handleList)))->delete();
         }

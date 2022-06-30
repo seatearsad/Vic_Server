@@ -106,16 +106,21 @@ class LogoffAction extends BaseAction
 
             if ($user) {
                 $phone = $user['phone'];
-                $last_two = substr($phone, -2, 2);
-                $this->assign('last_two', $last_two);
+                if($phone == ""){
+                    session("logoff_check", 1);
+                    redirect(U('Logoff/step_3'));
+                }else {
+                    $last_two = substr($phone, -2, 2);
+                    $this->assign('last_two', $last_two);
 
-                $code = M('User_modifypwd')->where(array('telphone'=>$phone))->order('id desc')->find();
-                if($code) {
-                    $cha_time = 60 - (time() - $code['addtime']);
-                }else{
-                    $cha_time = 0;
+                    $code = M('User_modifypwd')->where(array('telphone' => $phone))->order('id desc')->find();
+                    if ($code) {
+                        $cha_time = 60 - (time() - $code['addtime']);
+                    } else {
+                        $cha_time = 0;
+                    }
+                    $this->assign('cha_time', $cha_time);
                 }
-                $this->assign('cha_time', $cha_time);
             } else {
                 redirect(U('Logoff/index'));
             }
@@ -149,7 +154,7 @@ class LogoffAction extends BaseAction
                     $title = "We Received Your Account Deletion Request";
                     $body = $this->getMailBodySuccess($user['nickname']);
                     $mail = getMail($title, $body, $email);
-                    $mail->send();
+                    //$mail->send();
                 }
 
                 session("logoff_user_id",null);
@@ -174,7 +179,7 @@ class LogoffAction extends BaseAction
             $vcode = createRandomStr(6, true, true);
 
             $sms_txt = "This is your verification code for log off. Your code is: " . $vcode . " .";
-            Sms::sendTwilioSms($user['phone'], $sms_txt);
+            //Sms::sendTwilioSms($user['phone'], $sms_txt);
 
             $user_modifypwdDb = M('User_modifypwd');
             $user_modifypwdDb->where(array('telphone' => $user['phone']))->delete();
