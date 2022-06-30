@@ -358,7 +358,7 @@ class UserAction extends BaseAction {
 
             $database_user = D('User');
             if ($_POST['phone']){
-                $con_pre['_string']=" phone='".$_POST['phone']."' and uid<>".intval($_POST['uid']);
+                $con_pre['_string']=" phone='".$_POST['phone']."' and uid<>".intval($_POST['uid']).' and is_logoff<>2';
                 $check_user = $database_user->field(true)->where($con_pre)->find();
                 if (!empty($check_user)) {
                     $this->error(L('_B_LOGIN_PHONENOHAVE_'));

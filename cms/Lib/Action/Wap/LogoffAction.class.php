@@ -154,7 +154,7 @@ class LogoffAction extends BaseAction
                     $title = "We Received Your Account Deletion Request";
                     $body = $this->getMailBodySuccess($user['nickname']);
                     $mail = getMail($title, $body, $email);
-                    //$mail->send();
+                    $mail->send();
                 }
 
                 session("logoff_user_id",null);
@@ -179,7 +179,7 @@ class LogoffAction extends BaseAction
             $vcode = createRandomStr(6, true, true);
 
             $sms_txt = "This is your verification code for log off. Your code is: " . $vcode . " .";
-            //Sms::sendTwilioSms($user['phone'], $sms_txt);
+            Sms::sendTwilioSms($user['phone'], $sms_txt);
 
             $user_modifypwdDb = M('User_modifypwd');
             $user_modifypwdDb->where(array('telphone' => $user['phone']))->delete();

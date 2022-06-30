@@ -726,7 +726,7 @@ class UserModel extends Model
         }
 
         if(count($handleList) > 0) {
-	        $this->where(array('uid'=>array('in',$handleList)))->save(array('is_logoff'=>2,'logoff_time'=>$time,'device_id'=>''));
+	        $this->where(array('uid'=>array('in',$handleList)))->save(array('is_logoff'=>2,'logoff_time'=>$time,'device_id'=>'','openid'=>''));
 	        D('User_card')->where(array('uid'=>array('in',$handleList)))->delete();
             D('User_adress')->where(array('uid'=>array('in',$handleList)))->delete();
         }
