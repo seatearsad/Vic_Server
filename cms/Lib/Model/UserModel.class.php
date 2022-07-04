@@ -729,6 +729,7 @@ class UserModel extends Model
 	        $this->where(array('uid'=>array('in',$handleList)))->save(array('is_logoff'=>2,'logoff_time'=>$time,'device_id'=>'','openid'=>''));
 	        D('User_card')->where(array('uid'=>array('in',$handleList)))->delete();
             D('User_adress')->where(array('uid'=>array('in',$handleList)))->delete();
+            D('Reply')->where(array('uid'=>array('in',$handleList)))->delete();
         }
 
         if(count($sendList) > 0){

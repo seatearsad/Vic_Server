@@ -10,6 +10,7 @@ class BaseAction extends Action
     protected $user_session;
     protected $app_version;
     protected $voic_baidu = array();
+    protected $user;
     protected function _initialize()
     {
         if(empty($_POST)){
@@ -39,10 +40,12 @@ class BaseAction extends Action
         $this->checkSign();
         //监测被禁用账号
         if($_POST['uid']){
-            $user = D('User')->where(array('uid'=>$_POST['uid']))->find();
-            if($user['status'] == 0){
+            $this->user = D('User')->where(array('uid'=>$_POST['uid']))->find();
+            if($this->user['status'] == 0){
                 $this->returnCode(1,'info',array(),'Account has been disabled!');
             }
+        }else{
+            $this->user = null;
         }
     }
 
@@ -110,6 +113,12 @@ class BaseAction extends Action
                 'status'=>$code,
                 'fail'=>$error
             );
+        }
+
+        if($this->user != null){
+            $array['user_is_logoff'] = $this->user['is_logoff'];
+        }else{
+            $array['user_is_logoff'] = 0;
         }
 
         echo json_encode($array);

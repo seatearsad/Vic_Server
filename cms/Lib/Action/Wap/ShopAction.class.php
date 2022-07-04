@@ -2644,7 +2644,7 @@ class ShopAction extends BaseAction{
         }
 
         $user = D('User')->where(array('uid'=>$this->user_session['uid']))->find();
-        if(!$user || $user['is_logoff'] == 2){
+        if(!$user || $user['is_logoff'] == 1){
             session("user",null);
             $is_error = true;
             $type = "logoff";

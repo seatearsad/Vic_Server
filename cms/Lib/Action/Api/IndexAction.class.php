@@ -518,6 +518,8 @@ class IndexAction extends BaseAction
         $userInfo['outsrc'] = $user['avatar'];
         $userInfo['openid'] = $user['openid'];
         $userInfo['login_type'] = $type;
+
+        $data['is_logoff'] = 0;
         //记录设备号
         if($token != '') {
             $from = $_POST['from'] ? $_POST['from'] : 0;
@@ -539,8 +541,11 @@ class IndexAction extends BaseAction
                     $source = 'Web';
                     break;
             }
-            D('User')->where(array('uid' => $userInfo['uid']))->save(array('device_id' => $token,'source'=>$source));
+
+            $data['device_id'] = $token;
+            $data['source'] = $source;
         }
+        D('User')->where(array('uid' => $userInfo['uid']))->save($data);
 
         $this->returnCode(0,'info',$userInfo);
     }
