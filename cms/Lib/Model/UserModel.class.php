@@ -275,6 +275,7 @@ class UserModel extends Model
 		}
 
 		$condition_user['phone'] = $phone;
+		$condition_user['is_logoff'] = array('lt',2);
 		if($this->field('`uid`')->where($condition_user)->find()){
 			return array('error_code' => true, 'msg' => L('_B_LOGIN_PHONENOHAVE_'));
 		}

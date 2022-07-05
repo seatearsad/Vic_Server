@@ -144,12 +144,10 @@
                 </li>
             </a>
 
-            <a href="{pigcms{:U('bind_user')}">
-            <li>
+            <li id="bind_phone">
                 <div>{pigcms{:L('_B_PURE_MY_90_')}</div>
                 <div class="right_align">{pigcms{$now_user.phone}</div>
             </li>
-            </a>
             <a href="{pigcms{:U('email')}">
             <li>
                 <div>{pigcms{:L('_B_PURE_MY_91_')}</div>
@@ -183,6 +181,19 @@
     $('#back_span').click(function () {
         window.history.go(-1);
     });
+
+    var user_phone = "{pigcms{$now_user['phone']}";
+    $("#bind_phone").click(function () {
+        if(user_phone == ""){
+            window.location.href = "{pigcms{:U(bind_user)}"
+        }else{
+            layer.open({
+                content:"You cannot change the phone number linked to your account here. Please contact our support team to do so if necessary.",
+                btn: ['Confirm']
+            });
+        }
+    });
+
     $('#logout').on('click',function(){
         if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())) {
             if (typeof (window.linkJs.delUser) != 'undefined') {

@@ -2648,7 +2648,7 @@ class ShopAction extends BaseAction{
             session("user",null);
             $is_error = true;
             $type = "logoff";
-            $msg = "Sorry, Account has been logged off";
+            $msg = "You have been logged out. Please login to continue.";
         }
 
         echo json_encode(array('error'=>$is_error,'type'=>$type,'msg'=>$msg,'cartList'=>$newCart));
