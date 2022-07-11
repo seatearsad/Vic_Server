@@ -333,10 +333,10 @@ class CouponAction extends BaseAction {
                 $where['c.city_id'] = $this->system_session['area_id'];
             }
 			$coupon = M('System_coupon_hadpull');
-			$count_count = $coupon->join('as h left join '.C('DB_PREFIX').'system_coupon c ON h.coupon_id = c.coupon_id')->join(C('DB_PREFIX').'user u ON h.uid = u.uid')->field('h.id,c.name,u.nickname,h.num,h.receive_time,h.is_use,h.phone,h.admin_name')->where($where)->count();
+			$count_count = $coupon->join('as h left join '.C('DB_PREFIX').'system_coupon c ON h.coupon_id = c.coupon_id')->join(C('DB_PREFIX').'user u ON h.uid = u.uid')->field('h.id,c.name,u.nickname,h.num,h.receive_time,h.is_use,h.phone,h.admin_name,u.is_logoff')->where($where)->count();
 			import('@.ORG.system_page');
 			$p = new Page($count_count, 15);
-			$coupon_list = $coupon->join('as h left join '.C('DB_PREFIX').'system_coupon c ON h.coupon_id = c.coupon_id')->join(C('DB_PREFIX').'user u ON h.uid = u.uid')->field('h.id,c.coupon_id,h.uid,c.name,u.nickname,h.num,h.receive_time,h.is_use,h.phone,h.admin_name')->where($where)->order($order_string)->limit($p->firstRow . ',' . $p->listRows)->select();
+			$coupon_list = $coupon->join('as h left join '.C('DB_PREFIX').'system_coupon c ON h.coupon_id = c.coupon_id')->join(C('DB_PREFIX').'user u ON h.uid = u.uid')->field('h.id,c.coupon_id,h.uid,c.name,u.nickname,h.num,h.receive_time,h.is_use,h.phone,h.admin_name,u.is_logoff')->where($where)->order($order_string)->limit($p->firstRow . ',' . $p->listRows)->select();
 
 			$this->assign('coupon_list',$coupon_list);
 			$pagebar = $p->show2();
@@ -406,7 +406,7 @@ class CouponAction extends BaseAction {
                 $objActSheet->setCellValue('I1', 'Admin');
                 $objActSheet->setCellValue('J1', 'Status');
 
-                $coupon_list = $coupon->join('as h left join '.C('DB_PREFIX').'system_coupon c ON h.coupon_id = c.coupon_id')->join(C('DB_PREFIX').'user u ON h.uid = u.uid')->field('h.id,c.coupon_id,h.uid,c.name,u.nickname,u.email,h.num,h.receive_time,h.is_use,h.phone,h.admin_name')->where($where)->order($order_string)->limit($i*1000 . ',1000')->select();
+                $coupon_list = $coupon->join('as h left join '.C('DB_PREFIX').'system_coupon c ON h.coupon_id = c.coupon_id')->join(C('DB_PREFIX').'user u ON h.uid = u.uid')->field('h.id,c.coupon_id,h.uid,c.name,u.nickname,u.email,u.is_logoff,h.num,h.receive_time,h.is_use,h.phone,h.admin_name')->where($where)->order($order_string)->limit($i*1000 . ',1000')->select();
 
                 $index = 2;
                 foreach ($coupon_list as $value){
@@ -418,6 +418,11 @@ class CouponAction extends BaseAction {
                         $statusName = "Void";
                     }else{
                         $statusName = "";
+                    }
+
+                    if($value['is_logoff'] == 2){
+                        $value['nickname'] = "Deleted ".$value['uid'];
+                        $value['email'] = "-";
                     }
 
                     $objActSheet->setCellValueExplicit('A' . $index, $value['id']);

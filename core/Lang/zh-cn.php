@@ -2542,6 +2542,7 @@ return array(
     "ORDER_COURIER_EXPORT"=>"送餐员配送信息",
     "USER_EXPORT"=>"用户信息",
     "USER_RANKING_EXPORT"=>"用户排行",
+    "DELETED_USER_LIST"=>"删除用户列表",
 
     "VOIP_PHONE_TIP"=>"此号码为网络号码，请使用真实的移动号码。",
     "COUPON_ADD_TIP"=>"优惠金额不能大于最低消费金额，请重试！",
@@ -2552,4 +2553,6 @@ return array(
     "SYSTEM_MESSAGE"=>"系统消息",
     "EVENT_NOTIFICATIONS"=>"推送",
     "Recharge_New_Desc" => "充值 $%s0 返 $%s1",
+    "PRIVACY_TXT"=>"隐私",
+    "DELETE_ACCOUNT"=>"注销",
 );

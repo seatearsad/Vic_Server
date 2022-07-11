@@ -126,81 +126,27 @@
     <include file="Public:header"/>
     <div class="main">
         <ul>
-            <a href="{pigcms{:U('adress')}">
+            <a href="/intro/2.html">
                 <li>
-                    <div>{pigcms{:L('_B_PURE_MY_87_')}</div>
+                    <div>{pigcms{:L('7PRIVACY')}</div>
                 </li>
             </a>
-            <a href="{pigcms{:U('credit')}">
+            <a href="/intro/5.html">
                 <li>
-                    <div>{pigcms{:L('_B_PURE_MY_88_')}</div>
+                    <div>{pigcms{:L('7TERMSOFUSE')}</div>
                 </li>
             </a>
-            <div class="gray_space_v"></div>
-            <a href="{pigcms{:U('username')}">
+            <a href="{pigcms{:U('Logoff/step_2')}">
                 <li>
-                    <div>{pigcms{:L('_B_PURE_MY_89_')}</div>
-                    <div class="right_align">{pigcms{$now_user.nickname}</div>
-                </li>
-            </a>
-
-            <li id="bind_phone">
-                <div>{pigcms{:L('_B_PURE_MY_90_')}</div>
-                <div class="right_align">{pigcms{$now_user.phone}</div>
-            </li>
-            <a href="{pigcms{:U('email')}">
-            <li>
-                <div>{pigcms{:L('_B_PURE_MY_91_')}</div>
-                <div class="right_align">{pigcms{$now_user.email}</div>
-            </li>
-            </a>
-            <a href="{pigcms{:U('password')}">
-                <li>
-                    <div>{pigcms{:L('_B_PURE_MY_92_')}</div>
-                </li>
-            </a>
-
-            <a href="{pigcms{:U('invitation')}">
-                <li>
-                    <div>{pigcms{:L('_B_PURE_MY_93_')}</div>
-                    <div class="right_align">{pigcms{$invitationcode}</div>
-
-                </li>
-            </a>
-            <a href="{pigcms{:U('privacy')}">
-                <li>
-                    <div>{pigcms{:L('PRIVACY_TXT')}</div>
+                    <div>{pigcms{:L('DELETE_ACCOUNT')}</div>
                 </li>
             </a>
         </ul>
-
-        <div id="logout">{pigcms{:L('_B_PURE_MY_94_')}</div>
     </div>
     <include file="Public:footer"/>
 <script>
     $('#back_span').click(function () {
         window.history.go(-1);
-    });
-
-    var user_phone = "{pigcms{$now_user['phone']}";
-    $("#bind_phone").click(function () {
-        if(user_phone == ""){
-            window.location.href = "{pigcms{:U(bind_user)}"
-        }else{
-            layer.open({
-                content:"You cannot change the phone number linked to your account here. Please contact our support team to do so if necessary.",
-                btn: ['Confirm']
-            });
-        }
-    });
-
-    $('#logout').on('click',function(){
-        if(/(tutti_android)/.test(navigator.userAgent.toLowerCase())) {
-            if (typeof (window.linkJs.delUser) != 'undefined') {
-                window.linkJs.delUser();
-            }
-        }
-        location.href =	"{pigcms{:U('Login/logout')}";
     });
 </script>
 </body>

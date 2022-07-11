@@ -83,7 +83,13 @@
                                             <td>{pigcms{$vo.order_id}</td>
                                             <td>${pigcms{$vo.money}</td>
 
-                                            <td>{pigcms{$vo.nickname}</td>
+                                            <td>
+                                                <if condition="$vo['is_logoff'] eq 2">
+                                                    -
+                                                    <else />
+                                                    {pigcms{$vo.nickname}
+                                                </if>
+                                            </td>
                                             <td>
                                                 {pigcms{$vo.uid}
                                             </td>

@@ -13,7 +13,7 @@ class UserAction extends BaseAction {
                 $sql_count = "SELECT count(*) FROM ". C('DB_PREFIX') . "user as u ";
                 $sql = "SELECT u.* FROM ". C('DB_PREFIX') . "user as u ";
 
-                $where = "WHERE u.openid not like '%no_use'";
+                $where = "WHERE u.openid not like '%no_use' and u.is_logoff <> 2";
 
                 if($this->system_session['level'] == 3 && $this->system_session['area_id'] != 0){
                     $sql_count .= " LEFT JOIN ". C('DB_PREFIX') . "user_adress as a on a.uid = u.uid ";
@@ -358,7 +358,7 @@ class UserAction extends BaseAction {
 
             $database_user = D('User');
             if ($_POST['phone']){
-                $con_pre['_string']=" phone='".$_POST['phone']."' and uid<>".intval($_POST['uid']);
+                $con_pre['_string']=" phone='".$_POST['phone']."' and uid<>".intval($_POST['uid']).' and is_logoff<>2';
                 $check_user = $database_user->field(true)->where($con_pre)->find();
                 if (!empty($check_user)) {
                     $this->error(L('_B_LOGIN_PHONENOHAVE_'));
@@ -875,7 +875,7 @@ class UserAction extends BaseAction {
         $order_count = D('')->where($condition_where)->table($condition_table)->count();
         import('@.ORG.system_page');
         $p = new Page($order_count,30);
-        $order_list = D('')->field('`o`.*,`u`.`uid`,`u`.`nickname`,`u`.`phone`')->where($condition_where)->table($condition_table)->order($order_sort)->limit($p->firstRow.','.$p->listRows)->select();
+        $order_list = D('')->field('`o`.*,`u`.`uid`,`u`.`nickname`,`u`.`phone`,`u`.`is_logoff`')->where($condition_where)->table($condition_table)->order($order_sort)->limit($p->firstRow.','.$p->listRows)->select();
         $this->assign('order_list',$order_list);
         $pagebar = $p->show2();
         $this->assign('pagebar',$pagebar);

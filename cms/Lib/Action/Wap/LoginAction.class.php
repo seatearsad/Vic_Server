@@ -46,7 +46,7 @@ class LoginAction extends BaseAction{
 	public function reg(){
 		if(IS_POST){
 			$condition_user['phone'] = $data_user['phone'] = trim($_POST['phone']);
-
+            $condition_user['is_logoff'] = array('lt',2);
 			$database_user = D('User');
 			if($database_user->field('`uid`')->where($condition_user)->find()){
 				$this->error(L('_B_LOGIN_PHONENOHAVE_'));
@@ -201,7 +201,7 @@ class LoginAction extends BaseAction{
             exit(json_encode(array('error_code' => 1, 'msg' => 'No phone number')));
         }
 
-        $user = D('User')->where(array('phone'=>$phone))->find();
+        $user = D('User')->where(array('phone'=>$phone,'is_logoff'=>array('lt',2)))->find();
         if(!$user)
             exit(json_encode(array('error_code' => 1, 'msg' => 'Phone Number Error')));
 

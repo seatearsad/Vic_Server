@@ -78,7 +78,13 @@
                                         <td>{pigcms{$vo.id}</td>
                                         <td>{pigcms{$vo.name}</td>
                                         <td>{pigcms{$vo.coupon_id}</td>
-                                        <td>{pigcms{$vo.nickname}</td>
+                                        <td>
+                                            <if condition="$vo.is_logoff eq 2">
+                                                Deleted {pigcms{$vo.uid}
+                                                <else/>
+                                                {pigcms{$vo.nickname}
+                                            </if>
+                                        </td>
                                         <td>{pigcms{$vo.uid}</td>
                                         <td>{pigcms{$vo.num}</td>
                                         <td>{pigcms{$vo.receive_time|date='Y-m-d',###}</td>

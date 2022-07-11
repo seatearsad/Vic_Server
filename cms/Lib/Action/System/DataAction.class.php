@@ -22,7 +22,8 @@ class DataAction extends BaseAction
             "courier_info"=>L('COURIER_INFO_EXPORT'),
             "order_courier"=>L('ORDER_COURIER_EXPORT'),
             "user"=>L('USER_EXPORT'),
-            "user_ranking"=>L('USER_RANKING_EXPORT')
+            "user_ranking"=>L('USER_RANKING_EXPORT'),
+            "user_deleted"=>L('DELETED_USER_LIST')
         );
 
         $this->assign("export_menu",$this->export_menu);
@@ -287,7 +288,7 @@ class DataAction extends BaseAction
             $objActSheet->setCellValue('AA1', '配送费优惠类型');
             $objActSheet->setCellValue('AB1', 'Food Prep出餐时间');
 
-            $sql = "SELECT o.*,d.goods_id, d.name as good_name,d.price as good_price ,d.cost_price as good_old_price,d.unit,d.cost_price, d.num as good_num,d.tax_num,d.deposit_price,d.dish_id FROM (select oo.*,ss.tax_num as store_tax,ss.name AS store_name,ss.menu_version from pigcms_shop_order as oo left join pigcms_merchant_store as ss on ss.store_id=oo.store_id ".$condition_where." LIMIT ". $i*1000 .",1000)o LEFT JOIN pigcms_shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ORDER BY o.order_id DESC";
+            $sql = "SELECT o.*,d.goods_id, d.name as good_name,d.price as good_price ,d.cost_price as good_old_price,d.unit,d.cost_price, d.num as good_num,d.tax_num,d.deposit_price,d.dish_id FROM (select oo.*,ss.tax_num as store_tax,ss.name AS store_name,ss.menu_version,u.is_logoff from pigcms_shop_order as oo left join pigcms_merchant_store as ss on ss.store_id=oo.store_id left join pigcms_user as u on u.uid=oo.uid ".$condition_where." LIMIT ". $i*1000 .",1000)o LEFT JOIN pigcms_shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ORDER BY o.order_id DESC";
 
             $result_list = D()->query($sql);
             fdump(D()->getDbError());
@@ -362,6 +363,11 @@ class DataAction extends BaseAction
 
                 $index = 2;
                 foreach ($result_list as $value) {
+                    if($value['is_logoff'] == 2){
+                        $value['username'] = "Deleted ".$value['uid'];
+                        $value['userphone'] = "-";
+                        $value['address'] = "-";
+                    }
                     if($tmp_id == $value['real_orderid']){
 //                        $objActSheet->setCellValueExplicit('A' . $index, '');//订单编号
 //                        $objActSheet->setCellValueExplicit('B' . $index, '');
@@ -827,7 +833,7 @@ class DataAction extends BaseAction
 
         $where['uid'] = array('neq',0);
 
-        $sql = "SELECT COUNT(o.order_id) as count,SUM(o.price) as sum,o.username,u.add_time,u.uid FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "user as u ON u.uid=o.uid ".$condition_where." GROUP BY o.uid ORDER BY SUM(o.price) DESC";
+        $sql = "SELECT COUNT(o.order_id) as count,SUM(o.price) as sum,o.username,u.add_time,u.uid,u.is_logoff FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "user as u ON u.uid=o.uid ".$condition_where." GROUP BY o.uid ORDER BY SUM(o.price) DESC";
         $list = D()->query($sql);
 
         $objExcel = new PHPExcel();
@@ -854,6 +860,7 @@ class DataAction extends BaseAction
         $index = 2;
 
         foreach ($list as $store) {
+            if($store['is_logoff'] == 2) $store['username'] = "Deleted ".$store['uid'];
             $objActSheet->setCellValueExplicit('A' . $index, $store['count'], PHPExcel_Cell_DataType::TYPE_NUMERIC);
             $objActSheet->setCellValueExplicit('B' . $index, floatval(sprintf("%.2f", $store['sum'])), PHPExcel_Cell_DataType::TYPE_NUMERIC);
             $objActSheet->setCellValueExplicit('C' . $index, $store['username']);
@@ -911,6 +918,7 @@ class DataAction extends BaseAction
             if($_GET['status'] != -1){
                 $where['u.status'] = $_GET['status'];
             }
+            $where['u.is_logoff'] = array('lt',2);
 
             $database_user = D('User');
             $count_user = $database_user->field('u.*,a.city')->join(' as u left join '.C('DB_PREFIX').'user_adress as a on a.uid=u.uid')->where($where)->group('u.uid')->select();
@@ -1131,7 +1139,7 @@ class DataAction extends BaseAction
             $objActSheet->setCellValue('N1', 'Time|时间');
 
             //$sql = "SELECT  o.*, m.name AS merchant_name,d.name as good_name,d.price as good_price ,d.unit,d.cost_price, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o INNER JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id INNER JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` INNER JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
-            $sql = "SELECT  o.*, m.name AS merchant_name,g.name as good_name,g.tax_num as good_tax,g.deposit_price,s.tax_num as store_tax,s.menu_version,d.goods_id,d.name as order_good_name,d.price as good_price ,d.cost_price as good_old_price,d.unit,d.cost_price,d.dish_id, d.num as good_num, s.name AS store_name FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id`  LEFT JOIN " . C('DB_PREFIX') . "shop_goods AS g ON `g`.`goods_id`=`d`.`goods_id` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
+            $sql = "SELECT  o.*, m.name AS merchant_name,g.name as good_name,g.tax_num as good_tax,g.deposit_price,s.tax_num as store_tax,s.menu_version,d.goods_id,d.name as order_good_name,d.price as good_price ,d.cost_price as good_old_price,d.unit,d.cost_price,d.dish_id, d.num as good_num, s.name AS store_name,u.is_logoff FROM " . C('DB_PREFIX') . "shop_order AS o LEFT JOIN " . C('DB_PREFIX') . "merchant_store AS s ON s.store_id=o.store_id LEFT JOIN " . C('DB_PREFIX') . "merchant AS m ON `s`.`mer_id`=`m`.`mer_id` LEFT JOIN " . C('DB_PREFIX') . "shop_order_detail AS d ON `d`.`order_id`=`o`.`order_id`  LEFT JOIN " . C('DB_PREFIX') . "shop_goods AS g ON `g`.`goods_id`=`d`.`goods_id` LEFT JOIN " . C('DB_PREFIX') . "user AS u ON `u`.`uid`=`o`.`uid` ".$condition_where." ORDER BY o.order_id DESC LIMIT " . $i * 1000 . ",1000";
 
             $result_list = D()->query($sql);
             //计算订单税费及押金
@@ -1279,6 +1287,8 @@ class DataAction extends BaseAction
                             $objActSheet->setCellValueExplicit('C' . $index, $value['good_name']);//Item|商品名称
                         else
                             $objActSheet->setCellValueExplicit('C' . $index, $value['order_good_name']);//Item|商品名称
+
+                        if($value['is_logoff'] == 2) $value['username'] = "Deleted ".$value['uid'];
                         $objActSheet->setCellValueExplicit('D' . $index, $value['good_num'],PHPExcel_Cell_DataType::TYPE_NUMERIC);//数量
                         $objActSheet->setCellValueExplicit('E' . $index, $value['good_price'],PHPExcel_Cell_DataType::TYPE_NUMERIC);//单价
                         $objActSheet->setCellValueExplicit('F' . $index, ($value['good_old_price']-$value['good_price']),PHPExcel_Cell_DataType::TYPE_NUMERIC);//单价
@@ -1667,7 +1677,7 @@ class DataAction extends BaseAction
             $objActSheet->setCellValue('P1', 'Complete Time');
 
 
-            $sql = "SELECT s.`supply_id`, s.order_id, s.item, s.name as username, s.phone as userphone, m.name as storename, s.money, s.start_time, s.end_time, s.aim_site, s.pay_type, s.paid, s.status, s.deliver_cash,s.freight_charge,s.bonus,o.tip_charge as tips FROM " . C('DB_PREFIX') . "deliver_supply AS s left JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id left join ". C('DB_PREFIX') ."shop_order as o on s.order_id=o.order_id";
+            $sql = "SELECT s.`supply_id`, s.order_id, s.item, s.name as username, s.phone as userphone, m.name as storename, s.money, s.start_time, s.end_time, s.aim_site, s.pay_type, s.paid, s.status, s.deliver_cash,s.freight_charge,s.bonus,o.tip_charge as tips,u.is_logoff,o.uid as user_id FROM " . C('DB_PREFIX') . "deliver_supply AS s left JOIN " . C('DB_PREFIX') . "merchant_store AS m ON m.store_id=s.store_id left join ". C('DB_PREFIX') ."shop_order as o on s.order_id=o.order_id left join ". C('DB_PREFIX') ."user as u on u.uid=o.uid";
             $sql .= ' WHERE s.type=0 AND s.uid=' . $uid;
             if ($begin_time && $end_time) {
                 $sql .= ' AND s.start_time>' . strtotime($begin_time." 00:00:00") . ' AND s.start_time<' . strtotime($end_time." 23:59:59");
@@ -1682,6 +1692,11 @@ class DataAction extends BaseAction
                 $IpLocation = new IpLocation();
                 $index = 2;
                 foreach ($supply_list as $value) {
+                    if($value['is_logoff'] == 2){
+                        $value['username'] = "Deleted ".$value['user_id'];
+                        $value['userphone'] = "-";
+                        $value['aim_site'] = "-";
+                    }
 
                     $objActSheet->setCellValueExplicit('A' . $index, $value['order_id']);
                     if ($value['item'] == 0) {
@@ -1747,6 +1762,69 @@ class DataAction extends BaseAction
         header("Content-Type:application/octet-stream");
         header("Content-Type:application/download");
         header('Content-Disposition:attachment;filename="' . $title . '.xls"');
+        header("Content-Transfer-Encoding:binary");
+        $objWriter->save('php://output');
+        exit();
+    }
+
+    public function user_deleted(){
+        set_time_limit(0);
+        require_once APP_PATH . 'Lib/ORG/phpexcel/PHPExcel.php';
+        $title = 'Deleted User List';
+
+        $objExcel = new PHPExcel();
+        $objProps = $objExcel->getProperties();
+        // 设置文档基本属性
+        $objProps->setCreator($title);
+        $objProps->setTitle($title);
+        $objProps->setSubject($title);
+        $objProps->setDescription($title);
+
+        $database_user = D('User');
+        $count_user = $database_user->field(true)->where(array('is_logoff'=>2))->order('logoff_time desc')->select();
+        $count_user = count($count_user);
+
+        $length = ceil($count_user / 1000);
+        for ($i = 0; $i < $length; $i++) {
+            $i && $objExcel->createSheet();
+            $objExcel->setActiveSheetIndex($i);
+
+            $objExcel->getActiveSheet()->setTitle( strval($i*1000+1).' - '.strval($i*1000+1000));
+            $objActSheet = $objExcel->getActiveSheet();
+
+            $objActSheet->setCellValue('A1', 'User ID');
+            $objActSheet->setCellValue('B1', 'Email');
+            $objActSheet->setCellValue('C1', 'Logoff Time');
+
+
+            $user_list = $database_user->field(true)->where(array('is_logoff'=>2))->order('logoff_time desc')->select();
+
+            if (!empty($user_list)) {
+                import('ORG.Net.IpLocation');
+                $IpLocation = new IpLocation();
+                $index = 2;
+                foreach ($user_list as $value) {
+                    $objActSheet->setCellValueExplicit('A' . $index, $value['uid']);
+                    $objActSheet->setCellValueExplicit('B' . $index, $value['email']);
+                    $objActSheet->setCellValueExplicit('C' . $index, date('Y-m-d H:i:s', $value['logoff_time']));
+
+                    $index++;
+                }
+            }
+            sleep(1);
+        }
+
+        //输出
+        $objWriter = new PHPExcel_Writer_Excel5($objExcel);
+        ob_end_clean();
+        header("Pragma: public");
+        header("Expires: 0");
+        header("Cache-Control:must-revalidate, post-check=0, pre-check=0");
+        header("Content-Type:application/force-download");
+        header("Content-Type:application/vnd.ms-execl");
+        header("Content-Type:application/octet-stream");
+        header("Content-Type:application/download");
+        header('Content-Disposition:attachment;filename="'.$title.'.xls"');
         header("Content-Transfer-Encoding:binary");
         $objWriter->save('php://output');
         exit();

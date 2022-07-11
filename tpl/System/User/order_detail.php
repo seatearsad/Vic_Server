@@ -53,11 +53,23 @@
 			<th width="15%">{pigcms{:L('F_USER_ID')}</th>
 			<td width="35%">{pigcms{$now_order.uid}</td>
 			<th width="15%">{pigcms{:L('F_USER_NICKNAME')}</th>
-			<td width="35%">{pigcms{$now_order.nickname}</td>
+			<td width="35%">
+                <if condition="$now_order['is_logoff'] eq 2">
+                    -
+                    <else />
+                    {pigcms{$now_order.nickname}
+                </if>
+            </td>
 		</tr>
 		<tr>
 			<th width="15%">{pigcms{:L('F_USER_NUMBER1')}</th>
-			<td width="35%">{pigcms{$now_order.phone}</td>
+			<td width="35%">
+                <if condition="$now_order['is_logoff'] eq 2">
+                    -
+                    <else />
+                    {pigcms{$now_order.phone}
+                </if>
+            </td>
 	
 		</tr>
 		

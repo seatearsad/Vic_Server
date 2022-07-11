@@ -2541,6 +2541,7 @@ return array(
     "ORDER_COURIER_EXPORT"=>"Orders by Courier",
     "USER_EXPORT"=>"User Info",
     "USER_RANKING_EXPORT"=>"User Ranking",
+    "DELETED_USER_LIST"=>"Deleted user list",
 
     "VOIP_PHONE_TIP"=>"It looks like this phone number is coming from a VoIP carrier. Please use mobile numbers only.",
     "COUPON_ADD_TIP"=>"Your discount amount cannot exceed the minimum order amount! Please try again.",
@@ -2551,4 +2552,6 @@ return array(
     "SYSTEM_MESSAGE"=>"System Message",
     "EVENT_NOTIFICATIONS"=>"Notifications",
     "Recharge_New_Desc" => "Add over $%s0, receive $%s1 in Tutti Credits",
+    "PRIVACY_TXT"=>"Privacy",
+    "DELETE_ACCOUNT"=>"Delete Account",
 );

@@ -981,6 +981,15 @@ $(document).ready(function () {
                                 window.location.href = "{pigcms{:U('classic_shop',array('shop_id'=>$store['store_id']))}";
                             }
                         });
+                    }else if(data.type == 'logoff'){
+                        var remindTipLayer = layer.open({
+                            content: "<label style='word-break: break-word;'>" + data.msg + "</label>",
+                            btn: ['Confirm'],
+                            end:function(){
+                                //window.history.back();
+                                window.location.href = "{pigcms{:U('Wap/Home/index')}";
+                            }
+                        });
                     }else{
                         $.cookie('shop_cart_' + "{pigcms{$store['store_id']}", JSON.stringify(data.cartList), {
                             expires: 700,

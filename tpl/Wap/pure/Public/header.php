@@ -623,6 +623,12 @@
                     {pigcms{:L('V2_ACCOUNT_MENU_COUPONS')}
                 </div>
             </if>
+            <if condition="ACTION_NAME == 'privacy'">
+                <div class="this_header">
+                    <span id="back_button_span"></span>
+                    {pigcms{:L('PRIVACY_TXT')}
+                </div>
+            </if>
         </if>
     </div>
     <!--div id="header_logo"></div-->

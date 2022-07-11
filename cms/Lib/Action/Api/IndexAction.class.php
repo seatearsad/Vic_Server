@@ -518,6 +518,8 @@ class IndexAction extends BaseAction
         $userInfo['outsrc'] = $user['avatar'];
         $userInfo['openid'] = $user['openid'];
         $userInfo['login_type'] = $type;
+
+        $data['is_logoff'] = 0;
         //记录设备号
         if($token != '') {
             $from = $_POST['from'] ? $_POST['from'] : 0;
@@ -539,8 +541,11 @@ class IndexAction extends BaseAction
                     $source = 'Web';
                     break;
             }
-            D('User')->where(array('uid' => $userInfo['uid']))->save(array('device_id' => $token,'source'=>$source));
+
+            $data['device_id'] = $token;
+            $data['source'] = $source;
         }
+        D('User')->where(array('uid' => $userInfo['uid']))->save($data);
 
         $this->returnCode(0,'info',$userInfo);
     }
@@ -2956,6 +2961,7 @@ class IndexAction extends BaseAction
         }
 
         $condition_user['phone'] = $_POST['phone'];
+        $condition_user['is_logoff'] = array('lt',2);
         if($database_user->field(true)->where($condition_user)->find()){
             $this->returnCode(1,'info',array(),L('_API_PHONE_ERROR'));
         }
@@ -3095,10 +3101,19 @@ class IndexAction extends BaseAction
     }
 
     public function get_privacy(){
+        $uid = $_POST['uid'];
+        $config = D('Config')->get_config();
+
         $privacy_list = array();
         $privacy_list[] = array("name"=>"Privacy Policy","url"=>"https://tutti.app/intro/2.html?app=1");
         $privacy_list[] = array("name"=>"Terms and Conditions","url"=>"https://tutti.app/intro/5.html?app=1");
-        //$privacy_list[] = array("name"=>"Delete Account","url"=>"https://tutti.app/intro/5.html");
+
+        $time = time();
+        $secret_key = $config['api_secret_key'];
+        $data_str = "c:Logoff,a:step_2,uid:".$uid.",t:".$time;
+        $sign = MD5($data_str.$secret_key);
+        $delete_url = C('config.site_url').'/wap.php?g=Wap&c=Logoff&a=step_2&u='.$uid.'&t='.$time.'&sign='.$sign;
+        $privacy_list[] = array("name"=>"Delete Account","url"=>$delete_url);
 
         $this->returnCode(0,'info',$privacy_list,'success');
     }
@@ -3431,6 +3446,8 @@ class IndexAction extends BaseAction
         }
 
         //var_dump($work_delver_list);
+        //处理注销用户
+        D('User')->handleLogOffUser();
     }
 
     public function sendUpdateMail($list,$day_num,$file_name){

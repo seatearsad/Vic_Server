@@ -434,6 +434,10 @@ class MyAction extends BaseAction{
 			//	}
 		}
 		$now_user = D('User')->where(array('uid'=>$this->user_session['uid']))->find();
+
+		if($now_user['phone'] != ''){
+		    redirect(U('My/index'));
+        }
 		$referer = !empty($_GET['referer']) ? $_GET['referer'] : U('My/index');
 		$this->assign('referer',$referer);
 		$this->assign('now_user',$now_user);
@@ -6481,6 +6485,10 @@ class MyAction extends BaseAction{
 
         exit(json_encode(array('status' => 1, 'msg' => "Success")));
 
+    }
+
+    public function privacy(){
+        $this->display();
     }
 
 }

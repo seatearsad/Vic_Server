@@ -37,7 +37,7 @@ class UserModel extends Model
 				return array('error_code' => true, 'msg' => L('_B_LOGIN_ENTERKEY_'));
 			}
 		}
-		$now_user = $this->field(true)->where(array('phone' => $phone))->find();
+		$now_user = $this->field(true)->where(array('phone' => $phone,'is_logoff'=>array('lt',2)))->find();
 		if ($now_user){
 			if($now_user['pwd'] != md5($pwd)){
 				if($type){
@@ -95,11 +95,20 @@ class UserModel extends Model
 			   }
 			}
 
+			if($now_user['is_logoff'] == 1){
+                $data_save_user['is_logoff'] = 0;
+                $data_save_user['logoff_time'] = 0;
+                $data_save_user['device_id'] = "";
+            }
+
 			if($this->where($condition_save_user)->data($data_save_user)->save()){
 			    if(!empty($user_import)){
 				   $user_importDb->where(array('id'=>$user_import['id']))->save(array('isuse'=>1));
 				}
 
+                $now_user['is_logoff'] = 0;
+                $now_user['logoff_time'] = 0;
+                $now_user['device_id'] = "";
 
 				$database_house_village_user_bind = D('House_village_user_bind');
 				$bind_where['uid'] = $now_user['uid'];
@@ -266,6 +275,7 @@ class UserModel extends Model
 		}
 
 		$condition_user['phone'] = $phone;
+		$condition_user['is_logoff'] = array('lt',2);
 		if($this->field('`uid`')->where($condition_user)->find()){
 			return array('error_code' => true, 'msg' => L('_B_LOGIN_PHONENOHAVE_'));
 		}
@@ -338,6 +348,7 @@ class UserModel extends Model
 
 	public function check_phone($phone){
 		$condition_user['phone'] = $phone;
+        $condition_user['is_logoff'] = array('lt',2);
 		if($this->field('`uid`')->where($condition_user)->find()){
 			return array('error_code' => true, 'msg' => L('_B_LOGIN_PHONENOHAVE_'));
 		}
@@ -693,6 +704,53 @@ class UserModel extends Model
             $str .= $chars[mt_rand(0, $charsLen)];//随机取出一位
         }
         return $str;
+    }
+
+    function handleLogOffUser(){
+	    $offList = $this->where(array('is_logoff'=>1))->select();
+	    $time = time();
+	    $check_time = 1*3600*24;
+
+	    $sendMailTime = 1*3600*20;
+
+	    $handleList = array();
+	    $sendList = array();
+	    foreach ($offList as $user){
+            $cha_time = $time - $user['logoff_time'];
+            if($cha_time >= $check_time){
+                $handleList[] = $user['uid'];
+            }else if($cha_time >= $sendMailTime){
+                if($user['email'] != '') {
+                    $sendList[] = array("address" => $user['email'], "userName" => $user['nickname']);
+                }
+            }
+        }
+
+        if(count($handleList) > 0) {
+	        $this->where(array('uid'=>array('in',$handleList)))->save(array('is_logoff'=>2,'logoff_time'=>$time,'device_id'=>'','openid'=>''));
+	        D('User_card')->where(array('uid'=>array('in',$handleList)))->delete();
+            D('User_adress')->where(array('uid'=>array('in',$handleList)))->delete();
+            D('Reply')->where(array('uid'=>array('in',$handleList)))->delete();
+        }
+
+        if(count($sendList) > 0){
+            $title = "Reminder: Your Tutti Account Will Be Deleted Soon";
+            $body = $this->getMailBodyBeforeDelete();
+            $mail = getMail($title, $body, $sendList);
+            $mail->send();
+        }
+    }
+
+    public function getMailBodyBeforeDelete(){
+        $body = "<p>This is a reminder that your Tutti account will be deleted after 1 day. If you change your mind, you can restore your account by signing in before we delete it.</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p><a href='https://www.tutti.app/wap.php?g=Wap&c=Login&a=index' target='_blank'>Sign In to Restore Account</a></p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>We hope to see you again soon!</p>";
+        $body .= "<p>&nbsp;</p>";
+        $body .= "<p>The Tutti Team</p>";
+
+        return $body;
     }
 }
 ?>

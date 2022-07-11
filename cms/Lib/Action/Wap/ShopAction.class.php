@@ -2643,6 +2643,14 @@ class ShopAction extends BaseAction{
             $type = "";
         }
 
+        $user = D('User')->where(array('uid'=>$this->user_session['uid']))->find();
+        if(!$user || $user['is_logoff'] == 1){
+            session("user",null);
+            $is_error = true;
+            $type = "logoff";
+            $msg = "You have been logged out. Please login to continue.";
+        }
+
         echo json_encode(array('error'=>$is_error,'type'=>$type,'msg'=>$msg,'cartList'=>$newCart));
     }
 
