@@ -65,6 +65,10 @@ class BaseAction extends Action
                 $v = str_replace("\n","",$v);
             }
 
+            if(abs(time()-$_POST['time']) > 86400){
+                $this->returnCode(1,'info',array(),'Time Error');
+            }
+
             $data_str = "a:".ACTION_NAME.",time:".$_POST['time'].",version:".$_POST['version'];
 
             $self_sign = MD5($data_str.$secret_key);
