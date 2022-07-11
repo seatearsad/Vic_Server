@@ -709,9 +709,9 @@ class UserModel extends Model
     function handleLogOffUser(){
 	    $offList = $this->where(array('is_logoff'=>1))->select();
 	    $time = time();
-	    $check_time = 1*3600*24;
+	    $check_time = 30*3600*24;
 
-	    $sendMailTime = 1*3600*20;
+	    $sendMailTime = 29*3600*24;
 
 	    $handleList = array();
 	    $sendList = array();
