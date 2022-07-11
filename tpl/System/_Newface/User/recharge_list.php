@@ -108,12 +108,14 @@
                                                         {pigcms{:L('F_DETAILS')}
                                                     </button>
                                                 </a>
+                                                <if condition="$vo['is_logoff'] neq 2">
                                                 <a href="javascript:void(0);"
                                                    onclick="window.top.artiframe('{pigcms{:U('User/edit',array('uid'=>$vo['uid']))}','{pigcms{:L(\'F_EDIT_INFO\')}',680,560,true,false,false,editbtn,'edit',true);">
                                                     <button class="btn btn-white text-grey" type="button">
                                                         {pigcms{:L('F_USER_INFO')}
                                                     </button>
                                                 </a>
+                                                </if>
                                             </td>
                                         </tr>
                                     </volist>
