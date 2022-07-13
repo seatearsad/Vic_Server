@@ -200,7 +200,7 @@ class LogoffAction extends BaseAction
         $body .= "<p>We've received your account deletion request. Your Tutti account is scheduled to be deleted after 30 days. If you change your mind, you can restore your account by signing in within the 30-day waiting period. Please be aware that we may retain certain information after account deletion for legal and regulatory purposes.</p>";
         $body .= "<p>&nbsp;</p>";
         $body .= "<p>&nbsp;</p>";
-        $body .= "<p>If this wasn't you...</p>";
+        $body .= "<p>If this request wasn't made by you, please sign in now to reverse the action and change your password immediately.</p>";
         $body .= "<p>&nbsp;</p>";
         $body .= "<p><a href='https://www.tutti.app/wap.php?g=Wap&c=Login&a=index' target='_blank'>Sign In to Restore Account</a></p>";
         $body .= "<p>&nbsp;</p>";
