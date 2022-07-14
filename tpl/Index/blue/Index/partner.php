@@ -377,11 +377,23 @@
     }
     $('.become_btn').click(function () {
         var is_tip = checkForm();
-        if(is_tip){
+        if(is_tip != 0){
+            var msg = "";
+            switch (is_tip){
+                case 1:
+                    msg = "{pigcms{:L('_PLEASE_INPUT_ALL_')}";
+                    break;
+                case 2:
+                    msg = "Phone number must be at least 10 digits without any symbols";
+                    break;
+                case 3:
+                    msg = "Incorrect email format";
+                    break;
+            }
             layer.open({
                 title: "{pigcms{:L('_STORE_REMIND_')}",
                 time: 1,
-                content: "{pigcms{:L('_PLEASE_INPUT_ALL_')}"
+                content: msg
             });
         }else{
             var re_data = {};
@@ -418,23 +430,20 @@
     }
 
     function checkForm() {
-        var is_tip = false;
+        var is_tip = 0;
         $('.become_form').find('input').each(function () {
-            if($(this).val() == ''){
-                is_tip = true;
+            var t_name = $(this).attr("name");
+            if(t_name != 'lng' && t_name != 'lat' && t_name != 'city_id' && $(this).val() == ''){
+                is_tip = 1;
             }
         });
 
-        if($("input[name='store_name']").val().length < 3){
-            is_tip = true;
-        }
-
         if(!checkPhone($("input[name='phone']").val())){
-            is_tip = true;
+            is_tip = 2;
         }
 
         if(!checkMail($("input[name='email']").val())){
-            is_tip = true;
+            is_tip = 3;
         }
 
         return is_tip;
