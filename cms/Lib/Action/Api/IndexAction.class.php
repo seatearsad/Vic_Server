@@ -3754,8 +3754,8 @@ class IndexAction extends BaseAction
         //var_dump($result);die();
 
         //
-        $exif = exif_read_data('./upload/delivery_photo/000/000/083/62a1d876a79f9164.jpg');
-        var_dump($exif);die();
+        //$exif = exif_read_data('./upload/delivery_photo/000/000/083/62a1d876a79f9164.jpg');
+        //var_dump($exif);die();
 
         $pass = md5($_GET['pass']);
         if($pass == '19363ffad1f549bdef293f5eea1a2fe4'){
