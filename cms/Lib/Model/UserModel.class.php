@@ -719,7 +719,7 @@ class UserModel extends Model
             $cha_time = $time - $user['logoff_time'];
             if($cha_time >= $check_time){
                 $handleList[] = $user['uid'];
-            }else if($cha_time >= $sendMailTime){
+            }else if($cha_time == $sendMailTime){
                 if($user['email'] != '') {
                     $sendList[] = array("address" => $user['email'], "userName" => $user['nickname']);
                 }

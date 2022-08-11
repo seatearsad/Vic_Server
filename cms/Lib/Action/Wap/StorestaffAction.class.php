@@ -3993,7 +3993,7 @@ class StorestaffAction extends BaseAction
         //$mail->addAddress('garfunkel@126.com', 'Garfunkel');
         $mail->addAddress('sales@tutti.app', 'Sales');
         $mail->addAddress('shrini@tutti.app', 'Shrini');
-        $mail->addAddress('adam@tutti.app', 'Adam');
+        //$mail->addAddress('adam@tutti.app', 'Adam');
 
         $mail->isHTML(true);
         $mail->Subject = $title;

@@ -246,7 +246,7 @@ class IndexAction extends BaseAction {
 
         $mail->setFrom('donotreply.tutti@gmail.com', 'Tutti');
         $mail->addAddress('caesar@tutti.app', 'Caesar');
-        $mail->addAddress('adam@tutti.app','Adam');
+        //$mail->addAddress('adam@tutti.app','Adam');
         $mail->addAddress('garfunkel@126.com', 'Garfunkel');
         //$mail->addAddress('jheary@tutti.app', 'Heary');
         //$mail->addAddress('ellen@example.com');               // Name is optional

@@ -3459,9 +3459,10 @@ class IndexAction extends BaseAction
                 $body = $this->getMailBody($deliver['name'],$day_num,$file_name);
 
                 if(!$this->mail) $this->mail = $this->getMail();
-                $this->mail->clearAddresses();
+
+                $this->mail->clearBCCs();
                 foreach ($email as $address) {
-                    $this->mail->addAddress($address['address'], $address['userName']);
+                    $this->mail->addBCC($address['address'], $address['userName']);
                 }
 
                 $this->mail->isHTML(true);

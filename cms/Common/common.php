@@ -1078,8 +1078,12 @@ function getMail($title,$body,$addressee){
     $mail->Port = 465;
 
     $mail->setFrom('donotreply.tutti@gmail.com', 'Tutti');
+    $count = count($addressee);
     foreach ($addressee as $address) {
-        $mail->addAddress($address['address'], $address['userName']);
+        if($count > 1)
+            $mail->addBCC($address['address'], $address['userName']);
+        else
+            $mail->addAddress($address['address'], $address['userName']);
     }
 
     $mail->isHTML(true);
